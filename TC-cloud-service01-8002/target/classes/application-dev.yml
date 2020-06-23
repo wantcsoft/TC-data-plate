@@ -1,0 +1,19 @@
+server:
+  port: 8002
+  servlet:
+    context-path: /service
+
+spring:
+  application:
+    name: tcsoft-data-platform-service
+  datasource:
+    username: root
+    password: 12345678
+    url: jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC&userUnicode=true&CharacterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848
+
