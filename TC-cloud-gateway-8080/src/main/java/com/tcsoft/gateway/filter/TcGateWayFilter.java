@@ -1,7 +1,6 @@
 package com.tcsoft.gateway.filter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tcsoft.gateway.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -24,9 +23,7 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        System.out.println("这个是gateway过滤器");
         ServerHttpRequest request = exchange.getRequest();
-        System.out.println(exchange.getRequest().getHeaders());
 //        如果请求的URL含有login，不进行拦截
         if(request.getPath().value().contains("login") || request.getPath().value().contains("index")){
             return chain.filter(exchange);
@@ -37,11 +34,6 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
 //        简单验证一下token是否为空，格式是否正确
         if(token == null || ! token.startsWith("eyJhbGciOiJIUzI1NiJ9")){
             return this.setErrorResponse(response,"未携带token");
-        }
-        try {
-            exchange.getAttributes().put("user", JwtUtil.parseJWT(token));
-        }catch(Exception e) {
-            return this.setErrorResponse(response,e.getMessage());
         }
         return  chain.filter(exchange);
     }

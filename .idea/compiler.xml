@@ -9,9 +9,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="TC-cloud-gateway-8080" />
         <module name="TC-cloud-service01-8002" />
+        <module name="TC-shiro-jwt" />
+        <module name="TC-cloud-getdata-8003" />
         <module name="TC-cloud-security-8001" />
         <module name="TC-security-admin-8003" />
-        <module name="TC-shiro-jwt" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

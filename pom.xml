@@ -14,7 +14,7 @@
         <module>TC-cloud-gateway-8080</module>
         <module>TC-cloud-security-8001</module>
         <module>TC-cloud-service01-8002</module>
-        <module>TC-shiro-jwt</module>
+        <module>TC-cloud-getdata-8003</module>
     </modules>
 
 

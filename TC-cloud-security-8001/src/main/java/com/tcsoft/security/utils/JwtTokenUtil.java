@@ -1,6 +1,6 @@
 package com.tcsoft.security.utils;
 
-import com.tcsoft.security.user.JwtUser;
+import com.tcsoft.security.entity.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,8 +1,6 @@
 package com.tcsoft.gateway.utils;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
