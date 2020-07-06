@@ -12,9 +12,10 @@ import java.util.Date;
  * @author big_john
  */
 public class JwtUser implements UserDetails {
-    private final Integer id;
+    private final Integer UserId;
     private final String username;
     private final String password;
+    private final Integer groupId;
     private final Collection<? extends GrantedAuthority> authorities;
     private final Date lastPasswordResetDate;
     private final boolean accountNonLocked;
@@ -23,18 +24,20 @@ public class JwtUser implements UserDetails {
     private final boolean enabled;
 
     public JwtUser(
-            Integer id,
+            Integer UserId,
             String username,
             String password,
+            Integer groupId,
             Collection<? extends GrantedAuthority> authorities,
             Date lastPasswordResetDate,
             boolean accountNonLocked,
             boolean accountNonExpired,
             boolean credentialsNonExpired,
             boolean enabled) {
-        this.id = id;
+        this.UserId = UserId;
         this.username = username;
         this.password = password;
+        this.groupId = groupId;
         this.authorities = authorities;
         this.lastPasswordResetDate = lastPasswordResetDate;
         this.accountNonLocked = accountNonLocked;
@@ -50,7 +53,7 @@ public class JwtUser implements UserDetails {
 
     @JsonIgnore
     public Integer getId() {
-        return id;
+        return UserId;
     }
 
     @JsonIgnore
@@ -62,6 +65,11 @@ public class JwtUser implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    @JsonIgnore
+    public Integer getGroupId(){
+        return groupId;
     }
 
     /**

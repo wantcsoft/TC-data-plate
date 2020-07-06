@@ -1,11 +1,10 @@
-package com.tcsoft.security.service.impl;
+package com.tcsoft.security.service.group;
 
 import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
-import com.tcsoft.security.service.UserGroupService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +14,7 @@ import java.util.List;
  * @author big_john
  */
 @Service
-public class UserGroupServiceImpl implements UserGroupService {
+public class UserGroupService {
 
     @Resource
     private UserMapper userMapper;
@@ -23,9 +22,7 @@ public class UserGroupServiceImpl implements UserGroupService {
     @Resource
     private UserGroupMapper userGroupMapper;
 
-    @Override
-    public ResultData getUserGroup(String username) {
-        ResultData<List<UserGroupDao>> resultData = new ResultData<>();
+    public ResultData<List<UserGroupDao>> getUserGroup(String username, ResultData<List<UserGroupDao>> resultData) {
         UserDao user = userMapper.queryUserByName(username);
         if (user == null){
             resultData.setCode(401);

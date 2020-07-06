@@ -1,8 +1,8 @@
-package com.tcsoft.security.service.impl;
+package com.tcsoft.security.service;
 
 import com.tcsoft.security.convert.UserConvertJwtUser;
-import com.tcsoft.security.dao.UserAuthorityDao;
-import com.tcsoft.security.mapper.UserAuthorityMapper;
+import com.tcsoft.security.dao.UserRoleDao;
+import com.tcsoft.security.mapper.UserRoleMapper;
 import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.dao.UserDao;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,16 +22,16 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private UserMapper userMapper;
     @Resource
-    private UserAuthorityMapper userAuthorityMapper;
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDao userDao = userMapper.queryUserByName(username);
-        UserAuthorityDao userAuthorityDao = userAuthorityMapper.queryAuthorityByName(username);
+        UserRoleDao userRoleDao = userRoleMapper.queryRoleByName(username);
         if (userDao == null) {
             throw new UsernameNotFoundException(String.format("没有找到该用户 '%s'.", username));
         } else {
-            return UserConvertJwtUser.create(userDao, userAuthorityDao);
+            return UserConvertJwtUser.create(userDao, userRoleDao);
         }
     }
 }

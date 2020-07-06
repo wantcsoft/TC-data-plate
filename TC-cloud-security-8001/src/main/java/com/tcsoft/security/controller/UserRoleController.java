@@ -1,27 +1,29 @@
 package com.tcsoft.security.controller;
 
 
+import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
-import com.tcsoft.security.service.UserAuthorityService;
+import com.tcsoft.security.service.role.UserRoleQueryService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author big_john
  */
 @RestController
-public class UserAuthorityController {
+public class UserRoleController {
 
     @Resource
-    private UserAuthorityService userAuthorityService;
+    private UserRoleQueryService userRoleQueryService;
 
-    @GetMapping("/getAuthority")
-    public ResultData getAuthority(Authentication authentication){
-        ResultData<String> resultData = new ResultData<>();
+    @GetMapping("/getRoles")
+    public ResultData<List<UserRoleDao>> getAuthority(Authentication authentication){
+        ResultData<List<UserRoleDao>> resultData = new ResultData<>();
         if (authentication == null || authentication.getPrincipal() == null) {
             resultData.setCode(402);
             resultData.setMessage("操作失败");
@@ -29,12 +31,12 @@ public class UserAuthorityController {
         }
         try{
             JwtUser user = (JwtUser) authentication.getPrincipal();
-            String username = user.getUsername();
-            return userAuthorityService.getUserAuthority(username);
+            return userRoleQueryService.queryAllRole(user.getUsername(), resultData);
         }catch (Exception e){
             resultData.setCode(402);
             resultData.setMessage("操作失败");
             return resultData;
         }
     }
+
 }

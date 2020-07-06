@@ -16,6 +16,7 @@ import java.util.Map;
 
 /**
  * Jwt秘钥的生成和解析
+ * @author big_john
  */
 @Component
 public class JwtTokenUtil implements Serializable {

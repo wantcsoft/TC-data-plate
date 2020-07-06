@@ -11,14 +11,16 @@ import java.util.Date;
  */
 @Data
 public class UserDao {
+
     private Integer userId;
     private Integer groupId;
+    private Integer roleId;
     private String username;
     private String password;
-    private Integer authorityId;
     private Date lastPasswordResetDate;
     private boolean accountNonLocked;
     private boolean accountNonExpired;
     private boolean credentialsNonExpired;
     private boolean enabled;
+
 }
