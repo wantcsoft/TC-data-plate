@@ -3,8 +3,12 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/TC-cloud-gateway-8080/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TC-cloud-gateway-8080/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/TC-cloud-getdata-8003/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/TC-cloud-getdata-8003/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/TC-cloud-kafka-consumer01-8004/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/TC-cloud-kafka-consumer01-8004/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/TC-cloud-kafka-consumer02-8005/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/TC-cloud-kafka-consumer02-8005/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/TC-cloud-kafka-provider-8003/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/TC-cloud-kafka-provider-8003/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TC-cloud-security-8001/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TC-cloud-security-8001/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TC-cloud-service01-8002/src/main/java" charset="UTF-8" />

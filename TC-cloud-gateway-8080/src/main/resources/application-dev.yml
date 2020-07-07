@@ -4,23 +4,10 @@ server:
 spring:
   application:
     name: tcsoft-data-platform-gateway
-#  security:
-#    user:
-#      name: admin
-#      password: 1234
   cloud:
     nacos:
       discovery:
         server-addr: localhost:8848
-
-org:
-  my:
-    jwt:
-      #跳过认证的路由
-      skip-auth-urls:
-        - /login
-#           单位：d:天、h:小时、m:分钟、s:秒
-      effective-time: 1m
 
     gateway:
       discovery:

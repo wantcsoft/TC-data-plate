@@ -3,6 +3,7 @@ server:
 #  servlet:
 #    context-path: /security
 
+
 spring:
   application:
     name: tcsoft-data-platform-security
@@ -17,6 +18,10 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8888
+      eager: false
 
 # JWT 参数配置
 jwt:
