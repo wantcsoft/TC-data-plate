@@ -82,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 // 由于使用的是JWT，我们这里不需要csrf
+                .cors().disable()
                 .csrf().disable()
                 .formLogin()
                     //用户未登录时，访问任何资源都转跳到该路径，即登录页面
@@ -105,7 +106,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 对于获取token的rest api要允许匿名访问
-                .antMatchers("/auth").permitAll()
+                .antMatchers("/auth", "/test").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
 

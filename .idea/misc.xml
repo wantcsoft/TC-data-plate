@@ -10,6 +10,8 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/TC-cloud-gateway-8080/pom.xml" />
         <option value="$PROJECT_DIR$/TC-cloud-kafka-provider-8003/pom.xml" />
+        <option value="$PROJECT_DIR$/TC-cloud-security-8001/pom.xml" />
+        <option value="$PROJECT_DIR$/TC-cloud-security-copy1-8006/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

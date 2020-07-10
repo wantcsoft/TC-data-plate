@@ -22,6 +22,7 @@ import java.io.IOException;
 /**
  * 请求过滤器，如果携带token，可以转到登录页面
  * 如果携带token,验证token合法性和权限
+ * @author WMY
  */
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Component
@@ -61,7 +62,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                 userDetails, null, userDetails.getAuthorities());
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(
                                 request));
-                        logger.info("authenticated user " + username + ", setting security context");
+                        logger.info("authenticated user " + username + ", setting com.tcsoft.security context");
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }

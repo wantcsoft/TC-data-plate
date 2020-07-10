@@ -12,7 +12,7 @@ import java.util.Date;
  * @author big_john
  */
 public class JwtUser implements UserDetails {
-    private final Integer UserId;
+    private final Integer userId;
     private final String username;
     private final String password;
     private final Integer groupId;
@@ -24,7 +24,7 @@ public class JwtUser implements UserDetails {
     private final boolean enabled;
 
     public JwtUser(
-            Integer UserId,
+            Integer userId,
             String username,
             String password,
             Integer groupId,
@@ -34,7 +34,7 @@ public class JwtUser implements UserDetails {
             boolean accountNonExpired,
             boolean credentialsNonExpired,
             boolean enabled) {
-        this.UserId = UserId;
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.groupId = groupId;
@@ -52,8 +52,8 @@ public class JwtUser implements UserDetails {
     }
 
     @JsonIgnore
-    public Integer getId() {
-        return UserId;
+    public Integer getUserId() {
+        return userId;
     }
 
     @JsonIgnore

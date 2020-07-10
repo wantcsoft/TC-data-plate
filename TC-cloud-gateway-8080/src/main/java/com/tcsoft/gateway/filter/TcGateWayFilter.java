@@ -25,16 +25,16 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 //        如果请求的URL含有login，不进行拦截
-        if(request.getPath().value().contains("login") || request.getPath().value().contains("index")){
+        if(request.getPath().value().contains("auth") || request.getPath().value().contains("index")){
             return chain.filter(exchange);
         }
         ServerHttpResponse response = exchange.getResponse();
 //        获取请求头中的token
         String token = request.getHeaders().getFirst("Authoriszation");
 //        简单验证一下token是否为空，格式是否正确
-        if(token == null || ! token.startsWith("eyJhbGciOiJIUzI1NiJ9")){
-            return this.setErrorResponse(response,"未携带token");
-        }
+//        if(token == null || ! token.startsWith("eyJhbGciOiJIUzI1NiJ9")){
+//            return this.setErrorResponse(response,"未携带token");
+//        }
         return  chain.filter(exchange);
     }
 

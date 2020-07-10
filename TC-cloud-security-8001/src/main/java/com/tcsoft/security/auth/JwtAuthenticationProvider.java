@@ -37,21 +37,21 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         if (Objects.isNull(userDao)) {
             throw new UsernameNotFoundException(String.format("No qualified userDao[%s]!", username));
         }
-//        // 如果用户没有设置启用或禁用状态，或者用户被设为禁用，则抛出 DisabledException
-//        Optional<Boolean> enabled = Optional.of(userDao.getEnabled());
-//        if (!enabled.orElse(false)) {
-//            throw new DisabledException(String.format("UserDao[%s] is disabled!", username));
-//        }
-//        // 如果用户没有过期状态或过期状态为 true 则抛出 AccountExpiredException
-//        Optional<Boolean> expired = Optional.of(userDao.getExpired());
-//        if (expired.orElse(true)) {
-//            throw new AccountExpiredException(String.format("UserDao[%s] is expired!", username));
-//        }
-//        // 如果用户没有锁定状态或锁定状态为 true 则抛出 LockedException
-//        Optional<Boolean> locked = Optional.of(userDao.getLocked());
-//        if (locked.orElse(true)) {
-//            throw new LockedException(String.format("UserDao[%s] is locked!", username));
-//        }
+        // 如果用户没有设置启用或禁用状态，或者用户被设为禁用，则抛出 DisabledException
+        Optional<Boolean> enabled = Optional.of(userDao.isEnabled());
+        if (!enabled.orElse(false)) {
+            throw new DisabledException(String.format("UserDao[%s] is disabled!", username));
+        }
+        // 如果用户没有过期状态或过期状态为 true 则抛出 AccountExpiredException
+        Optional<Boolean> expired = Optional.of(userDao.isAccountNonExpired());
+        if (expired.orElse(true)) {
+            throw new AccountExpiredException(String.format("UserDao[%s] is expired!", username));
+        }
+        // 如果用户没有锁定状态或锁定状态为 true 则抛出 LockedException
+        Optional<Boolean> locked = Optional.of(userDao.isAccountNonLocked());
+        if (locked.orElse(true)) {
+            throw new LockedException(String.format("UserDao[%s] is locked!", username));
+        }
         // 如果用户登录时输入的密码和系统中密码匹配，则返回一个完全填充的 Authentication 对象
         if (passwordEncoder.matches(authentication.getCredentials().toString(), userDao.getPassword())){
             return new UsernamePasswordAuthenticationToken(authentication, authentication.getCredentials(), new ArrayList<>());

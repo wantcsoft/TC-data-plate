@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>TC-cloud-security-8001</artifactId>
+    <artifactId>TC-cloud-com.tcsoft.security-8001</artifactId>
 
     <dependencies>
 <!--        nacao服务注册发现-->

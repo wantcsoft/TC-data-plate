@@ -22,17 +22,22 @@ import java.util.List;
  */
 @RestController
 public class AuthController {
-
+    // 登录
     @Resource
     private UserLoginService userLoginService;
+    // 注册
     @Resource
     private UserRegisterService userRegisterService;
+    //删除
     @Resource
     private UserDeleteService userDeleteService;
+    // 修改
     @Resource
     private UserModifyService userModifyService;
+    // 查询
     @Resource
     private UserQueryService userQueryService;
+
     @Resource
     private UserGroupMapper userGroupMapper;
     @Resource
@@ -47,19 +52,19 @@ public class AuthController {
      * @throws AuthenticationException
      */
     @PostMapping("/auth")
-    public ResultData createAuthenticationToken(
+    public ResultData<String> createAuthenticationToken(
             @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
         return userLoginService.login(username, password);
     }
 
-    /**
-     * token刷新服务
-     * @param request
-     * @return
-     * @throws AuthenticationException
-     */
+//    /**
+//     * token刷新服务
+//     * @param request
+//     * @return
+//     * @throws AuthenticationException
+//     */
 //    @PostAuthorize("returnObject.username == principal.username or hasRole('ROLE_ADMIN')")
 //    @RequestMapping(value = "/refresh", method = RequestMethod.GET)
 //    public ResponseEntity<?> refreshAndGetAuthenticationToken(
@@ -85,7 +90,7 @@ public class AuthController {
      * @throws AuthenticationException
      */
     @PostMapping("/auth/register")
-    public ResultData register(@RequestBody RegisterUserBean registerUser) throws Exception {
+    public ResultData<UserDao> register(@RequestBody RegisterUserBean registerUser) throws Exception {
         ResultData<UserDao> resultData = new ResultData<>();
         String groupDescription = registerUser.getGroupDescription();
         if (groupDescription == null){
@@ -187,7 +192,7 @@ public class AuthController {
      * @return
      */
     @DeleteMapping("/auth/delete")
-    public ResultData delete(@RequestParam String username){
+    public ResultData<UserDao> delete(@RequestParam String username){
         ResultData<UserDao> resultData = new ResultData<>();
         if (username == null){
             resultData.setMessage("请输入用户名");
@@ -195,13 +200,14 @@ public class AuthController {
         } else {
             UserDao userDao = userMapper.queryUserByName(username);
             if (userDao == null){
-                resultData.setMessage("你输入的用户不存在");
+                resultData.setMessage("要删除的用户不存在");
                 return resultData;
             } else {
                 UserRoleDao userRoleDao = userRoleMapper.queryRoleByName(username);
                 String roleDescription = userRoleDao.getRoleDescription();
                 if (roleDescription.equals(UserConstant.SYSTEM_ADMIN)){
                     //删除系统管理员
+                    resultData.setCode(401);
                     resultData.setMessage("您没有此权限");
                     return resultData;
                 } else if (roleDescription.equals(UserConstant.SYSTEM_SUPER_USER)){
@@ -245,6 +251,24 @@ public class AuthController {
             String username = user.getUsername();
             return userQueryService.queryAllUser(username, resultData);
         }catch (Exception e){
+            resultData.setCode(402);
+            resultData.setMessage("身份已过期，重新登陆");
+            return resultData;
+        }
+    }
+
+    @GetMapping("/auth/queryByName")
+    public ResultData<List<QueryUserBean>> getUserByName(@RequestParam String username, Authentication authentication) {
+        ResultData<List<QueryUserBean>> resultData = new ResultData<>();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            resultData.setCode(402);
+            resultData.setMessage("身份已过期,重新登陆");
+            return resultData;
+        }
+        try {
+            JwtUser user = (JwtUser) authentication.getPrincipal();
+            return userQueryService.queryUserByName(username, user, resultData);
+        } catch (Exception e) {
             resultData.setCode(402);
             resultData.setMessage("身份已过期，重新登陆");
             return resultData;

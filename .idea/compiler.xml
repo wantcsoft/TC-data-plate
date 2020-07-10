@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="TC-cloud-gateway-8080" />
+        <module name="TC-cloud-security-copy1-8006" />
         <module name="TC-cloud-kafka-provider-8003" />
         <module name="TC-cloud-kafka-consumer01-8004" />
         <module name="TC-cloud-service01-8002" />

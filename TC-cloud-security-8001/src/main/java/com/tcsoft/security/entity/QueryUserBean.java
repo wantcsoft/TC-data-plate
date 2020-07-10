@@ -1,6 +1,7 @@
 package com.tcsoft.security.entity;
 
 
+import com.tcsoft.security.dao.UserDao;
 import lombok.Data;
 
 import java.util.Date;

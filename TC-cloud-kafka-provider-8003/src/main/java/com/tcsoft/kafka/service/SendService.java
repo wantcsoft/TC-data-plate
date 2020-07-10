@@ -1,10 +1,11 @@
 package com.tcsoft.kafka.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.messaging.support.MessageBuilder;
+import javax.annotation.Resource;
 
 
 /**
@@ -14,11 +15,13 @@ import org.springframework.messaging.support.MessageBuilder;
 @EnableBinding(Source.class)
 public class SendService {
 
-    @Autowired
+    @Resource
     private Source source;
 
     public void sendMsg(String msg) {
         source.output().send(MessageBuilder.withPayload(msg).build());
     }
+
+
 }
 

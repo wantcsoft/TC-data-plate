@@ -35,10 +35,10 @@ public class UserLoginService {
     public ResultData<String> login(String username, String password) {
         ResultData<String> resultData = new ResultData<String>();
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-        // Perform the security
+        // Perform the com.tcsoft.security
         final Authentication authentication = authenticationManager.authenticate(upToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        // Reload password post-security so we can generate token
+        // Reload password post-com.tcsoft.security so we can generate token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final String token = tokenHead + jwtTokenUtil.generateToken(userDetails);
         resultData.setMessage("登陆成功");

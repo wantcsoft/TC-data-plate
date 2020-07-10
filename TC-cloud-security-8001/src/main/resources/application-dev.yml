@@ -1,36 +1,36 @@
 server:
   port: 8001
 #  servlet:
-#    context-path: /security
+#    context-path: /com.tcsoft.security
 
 
 spring:
   application:
-    name: tcsoft-data-platform-security
+    name: tcsoft-data-platform-com.tcsoft.security
 
   datasource:
     username: root
     password: 12345678
-    url: jdbc:mysql://localhost:3306/mybatis?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
+    url: jdbc:mysql://192.168.3.3:3306/tc_data_plat?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+        server-addr: 192.168.3.3:8848
     sentinel:
       transport:
-        dashboard: localhost:8888
+        dashboard: 192.168.3.3:8080
       eager: false
 
 # JWT 参数配置
 jwt:
-  header: Authorization
-  secret: "ycjkskdmflsamewqjfnfkqwndkqw99d-dsa-dsam=dmas-sakdieiemlsm"
+  header: "Authorization"
+  secret: "qazwsxedcrfvtgbyhnujmdssaftghyujkloipmnvgyuhikolp"
   expiration: 604800
   tokenHead: "Bearer "
   route:
     authentication:
-      path: auth
+      path: "auth"
       refresh: refresh
       register: "auth/register"
