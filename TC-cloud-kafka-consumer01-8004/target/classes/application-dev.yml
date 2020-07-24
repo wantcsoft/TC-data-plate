@@ -6,12 +6,6 @@ spring:
   application:
     name: tcsoft-data-platform-kafka-consumer
 
-#  datasource:
-#    username: root
-#    password: 12345678
-#    url: jdbc:mysql://localhost:3306/mybatis?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-
   cloud:
     nacos:
       discovery:
@@ -24,10 +18,15 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: localhost:9092
+          brokers: 106.14.77.81:9092
 #          zk-nodes: localhost:2181
           auto-create-topics: true
       bindings:
         input:
-          destination: stream-demo
+          destination: stream-demo02
+          content-type: application/json
           group: test
+          consumer:
+            partitioned: true   #开启分区
+      instance-count: 1     #分区数量
+

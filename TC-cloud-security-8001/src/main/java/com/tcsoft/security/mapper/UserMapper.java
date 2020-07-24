@@ -1,6 +1,7 @@
 package com.tcsoft.security.mapper;
 
 import com.tcsoft.security.dao.UserDao;
+import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.QueryUserBean;
 import org.apache.ibatis.annotations.*;
 
@@ -81,7 +82,7 @@ public interface UserMapper {
     UserDao queryUserById(@Param("userId")Integer userId);
 
     /**
-     * 医院的用户查看本医院自己所管理的用户
+     * 医院的用户查看本医院的用户
      * @param groupId
      * @param roleGrade
      * @return
@@ -123,10 +124,10 @@ public interface UserMapper {
      * @param username
      * @return
      */
-    @Select("SELECT user_role.roleGrade " +
+    @Select("SELECT user_role.roleId, user_role.role, user_role.roleDescription, user_role.roleGrade" +
             "FROM `user`, user_role " +
             "WHERE `user`.username = #{username} " +
             "and `user`.roleId = user_role.roleId;")
-    Integer queryUserRoleGrade(@Param("username")String username);
+    UserRoleDao queryUserRole(@Param("username")String username);
 
 }

@@ -2,12 +2,14 @@ package com.tcsoft.security.service.user;
 
 
 import com.tcsoft.security.dao.UserDao;
+import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.mapper.UserMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.tcsoft.security.utils.JwtTokenUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @author big_john
@@ -16,36 +18,33 @@ import javax.annotation.Resource;
 public class UserDeleteService {
 
     @Resource
+    private JwtTokenUtil jwtTokenUtil;
+    @Resource
     private UserMapper userMapper;
 
-    @PreAuthorize("hasRole('system_admin')")
-    public ResultData<UserDao> deleteSystemSuperUser(String username){
-        return delete(username);
-    }
-
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user')")
-    public ResultData<UserDao> deleteSystemUser(String username){
-        return delete(username);
-    }
-
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user')")
-    public ResultData<UserDao> deleteAdmin(String username){
-        return delete(username);
-    }
-
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin')")
-    public ResultData<UserDao> deleteSuperUser(String username){
-        return delete(username);
-    }
-
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin') or hasRole('super_user')")
-    public ResultData<UserDao> deleteUser(String username){
-        return delete(username);
-    }
-
-    public ResultData<UserDao> delete(String username){
+    public ResultData<UserDao> delete(String deleteUsername, String deleteToken){
         ResultData<UserDao> resultData = new ResultData<>();
-        if (userMapper.deleteOne(username)){
+        String username = jwtTokenUtil.getUsernameFromToken(deleteToken);
+        if (username == null){
+            resultData.setCode(401);
+            resultData.setMessage("token异常");
+            return resultData;
+        }
+        Date date = jwtTokenUtil.getCreatedDateFromToken(deleteToken);
+        if (date == null){
+            resultData.setCode(401);
+            resultData.setMessage("token异常");
+            return resultData;
+        }else {
+            if (jwtTokenUtil.isTokenExpired(deleteToken)){
+                resultData.setCode(401);
+                resultData.setMessage("token过期");
+                return resultData;
+            }
+        }
+        UserRoleDao deleteUserRoleDao = userMapper.queryUserRole(deleteUsername);
+
+        if (userMapper.deleteOne(deleteUsername)){
             resultData.setMessage("删除成功");
         } else {
             resultData.setMessage("删除失败");

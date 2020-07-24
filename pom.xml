@@ -11,13 +11,12 @@
 
 
     <modules>
-        <module>TC-cloud-gateway-8080</module>
-        <module>TC-cloud-com.tcsoft.security-8001</module>
-        <module>TC-cloud-service01-8002</module>
+        <module>TC-cloud-gateway-8888</module>
+        <module>TC-cloud-security-8001</module>
         <module>TC-cloud-kafka-provider-8003</module>
         <module>TC-cloud-kafka-consumer01-8004</module>
         <module>TC-cloud-kafka-consumer02-8005</module>
-        <module>TC-cloud-com.tcsoft.security-copy1-8006</module>
+        <module>TC-cloud-service01-8010</module>
     </modules>
 
 

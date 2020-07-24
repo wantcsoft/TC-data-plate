@@ -51,36 +51,36 @@ public class UserRegisterService {
      * @param registerUserBean
      * @return
      */
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user')")
-    public ResultData<UserDao> registerAdmin(RegisterUserBean registerUserBean){
-        String groupDescription = registerUserBean.getGroupDescription();
-        UserGroupDao userGroupDao = userGroupMapper.queryGroupByDescription(groupDescription);
-        return register(registerUserBean, userGroupDao.getGroupId(), UserConstant.ADMIN_ID);
-    }
+//    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user')")
+//    public ResultData<UserDao> registerHospitalUser(RegisterUserBean registerUserBean){
+//        String groupDescription = registerUserBean.getGroupDescription();
+//        UserGroupDao userGroupDao = userGroupMapper.queryGroupByDescription(groupDescription);
+//        return register(registerUserBean, userGroupDao.getGroupId(), UserConstant.ADMIN_ID);
+//    }
 
     /**
      * 需要拥有系统管理员权限，系统超级用户权限，系统普通用户，医院管理员才能注册医院超级用户
      * @param registerUserBean
      * @return
      */
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin')")
-    public ResultData<UserDao> registerSuperUser(RegisterUserBean registerUserBean){
-        String groupDescription = registerUserBean.getGroupDescription();
-        UserGroupDao userGroupDao = userGroupMapper.queryGroupByDescription(groupDescription);
-        return register(registerUserBean, userGroupDao.getGroupId(), UserConstant.SUPER_USER_ID);
-    }
+//    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin')")
+//    public ResultData<UserDao> registerSuperUser(RegisterUserBean registerUserBean){
+//        String groupDescription = registerUserBean.getGroupDescription();
+//        UserGroupDao userGroupDao = userGroupMapper.queryGroupByDescription(groupDescription);
+//        return register(registerUserBean, userGroupDao.getGroupId(), UserConstant.SUPER_USER_ID);
+//    }
 
     /**
      * 需要拥有系统管理员权限，系统超级用户权限，系统普通用户，医院管理员，医院超级用户才能注册医院普通用户
      * @param registerUserBean
      * @return
      */
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin') or hasRole('super_user')")
-    public ResultData<UserDao> registerUser(RegisterUserBean registerUserBean){
-        String groupDescription = registerUserBean.getGroupDescription();
-        UserGroupDao userGroupDao = userGroupMapper.queryGroupByDescription(groupDescription);
-        return register(registerUserBean, userGroupDao.getGroupId(), UserConstant.USER_ID);
-    }
+//    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin') or hasRole('super_user')")
+//    public ResultData<UserDao> registerUser(RegisterUserBean registerUserBean){
+//        String groupDescription = registerUserBean.getGroupDescription();
+//        UserGroupDao userGroupDao = userGroupMapper.queryGroupByDescription(groupDescription);
+//        return register(registerUserBean, userGroupDao.getGroupId(), UserConstant.USER_ID);
+//    }
 
     /**
      * 检查username是否重复的情况

@@ -89,19 +89,19 @@ public class UserModifyService {
         return modify(modifyUser, resultData, UserConstant.SYSTEM_USER_ID);
     }
 
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user')")
-    public ResultData<UserDao> modifyAdmin(ModifyUserBean modifyUser, ResultData<UserDao> resultData){
-        return modify(modifyUser, resultData, UserConstant.ADMIN_ID);
-    }
-
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin')")
-    public ResultData<UserDao> modifySuperUser(ModifyUserBean modifyUser, ResultData<UserDao> resultData){
-        return modify(modifyUser, resultData, UserConstant.SUPER_USER_ID);
-    }
-
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin') or hasRole('super_user')")
-    public ResultData<UserDao> modifyUser(ModifyUserBean modifyUser, ResultData<UserDao> resultData){
-        return modify(modifyUser, resultData, UserConstant.USER_ID);
-    }
+//    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user')")
+//    public ResultData<UserDao> modifyAdmin(ModifyUserBean modifyUser, ResultData<UserDao> resultData){
+//        return modify(modifyUser, resultData, UserConstant.ADMIN_ID);
+//    }
+//
+//    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin')")
+//    public ResultData<UserDao> modifySuperUser(ModifyUserBean modifyUser, ResultData<UserDao> resultData){
+//        return modify(modifyUser, resultData, UserConstant.SUPER_USER_ID);
+//    }
+//
+//    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user') or hasRole('admin') or hasRole('super_user')")
+//    public ResultData<UserDao> modifyUser(ModifyUserBean modifyUser, ResultData<UserDao> resultData){
+//        return modify(modifyUser, resultData, UserConstant.USER_ID);
+//    }
 
 }

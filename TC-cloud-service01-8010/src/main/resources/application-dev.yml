@@ -1,0 +1,35 @@
+server:
+  port: 8010
+
+
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    database: 0
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: 300ms
+        max-idle: 16
+        min-idle: 8
+
+  application:
+    name: tcsoft-data-platform-service
+
+  datasource:
+    username: root
+    password: 12345678
+    url: jdbc:mysql://192.168.3.3:3306/tc_data_plat?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.3.3:8848
+    sentinel:
+      transport:
+        dashboard: 192.168.3.3:8080
+      eager: false
+

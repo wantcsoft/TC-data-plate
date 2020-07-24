@@ -82,7 +82,7 @@ public class JwtTokenUtil implements Serializable {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -94,10 +94,10 @@ public class JwtTokenUtil implements Serializable {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
-        claims.put(CLAIM_KEY_CREATED, new Date(System.currentTimeMillis() + 60 *60 *10));
+        claims.put(CLAIM_KEY_CREATED, new Date(System.currentTimeMillis() + 60 *60 *12));
         return generateToken(claims);
     }
-
+    //token加密
     String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -106,12 +106,13 @@ public class JwtTokenUtil implements Serializable {
                 .compact();
     }
 
+    //密码修改后需要刷新token
     public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = getCreatedDateFromToken(token);
         return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
                 && !isTokenExpired(token);
     }
-
+    //获取刷新后的token
     public String refreshToken(String token) {
         String refreshedToken;
         try {
@@ -123,7 +124,7 @@ public class JwtTokenUtil implements Serializable {
         }
         return refreshedToken;
     }
-
+    //token过期锁定启用
     public Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);

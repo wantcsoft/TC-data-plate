@@ -1,0 +1,51 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: tcsoft-data-platform-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.3.3:8848
+
+    gateway:
+#      #跨域配置
+#      cors-configurations:
+#        '[/**]': # 匹配所有请求
+#          allowedOrigins: "*"           #跨域处理 允许所有的域
+#          addAllowedHeader: "*"
+#          allowedMethods:          #支持的方法
+#            - GET
+#            - POST
+#            - PUT
+#            - DELETE
+      discovery:
+        locator:
+          enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由
+          lower-case-service-id: true
+      routes:
+        - id: tcsoft-data-platform-security # 路由的id,没有规定规则但要求唯一,建议配合服务名
+          #匹配后提供服务的路由地址
+#          uri: http://localhost:8001
+          uri: lb://tcsoft-data-platform-security
+          predicates:
+            - Host=**
+#            - Method=POST
+#            - Path=/com.tcsoft.security/** #断言,路径相匹配的进行路由
+#            - Path=/payment/get/** # 断言，路径相匹配的进行路由
+#            - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+#            - Before=2017-01-20T17:42:47.789-07:00[America/Denver]
+#            - Cookie=username,zzyy
+#            - Header=X-Request-Id, \d+ #请求头要有X-Request-Id属性，并且值为正数
+#            - Host=**
+
+#            - Query=username, \d+ # 要有参数名username并且值还要是正整数才能路由
+#           过滤
+#          filters:
+#            - AddRequestHeader=X-Request-red, blue
+#        - id: tcsoft-data-platform-service
+#          uri: lb://tcsoft-data-platform-service
+#          predicates:
+#            - Method=GET
+#            - Path=/service/** #断言,路径相匹配的进行路由

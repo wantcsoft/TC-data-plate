@@ -2,10 +2,14 @@ package com.tcsoft.kafka.service;
 
 
 
+import com.tcsoft.kafka.entity.User;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.messaging.Source;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.MessageChannel;
+
 import javax.annotation.Resource;
+import java.util.UUID;
 
 
 /**
@@ -15,10 +19,13 @@ import javax.annotation.Resource;
 @EnableBinding(Source.class)
 public class SendService {
 
+    /**
+     * 消息发送管道
+     */
     @Resource
     private Source source;
 
-    public void sendMsg(String msg) {
+    public void sendMsg(User msg) {
         source.output().send(MessageBuilder.withPayload(msg).build());
     }
 
