@@ -1,6 +1,7 @@
 package com.tcsoft.security.mapper;
 
 import com.tcsoft.security.dao.UserDao;
+import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.QueryUserBean;
 import org.apache.ibatis.annotations.*;
@@ -27,12 +28,20 @@ public interface UserMapper {
     boolean insertOne(UserDao userDao);
 
     /**
-     * 删除指定用户
+     * 根据用户名删除指定用户
      * @param username
      * @return
      */
     @Delete("DELETE FROM `user` WHERE `username` = #{username};")
-    boolean deleteOne(@Param("username")String username);
+    boolean deleteOneByUserName(@Param("username")String username);
+
+    /**
+     * 根据用户和Id删除指定用户
+     * @param userId
+     * @return
+     */
+    @Delete("DELETE FROM `user` WHERE `userId` = #{userId};")
+    boolean deleteOneByUserId(@Param("userId")Integer userId);
 
     /**
      * 跟新用户数据,不更新密码
@@ -120,7 +129,7 @@ public interface UserMapper {
     List<QueryUserBean> systemAdminQueryAllUser();
 
     /**
-     * 根据用户名查询出他的角色级别
+     * 根据用户名查询出他的角色信息
      * @param username
      * @return
      */
@@ -128,6 +137,17 @@ public interface UserMapper {
             "FROM `user`, user_role " +
             "WHERE `user`.username = #{username} " +
             "and `user`.roleId = user_role.roleId;")
-    UserRoleDao queryUserRole(@Param("username")String username);
+    UserRoleDao queryUserRoleByName(@Param("username")String username);
+
+    /**
+     * 根据用户号Id查询出他的角色信息
+     * @param userId
+     * @return
+     */
+    @Select("SELECT user_role.roleId, user_role.role, user_role.roleDescription, user_role.roleGrade" +
+            "FROM `user`, user_role " +
+            "WHERE `user`.userId = #{userId} " +
+            "and `user`.roleId = user_role.roleId;")
+    UserRoleDao queryUserRoleById(@Param("userId")Integer userId);
 
 }

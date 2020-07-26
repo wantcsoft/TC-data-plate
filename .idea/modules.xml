@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/TC-cloud-gateway-8888/TC-cloud-gateway-8888.iml" filepath="$PROJECT_DIR$/TC-cloud-gateway-8888/TC-cloud-gateway-8888.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TC-cloud-kafka-consumer01-8004/TC-cloud-kafka-consumer01-8004.iml" filepath="$PROJECT_DIR$/TC-cloud-kafka-consumer01-8004/TC-cloud-kafka-consumer01-8004.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TC-cloud-kafka-consumer02-8005/TC-cloud-kafka-consumer02-8005.iml" filepath="$PROJECT_DIR$/TC-cloud-kafka-consumer02-8005/TC-cloud-kafka-consumer02-8005.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TC-cloud-kafka-provider-8003/TC-cloud-kafka-provider-8003.iml" filepath="$PROJECT_DIR$/TC-cloud-kafka-provider-8003/TC-cloud-kafka-provider-8003.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TC-cloud-security-8001/TC-cloud-security-8001.iml" filepath="$PROJECT_DIR$/TC-cloud-security-8001/TC-cloud-security-8001.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TC-cloud-service01-8010/TC-cloud-service01-8010.iml" filepath="$PROJECT_DIR$/TC-cloud-service01-8010/TC-cloud-service01-8010.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TC-data-plate.iml" filepath="$PROJECT_DIR$/TC-data-plate.iml" />
+    </modules>
+  </component>
+</project>

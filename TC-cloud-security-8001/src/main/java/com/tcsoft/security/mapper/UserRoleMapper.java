@@ -29,7 +29,15 @@ public interface UserRoleMapper {
             "FROM `user`, user_role " +
             "WHERE `user`.username = #{username} " +
             "and `user`.roleId = user_role.roleId")
-    UserRoleDao queryRoleByName(@Param("username")String username);
+    UserRoleDao queryRoleByUserName(@Param("username")String username);
+
+    /**
+     * 根据roleId查询角色信息
+     * @param roleId
+     * @return
+     */
+    @Select("select * from user_role where roleId = #{roleId}")
+    UserRoleDao queryRoleById(@Param("roleId")Integer roleId);
 
     /**
      * 根据用户名查询出所有比他低的权限

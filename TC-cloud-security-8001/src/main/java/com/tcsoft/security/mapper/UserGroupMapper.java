@@ -35,4 +35,26 @@ public interface UserGroupMapper {
      */
     @Select("select * from user_group where groupDescription = #{groupDescription};")
     UserGroupDao queryGroupByDescription(@Param("groupDescription")String groupDescription);
+
+    /**
+     * 根据userId查询组信息
+     * @param userId
+     * @return
+     */
+    @Select("select user_group.groupId, user_group.groupDescription " +
+            "from `user`, user_group " +
+            "where userId = #{userId} " +
+            "and `user`.groupId = user_group.groupId;")
+    UserGroupDao queryGroupByUserId(@Param("userId")Integer userId);
+
+    /**
+     * 根据userId查询组信息
+     * @param userName
+     * @return
+     */
+    @Select("select user_group.groupId, user_group.groupDescription " +
+            "from `user`, user_group " +
+            "where userName = #{userName} " +
+            "and `user`.groupId = user_group.groupId;")
+    UserGroupDao queryGroupByUserName(@Param("userName")String userName);
 }

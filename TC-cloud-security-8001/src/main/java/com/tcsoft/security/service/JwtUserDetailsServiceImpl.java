@@ -27,7 +27,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDao userDao = userMapper.queryUserByName(username);
-        UserRoleDao userRoleDao = userRoleMapper.queryRoleByName(username);
+        UserRoleDao userRoleDao = userRoleMapper.queryRoleByUserName(username);
         if (userDao == null) {
             throw new UsernameNotFoundException(String.format("没有找到该用户 '%s'.", username));
         } else {

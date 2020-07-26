@@ -4,8 +4,11 @@ import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
 import com.tcsoft.security.service.user.UserDeleteService;
 import com.tcsoft.security.service.user.UserLoginService;
+import com.tcsoft.security.service.user.UserModifyService;
+import com.tcsoft.security.service.user.UserRegisterService;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +25,10 @@ public class UserController {
     private UserLoginService userLoginService;
     @Resource
     private UserDeleteService userDeleteService;
-
+    @Resource
+    private UserRegisterService userRegisterService;
+    @Resource
+    private UserModifyService userModifyService;
 
     @PostMapping("/user")
     public ResultData userService(@RequestBody UserServiceBean userServiceBean){
@@ -38,26 +44,36 @@ public class UserController {
                         return userLoginService.login(loginUsername, loginPassword);
                     }
                 case UserConstant.DELETE:
-                    //删除操作
-                    if (userServiceBean.getUsername()==null || userServiceBean.getToken()==null){
+                    //删除操作,根据userId删除用户
+                    if (userServiceBean.getUserId()==null || userServiceBean.getToken()==null){
                         return nullParameter();
                     }else {
-                        String deleteUsername = userServiceBean.getUsername();
+                        int deleteUserId = userServiceBean.getUserId();
                         String deleteToken = userServiceBean.getToken();
-                        return userDeleteService.delete(deleteUsername, deleteToken);
+                        return userDeleteService.delete(deleteUserId, deleteToken);
                     }
                 case UserConstant.CREATE:
                     //创建操作
-
-                    return null;
+                    if (userServiceBean.getGroupId()==null || userServiceBean.getRoleId()==null ||
+                    userServiceBean.getUsername()== null || userServiceBean.getPassword()==null ||
+                    userServiceBean.getToken()==null){
+                        return nullParameter();
+                    }else {
+                        return userRegisterService.register(userServiceBean);
+                    }
                 case UserConstant.QUERY:
                     //查询操作
 
                     return null;
                 case UserConstant.MODIFY:
                     //修改操作
-
-                    return null;
+                    if (userServiceBean.getUserId()==null || userServiceBean.getGroupId()==null ||
+                    userServiceBean.getRoleId()==null || userServiceBean.getUsername()==null ||
+                    userServiceBean.getPassword()==null || userServiceBean.getToken()==null){
+                        return nullParameter();
+                    }else {
+                        return userModifyService.modify(userServiceBean);
+                    }
                 default:
                     ResultData<String> resultData = new ResultData<>();
                     resultData.setCode(401);
@@ -72,7 +88,17 @@ public class UserController {
         }
     }
 
-    public ResultData<String> nullParameter(){
+    @GetMapping("/user")
+    public ResultData getUser(){
+
+        return nullParameter();
+    }
+
+    /**
+     * 缺少必要的参数
+     * @return
+     */
+    private ResultData<String> nullParameter(){
         ResultData<String> resultData = new ResultData<>();
         resultData.setCode(401);
         resultData.setMessage("缺少必要参数");

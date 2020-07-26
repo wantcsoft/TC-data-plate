@@ -1,6 +1,5 @@
 package com.tcsoft.security.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
@@ -19,7 +18,6 @@ public class UserServiceBean {
     private Integer roleId;
     private String username;
     private String password;
-    private Date lastPasswordResetDate;
     private boolean accountNonLocked;
     private boolean accountNonExpired;
     private boolean credentialsNonExpired;

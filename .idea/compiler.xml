@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="TC-cloud-kafka-provider-8003" />
+        <module name="TC-cloud-kafka-consumer01-8004" />
+        <module name="TC-cloud-gateway-8888" />
+        <module name="TC-cloud-kafka-consumer02-8005" />
+        <module name="TC-cloud-security-8001" />
+        <module name="TC-cloud-service01-8010" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="TC-cloud-gateway-8888" target="1.8" />
+      <module name="TC-cloud-kafka-consumer01-8004" target="1.8" />
+      <module name="TC-cloud-kafka-consumer02-8005" target="1.8" />
+      <module name="TC-cloud-kafka-provider-8003" target="1.8" />
+      <module name="TC-cloud-security-8001" target="1.8" />
+      <module name="TC-cloud-service01-8010" target="1.8" />
+      <module name="TC-data-plate" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

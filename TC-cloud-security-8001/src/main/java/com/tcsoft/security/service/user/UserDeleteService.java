@@ -5,11 +5,10 @@ import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.mapper.UserMapper;
-import com.tcsoft.security.utils.JwtTokenUtil;
+import com.tcsoft.security.utils.CheckUserToken;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * @author big_john
@@ -18,36 +17,33 @@ import java.util.Date;
 public class UserDeleteService {
 
     @Resource
-    private JwtTokenUtil jwtTokenUtil;
-    @Resource
     private UserMapper userMapper;
 
-    public ResultData<UserDao> delete(String deleteUsername, String deleteToken){
-        ResultData<UserDao> resultData = new ResultData<>();
-        String username = jwtTokenUtil.getUsernameFromToken(deleteToken);
-        if (username == null){
+    public ResultData<String> delete(int deleteUserId, String deleteToken){
+        ResultData<String> resultData = new ResultData<>();
+        String message = CheckUserToken.checkToken(deleteToken);
+        if (!"".equals(message)){
+            resultData.setCode(401);
+            resultData.setMessage(message);
+            return resultData;
+        }
+        String userName = CheckUserToken.getTokenUserName(deleteToken);
+        if (!"".equals(userName)){
             resultData.setCode(401);
             resultData.setMessage("token异常");
             return resultData;
         }
-        Date date = jwtTokenUtil.getCreatedDateFromToken(deleteToken);
-        if (date == null){
-            resultData.setCode(401);
-            resultData.setMessage("token异常");
-            return resultData;
-        }else {
-            if (jwtTokenUtil.isTokenExpired(deleteToken)){
-                resultData.setCode(401);
-                resultData.setMessage("token过期");
-                return resultData;
+        if (CheckUserToken.checkAuthority(userName, deleteUserId)){
+            if (userMapper.deleteOneByUserId(deleteUserId)){
+                resultData.setCode(200);
+                resultData.setMessage("删除成功");
+            } else {
+                resultData.setCode(200);
+                resultData.setMessage("删除失败");
             }
-        }
-        UserRoleDao deleteUserRoleDao = userMapper.queryUserRole(deleteUsername);
-
-        if (userMapper.deleteOne(deleteUsername)){
-            resultData.setMessage("删除成功");
-        } else {
-            resultData.setMessage("删除失败");
+        }else {
+            resultData.setCode(401);
+            resultData.setMessage("权限不足");
         }
         return resultData;
     }
