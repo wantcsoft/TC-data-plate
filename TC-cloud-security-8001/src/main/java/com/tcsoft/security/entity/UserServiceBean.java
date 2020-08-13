@@ -3,6 +3,7 @@ package com.tcsoft.security.entity;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  */
 @Data
 @ToString
-public class UserServiceBean {
+public class UserServiceBean implements Serializable {
 
     private String type;
     private Integer userId;
@@ -18,10 +19,10 @@ public class UserServiceBean {
     private Integer roleId;
     private String username;
     private String password;
-    private boolean accountNonLocked;
-    private boolean accountNonExpired;
-    private boolean credentialsNonExpired;
-    private boolean enabled;
+    private boolean accountNonLocked = false;
+    private boolean accountNonExpired = false;
+    private boolean credentialsNonExpired = false;
+    private boolean enabled = true;
 
     private String groupDescription;
 
@@ -32,5 +33,7 @@ public class UserServiceBean {
      * 用户访问凭证
      */
     private String token;
+
+    private QueryConditionBean condition;
 
 }

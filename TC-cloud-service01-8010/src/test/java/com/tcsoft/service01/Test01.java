@@ -1,12 +1,18 @@
 package com.tcsoft.service01;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tcsoft.service01.entity.Dog;
+import com.tcsoft.service01.entity.User;
+
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 public class Test01 {
 
-    public static void main(String[] args) {
-        new Test01().test01();
+    public static void main(String[] args) throws JsonProcessingException {
+        new Test01().test02();
     }
 
     public void test01(){
@@ -33,5 +39,20 @@ public class Test01 {
 //                    }
 //                });
 
+    }
+
+    public void test02() throws JsonProcessingException {
+        Dog dog = new Dog();
+        dog.setName("wangwang");
+        dog.setWeight(10);
+        User user = new User();
+        user.setUserName("xiaoming");
+        user.setAge(22);
+        user.setDog(dog);
+        ObjectMapper om = new ObjectMapper();
+        String s = om.writeValueAsString(user);
+        System.out.println(s);
+        User user1 = om.readValue(s, User.class);
+        System.out.println(user1);
     }
 }

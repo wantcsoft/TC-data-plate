@@ -1,5 +1,6 @@
 package com.tcsoft.security.service.group;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.entity.ResultData;
@@ -8,6 +9,7 @@ import com.tcsoft.security.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,19 +25,21 @@ public class UserGroupService {
     private UserGroupMapper userGroupMapper;
 
     public ResultData<List<UserGroupDao>> getUserGroup(String username, ResultData<List<UserGroupDao>> resultData) {
-        UserDao user = userMapper.queryUserByName(username);
+        UserDao user = userMapper.selectOne(new QueryWrapper<UserDao>()
+                .eq("username", username));
         if (user == null){
             resultData.setCode(401);
             resultData.setMessage("操作失败");
             return resultData;
         }
         Integer groupId = user.getGroupId();
-        List<UserGroupDao> userGroupDaoList;
+        List<UserGroupDao> userGroupDaoList = new ArrayList<>();
         if (groupId == 1){
-            userGroupDaoList = userGroupMapper.queryAllGroup();
+            userGroupDaoList = userGroupMapper.selectList(null);
 
         }else {
-            userGroupDaoList = userGroupMapper.queryGroupById(groupId);
+            UserGroupDao userGroupDao = userGroupMapper.selectById(groupId);
+            userGroupDaoList.add(userGroupDao);
         }
         resultData.setMessage("操作成功");
         resultData.setData(userGroupDaoList);

@@ -14,7 +14,7 @@ public class RecieveService {
     @StreamListener(Sink.INPUT)
     public void recieve(Object payload) throws InterruptedException {
         System.out.println(payload);
-        TimeUnit.MILLISECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(1);
     }
 
 }

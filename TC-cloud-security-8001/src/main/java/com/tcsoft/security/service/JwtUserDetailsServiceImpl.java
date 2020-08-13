@@ -1,5 +1,6 @@
 package com.tcsoft.security.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.convert.UserConvertJwtUser;
 import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.mapper.UserRoleMapper;
@@ -26,8 +27,11 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDao userDao = userMapper.queryUserByName(username);
-        UserRoleDao userRoleDao = userRoleMapper.queryRoleByUserName(username);
+        UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
+                .eq("user_name", username));
+        UserRoleDao userRoleDao = userRoleMapper.selectById(
+                userMapper.selectOne(new QueryWrapper<UserDao>()
+                    .eq("user_name", username)).getRoleId());
         if (userDao == null) {
             throw new UsernameNotFoundException(String.format("没有找到该用户 '%s'.", username));
         } else {

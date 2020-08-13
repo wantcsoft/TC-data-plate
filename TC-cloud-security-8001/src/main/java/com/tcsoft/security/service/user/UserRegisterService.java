@@ -1,13 +1,14 @@
 package com.tcsoft.security.service.user;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
-import com.tcsoft.security.dao.UserRoleDao;
+import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
 import com.tcsoft.security.mapper.UserMapper;
-import com.tcsoft.security.mapper.UserRoleMapper;
-import com.tcsoft.security.utils.CheckUserToken;
 import com.tcsoft.security.utils.UserConstant;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,6 @@ public class UserRegisterService {
 
     @Resource
     private UserMapper userMapper;
-    @Resource
-    private UserRoleMapper userRoleMapper;
 
     /**
      * 检查username是否重复的情况
@@ -31,61 +30,88 @@ public class UserRegisterService {
      * @return
      */
     private boolean checkUserName(String username){
-        UserDao userDao = userMapper.queryUserByName(username);
+        UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
+                .eq("username", username));
         return userDao == null;
     }
 
     /**
      * 注册的通用方法，供所有人调用
-     * @param userServiceBean
+     * @param userServiceBean, authentication
      * @return
      */
-    public ResultData<UserDao> register(UserServiceBean userServiceBean){
-        ResultData<UserDao> resultData = new ResultData<>();
-        String message = CheckUserToken.checkToken(userServiceBean.getToken());
-        if (!"".equals(message)){
-            resultData.setCode(401);
-            resultData.setMessage(message);
-            return resultData;
+    public ResultData<String> register(UserServiceBean userServiceBean,
+                                        Authentication authentication){
+
+        int roleId = userServiceBean.getRoleId();
+        int groupId = userServiceBean.getRoleId();
+        if (UserConstant.SYSTEM_USER_ID==roleId && groupId==UserConstant.SYSTEM_GROUP_ID){
+            //创建系统用户
+            return registerSystemUser(userServiceBean);
+        }else if (UserConstant.DEVELOPER_ID ==roleId && groupId==UserConstant.SYSTEM_GROUP_ID){
+            //创建开发者用户
+            return registerDeveloper(userServiceBean);
+        }else if (UserConstant.HOSPITAL_ID==roleId){
+            JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+            if (jwtUser.getGroupId()==UserConstant.SYSTEM_GROUP_ID){
+                return registerHospital(userServiceBean);
+            }else if (jwtUser.getGroupId()==groupId){
+                return registerHospital(userServiceBean);
+            }
         }
-        String userName = CheckUserToken.getTokenUserName(userServiceBean.getToken());
-        if (!"".equals(userName)){
+        ResultData<String> resultData = new ResultData<>();
+        resultData.setCode(401);
+        resultData.setMessage("权限不足");
+        return resultData;
+    }
+
+    @PreAuthorize("hasRole('system_admin')")
+    private ResultData<String> registerSystemUser(UserServiceBean userServiceBean){
+        return registerUser(userServiceBean);
+    }
+
+    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
+    private ResultData<String> registerDeveloper(UserServiceBean userServiceBean){
+        return registerUser(userServiceBean);
+    }
+
+    private ResultData<String> registerHospital(UserServiceBean userServiceBean){
+        return registerUser(userServiceBean);
+    }
+
+    private ResultData<String> registerUser(UserServiceBean userServiceBean){
+        ResultData<String> resultData = new ResultData<>();
+        //检查是否重名
+        String username = userServiceBean.getUsername();
+        if ("".equals(username)){
             resultData.setCode(401);
-            resultData.setMessage("token异常");
-            return resultData;
-        }
-        //检查用户名重名情况
-        if (checkUserName(userServiceBean.getUsername())){
+            resultData.setMessage("注册失败，用户名为空");
+        }else if (checkUserName(username)){
             String password = userServiceBean.getPassword();
             //密码长度检查
-            if (password.length() < UserConstant.PASSWORD_MIN_LENGTH){
+            if (password.length() < UserConstant.PASSWORD_LENGTH_MIN ||
+                    password.length() > UserConstant.PASSWORD_LENGTH_MAX){
                 resultData.setCode(401);
-                resultData.setMessage("注册失败，密码长度小于6位");
+                resultData.setMessage("注册失败，密码长度异常");
                 return resultData;
             } else {
-                //权限检查
-                if (CheckUserToken.checkAuthority(userName, userServiceBean.getUserId())){
-                    resultData.setCode(401);
-                    resultData.setMessage("权限不足");
+                UserDao userDao = new UserDao();
+                userDao.setGroupId(userServiceBean.getGroupId());
+                userDao.setRoleId(userServiceBean.getRoleId());
+                userDao.setUsername(userServiceBean.getUsername());
+                //密码加密
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                userDao.setPassword(encoder.encode(password));
+                //密码最新一次修改日期
+                userDao.setLastPasswordResetDate(new Date());
+                userDao.setAccountNonLocked(userServiceBean.isAccountNonLocked());
+                userDao.setEnabled(userServiceBean.isEnabled());
+                if (userMapper.insert(userDao) == 1){
+                    resultData.setCode(200);
+                    resultData.setMessage("注册成功");
                 }else {
-                    UserDao userDao = new UserDao();
-                    userDao.setGroupId(userServiceBean.getGroupId());
-                    userDao.setRoleId(userServiceBean.getRoleId());
-                    userDao.setUsername(userServiceBean.getUsername());
-                    //密码加密
-                    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-                    userDao.setPassword(encoder.encode(password));
-                    //密码最新一次修改日期
-                    userDao.setLastPasswordResetDate(new Date());
-                    userDao.setAccountNonLocked(userServiceBean.isAccountNonLocked());
-                    userDao.setEnabled(userServiceBean.isEnabled());
-                    if (userMapper.insertOne(userDao)){
-                        resultData.setMessage("注册成功");
-                        resultData.setData(userDao);
-                    }else {
-                        resultData.setCode(401);
-                        resultData.setMessage("注册失败");
-                    }
+                    resultData.setCode(401);
+                    resultData.setMessage("注册失败");
                 }
             }
         }else {

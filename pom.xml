@@ -17,6 +17,8 @@
         <module>TC-cloud-kafka-consumer01-8004</module>
         <module>TC-cloud-kafka-consumer02-8005</module>
         <module>TC-cloud-service01-8010</module>
+        <module>TC-cloud-system-setting-8006</module>
+        <module>TC-cloud-sample-8007</module>
     </modules>
 
 

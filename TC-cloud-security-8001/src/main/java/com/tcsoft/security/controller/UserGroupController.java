@@ -20,7 +20,7 @@ public class UserGroupController {
     @Resource
     private UserGroupService groupService;
 
-    @GetMapping("/getGroups")
+    @GetMapping("/groups")
     public ResultData<List<UserGroupDao>> getUserGroups(Authentication authentication){
         ResultData<List<UserGroupDao>> resultData = new ResultData<>();
         if (authentication == null || authentication.getPrincipal() == null) {

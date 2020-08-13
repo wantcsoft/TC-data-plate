@@ -1,20 +1,22 @@
 package com.tcsoft.security.service.user;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
-import com.tcsoft.security.entity.JwtUser;
-import com.tcsoft.security.entity.QueryUserBean;
-import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.dao.UserGroupDao;
+import com.tcsoft.security.entity.*;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.mapper.UserRoleMapper;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,120 +28,92 @@ public class UserQueryService {
     @Resource
     private UserMapper userMapper;
     @Resource
-    private UserRoleMapper userRoleMapper;
-    @Resource
     private UserGroupMapper userGroupMapper;
 
-    public ResultData<List<QueryUserBean>> queryAllUser(String username, ResultData<List<QueryUserBean>> resultData) {
-        List<QueryUserBean> userList;
-        UserDao currentUser = userMapper.queryUserByName(username);
-        Integer groupId = currentUser.getGroupId();
-        Integer roleGrade = userMapper.queryUserRoleGrade(username);
-        if (groupId == UserConstant.SYSTEM_GROUP_ID){
-            // 系统级用户，可以查看所有医院用户信息,还有比自己等级低的系统用户
-            Integer maxGrade = userRoleMapper.queryMaxGrade();
-            if (roleGrade.equals(maxGrade)){
-                // 这是系统管理员用户，权限最高
-                userList = userMapper.systemAdminQueryAllUser();
-            }else {
-                // 其他系统用户查看比自己等级低的用户
-                userList = userMapper.systemQueryAllUser(roleGrade);
-            }
-        }else {
-            // 这是一个医院用户，只能查看本医院的用户
-            userList = userMapper.hospitalQueryAllUser(groupId, roleGrade);
-        }
-        if (userList.size() != 0){
-            resultData.setData(userList);
-            resultData.setMessage("获取" + userList.size() + "条数据");
-        }else {
-            resultData.setMessage("获取0条数据");
-        }
-        return resultData;
-    }
-
-    public ResultData<List<QueryUserBean>> queryUserByName(String username, JwtUser user, ResultData<List<QueryUserBean>> resultData){
-        UserDao userDao = userMapper.queryUserByName(username);
-        if (userDao == null){
-            resultData.setMessage("没有找到该用户");
-            resultData.setData(new ArrayList<>());
+    public ResultData<List<UserDao>> query(UserServiceBean userServiceBean,
+                                                 Authentication authentication) {
+        QueryConditionBean condition = userServiceBean.getCondition();
+        ResultData<List<UserDao>> resultData = new ResultData<>();
+        if (condition == null){
+            resultData.setCode(401);
+            resultData.setMessage("查询条件缺失");
             return resultData;
         }else {
-            Integer groupId = userDao.getGroupId();
-            Integer roleId = userDao.getRoleId();
-            if (groupId == UserConstant.SYSTEM_GROUP_ID){
-                if (roleId == UserConstant.SYSTEM_ADMIN_ID){
-                    //查询的是系统管理员
-                    return querySystemAdminByName(userDao, resultData);
-                }else if (roleId == UserConstant.SYSTEM_SUPER_USER_ID){
-                    //系统超级用户
-                    return querySystemSuperUserByName(userDao, resultData);
-                }else if (roleId == UserConstant.SYSTEM_USER_ID){
-                    //系统普通用户
-                    return querySystemUserByName(userDao, resultData);
+            //根据userId查询用户
+            if (condition.getUserId() != null){
+                UserDao userDao = userMapper.selectById(condition.getUserId());
+                return handleSingle(userDao, authentication);
+            //根据username查询用户
+            }else if (condition.getUsername() != null){
+                UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
+                        .eq("user_name", condition.getUsername()));
+                return handleSingle(userDao, authentication);
+            //根据groupId查询用户
+            }else if (condition.getGroupId() != null){
+                JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+                List<UserDao> list = userMapper.selectList(new QueryWrapper<UserDao>()
+                        .eq("group_id", condition.getGroupId()));
+                if (condition.getGroupId()==UserConstant.SYSTEM_GROUP_ID){
+                    return querySystemAdmin(list, resultData);
                 }else {
-                    resultData.setMessage("该用户信息有误");
-                    resultData.setData(new ArrayList<>());
-                    return resultData;
-                }
-            } else {
-                //这是一个医院用户
-                if (groupId.equals(user.getGroupId()) || user.getGroupId() == UserConstant.SYSTEM_GROUP_ID){
-                    return queryHospitalUserByName(userDao, resultData);
-                }else {
-                    //不是一个医院
-                    resultData.setMessage("没有权限查看该用户");
-                    resultData.setData(new ArrayList<>());
-                    return resultData;
+                    UserGroupDao userGroupDao = userGroupMapper.selectById(condition.getGroupId());
+                    if (userGroupDao != null && jwtUser.getGroupId()==UserConstant.SYSTEM_GROUP_ID){
+                        return queryHospital(list, resultData);
+                    }
                 }
             }
         }
+        resultData.setCode(401);
+        resultData.setMessage("查询失败");
+        return resultData;
     }
 
     @PreAuthorize("hasRole('system_admin')")
-    public ResultData<List<QueryUserBean>> querySystemAdminByName(UserDao userDao, ResultData<List<QueryUserBean>> resultData){
-        resultData.setMessage("查询成功");
-        resultData.setData(convertQueryUserBean(userDao));
+    private ResultData<List<UserDao>> querySystemAdmin(List<UserDao> list, ResultData<List<UserDao>> resultData){
+        resultData.setData(list);
         return resultData;
     }
 
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user')")
-    public ResultData<List<QueryUserBean>> querySystemSuperUserByName(UserDao userDao, ResultData<List<QueryUserBean>> resultData){
-        resultData.setMessage("查询成功");
-        resultData.setData(convertQueryUserBean(userDao));
+    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
+    private ResultData<List<UserDao>> queryDeveloper(List<UserDao> list, ResultData<List<UserDao>> resultData){
+        resultData.setData(list);
         return resultData;
     }
 
-    @PreAuthorize("hasRole('system_admin') or hasRole('system_super_user') or hasRole('system_user')")
-    public ResultData<List<QueryUserBean>> querySystemUserByName(UserDao userDao, ResultData<List<QueryUserBean>> resultData){
-        resultData.setMessage("查询成功");
-        resultData.setData(convertQueryUserBean(userDao));
+    private ResultData<List<UserDao>> queryHospital(List<UserDao> list, ResultData<List<UserDao>> resultData){
+        resultData.setData(list);
         return resultData;
     }
 
-    public ResultData<List<QueryUserBean>> queryHospitalUserByName(UserDao userDao, ResultData<List<QueryUserBean>> resultData){
-        resultData.setMessage("查询成功");
-        resultData.setData(convertQueryUserBean(userDao));
+    private ResultData<List<UserDao>> handleSingle(UserDao userDao, Authentication authentication){
+        ResultData<List<UserDao>> resultData = new ResultData<>();
+        if (userDao != null){
+            resultData.setCode(200);
+            resultData.setMessage("查询成功");
+            userDao.setPassword("");
+            List<UserDao> list = new ArrayList<>();
+            if (userDao.getRoleId()==UserConstant.SYSTEM_ADMIN_ID ||
+                    userDao.getRoleId()==UserConstant.SYSTEM_USER_ID){
+                list.add(userDao);
+                return querySystemAdmin(list, resultData);
+            }else if (userDao.getRoleId()==UserConstant.DEVELOPER_ID){
+                list.add(userDao);
+                return queryDeveloper(list, resultData);
+            }else if (userDao.getRoleId()==UserConstant.HOSPITAL_ID){
+                JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+                if (jwtUser.getGroupId() == UserConstant.SYSTEM_GROUP_ID){
+                    list.add(userDao);
+                    return queryHospital(list, resultData);
+                }else if (userDao.getGroupId().equals(jwtUser.getGroupId())){
+                    list.add(userDao);
+                    return queryHospital(list, resultData);
+                }
+            }
+        }else {
+            resultData.setCode(401);
+            resultData.setMessage("查询失败");
+        }
         return resultData;
-    }
-
-    /**
-     * 将UserDao 转换为 QueryUserBean
-     * @param userDao
-     * @return
-     */
-    public List<QueryUserBean> convertQueryUserBean(UserDao userDao){
-        List<QueryUserBean> list = new ArrayList<>();
-        QueryUserBean queryUserBean = new QueryUserBean();
-        queryUserBean.setUserId(userDao.getUserId());
-        queryUserBean.setGroupDescription(userGroupMapper.queryGroupById(userDao.getGroupId()).get(0).getGroupDescription());
-        queryUserBean.setRoleDescription(userRoleMapper.queryRoleByName(userDao.getUsername()).getRoleDescription());
-        queryUserBean.setUsername(userDao.getUsername());
-        queryUserBean.setLastPasswordResetDate(userDao.getLastPasswordResetDate());
-        queryUserBean.setAccountNonLocked(userDao.isAccountNonLocked());
-        queryUserBean.setEnabled(userDao.isEnabled());
-        list.add(queryUserBean);
-        return list;
     }
 
 }

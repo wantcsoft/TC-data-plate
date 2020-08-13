@@ -1,11 +1,13 @@
 package com.tcsoft.security.utils;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.dao.UserRoleDao;
-import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
+import com.tcsoft.security.mapper.UserRoleMapper;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -21,6 +23,8 @@ public final class CheckUserToken {
     private static UserMapper userMapper;
     @Resource
     private static UserGroupMapper userGroupMapper;
+    @Resource
+    private static UserRoleMapper userRoleMapper;
 
     public static String checkToken(String token){
         Date date = jwtTokenUtil.getCreatedDateFromToken(token);
@@ -45,16 +49,22 @@ public final class CheckUserToken {
     }
 
     public static boolean checkAuthority(String userName, int userId){
-        UserRoleDao userRoleDao1 = userMapper.queryUserRoleByName(userName);
-        UserRoleDao userRoleDao2 = userMapper.queryUserRoleById(userId);
+        UserRoleDao userRoleDao1 = userRoleMapper.selectById(userMapper.selectOne(new QueryWrapper<UserDao>()
+                    .eq("username", userName)).getRoleId());
+        UserRoleDao userRoleDao2 = userRoleMapper.selectById(userMapper.selectById(userId).getRoleId());
         if (userRoleDao1==null || userRoleDao2==null) {
             return false;
         }
         if (userRoleDao1.getRoleGrade() > userRoleDao2.getRoleGrade()){
             return true;
         }else if (userRoleDao1.getRoleGrade().equals(userRoleDao2.getRoleGrade())){
-            UserGroupDao userGroupDao1 = userGroupMapper.queryGroupByUserName(userName);
-            UserGroupDao userGroupDao2 = userGroupMapper.queryGroupByUserId(userId);
+            UserGroupDao userGroupDao1 = userGroupMapper.selectById(
+                    userMapper.selectOne(new QueryWrapper<UserDao>()
+                            .eq("username", userName))
+                            .getGroupId());
+            UserGroupDao userGroupDao2 = userGroupMapper.selectById(
+                    userMapper.selectById(userId)
+                            .getGroupId());
             return userGroupDao1.getGroupId().equals(userGroupDao2.getGroupId()) && userGroupDao2.getGroupId() != 1;
         }else {
             return false;

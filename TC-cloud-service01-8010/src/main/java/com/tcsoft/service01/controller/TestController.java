@@ -1,13 +1,15 @@
 package com.tcsoft.service01.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import com.tcsoft.service01.entity.Dog;
+import com.tcsoft.service01.entity.User;
+import com.tcsoft.service01.util.RedisUtil;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -17,19 +19,46 @@ import javax.annotation.Resource;
 public class TestController {
 
     @Resource
-    private StringRedisTemplate redisTemplate;
+    private RedisUtil redisUtil;
 
-    @GetMapping(value = "/redis/set")
-    public void setKey () throws JsonProcessingException {
-        User user = new User("john", "616162728", 23);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String uu = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
-        redisTemplate.opsForValue().set("dasda", uu);
+    @Resource
+    private MongoTemplate mongoTemplate;
+
+
+    @GetMapping("/redis/set")
+    public void setKey () {
+        Dog dog = new Dog();
+        dog.setName("wangwang");
+        dog.setWeight(10);
+        com.tcsoft.service01.entity.User user = new User();
+        user.setUserName("xiaoming");
+        user.setAge(22);
+        user.setDog(dog);
+        redisUtil.set("1010101", user);
     }
 
     @GetMapping("/redis/get")
     public Object getKey(){
-        return redisTemplate.opsForValue().get("dasda");
+        Object o = redisUtil.get("1010101");
+        System.out.println(o);
+        return o;
+    }
+
+    @GetMapping("/mongo/set")
+    public void putMongo(){
+        Dog dog = new Dog();
+        dog.setName("wangwang");
+        dog.setWeight(10);
+        com.tcsoft.service01.entity.User user = new User();
+        user.setUserName("xiaoming");
+        user.setAge(22);
+        user.setDog(dog);
+        mongoTemplate.insert(user);
+    }
+
+    @GetMapping("/mongo/get")
+    public Object getMongo(){
+        return mongoTemplate.findAll(User.class);
     }
 
 }

@@ -16,7 +16,6 @@ public class RecieveService {
     @StreamListener(Sink.INPUT)
     public void recieve(Object payload) {
         System.out.println(payload);
-        System.out.println(payload.getClass());
 
     }
 

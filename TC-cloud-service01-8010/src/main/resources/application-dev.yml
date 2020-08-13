@@ -3,6 +3,12 @@ server:
 
 
 spring:
+  data:
+    mongodb:
+      host: 192.168.3.3
+      port: 27017
+      database: test
+
   redis:
     host: 127.0.0.1
     port: 6379
@@ -20,16 +26,16 @@ spring:
 
   datasource:
     username: root
-    password: 12345678
-    url: jdbc:mysql://192.168.3.3:3306/tc_data_plat?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
+    password: TCsoft123..
+    url: jdbc:mysql://106.14.77.81:3306/systemConfiguration?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.3.3:8848
+        server-addr: 106.14.77.81:8848
     sentinel:
       transport:
-        dashboard: 192.168.3.3:8080
+        dashboard: 106.14.77.81:8080
       eager: false
 
