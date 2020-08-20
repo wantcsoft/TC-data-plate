@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
+ * 基础配置信息，病人类型，例如急诊、门诊、住院、体检等
  * @author WMY
  */
 @Data

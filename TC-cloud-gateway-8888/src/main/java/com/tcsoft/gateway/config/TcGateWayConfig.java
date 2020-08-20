@@ -20,14 +20,18 @@ public class TcGateWayConfig {
      * @param routeLocatorBuilder
      * @return
      */
-//    @Bean
-//    public RouteLocator customRouteLocator(RouteLocatorBuilder routeLocatorBuilder) {
-//        log.info("网关的路由配置");
-//        RouteLocatorBuilder.Builder routes = routeLocatorBuilder.routes();
-//        routes.route("path_route_xd",
-//                r -> r.path("/guonei").uri("https://news.baidu.com/guonei"));
-//        routes.route("tc-security",
-//                r -> r.path("/**").uri("http://192.168.3.3:8001/**"));
-//        return routes.build();
-//    }
+    @Bean
+    public RouteLocator customRouteLocator(RouteLocatorBuilder routeLocatorBuilder) {
+        log.info("网关的路由配置");
+        RouteLocatorBuilder.Builder routes = routeLocatorBuilder.routes();
+//        安全模块
+        routes.route("tcsoft-data-platform-security",
+                r -> r.path("/security/**")
+                        .uri("lb://tcsoft-data-platform-security/security/**"));
+//        系统配置模块
+        routes.route("tcsoft-data-platform-system-setting",
+                r -> r.path("/setting/**")
+                        .uri("lb://tcsoft-data-platform-system-setting/setting/**"));
+        return routes.build();
+    }
 }

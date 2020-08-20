@@ -1,18 +1,13 @@
 package com.tcsoft.sample.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tcsoft.sample.dao.ProgItemDao;
-import com.tcsoft.sample.dao.SampleInfoDao;
-import com.tcsoft.sample.entity.SendTest;
+import com.tcsoft.sample.entity.external.SendTest;
 import com.tcsoft.sample.entity.ResultData;
 import com.tcsoft.sample.service.impl.ProgItemServiceImpl;
 import com.tcsoft.sample.service.impl.SampleInfoServiceImpl;
 import com.tcsoft.sample.service.kafka.ReceiveResultSendService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author WMY

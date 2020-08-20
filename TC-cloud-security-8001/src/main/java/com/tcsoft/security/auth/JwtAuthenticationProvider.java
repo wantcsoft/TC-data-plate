@@ -34,7 +34,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         // 根据用户名查询系统中的用户信息
         UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
-                .eq("user_name", username));
+                .eq("userName", username));
         // 如果用户列表为空，说明没有匹配的用户，抛出 UsernameNotFoundException
         if (Objects.isNull(userDao)) {
             throw new UsernameNotFoundException(String.format("No qualified userDao[%s]!", username));

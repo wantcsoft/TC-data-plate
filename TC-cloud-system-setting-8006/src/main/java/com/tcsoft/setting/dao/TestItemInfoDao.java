@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
+ * 基础配置信息，测试项目基础信息
  * @author WMY
  */
 @Data

@@ -42,9 +42,9 @@ public class UserRegisterService {
      */
     public ResultData<String> register(UserServiceBean userServiceBean,
                                         Authentication authentication){
-
+        System.out.println(userServiceBean);
         int roleId = userServiceBean.getRoleId();
-        int groupId = userServiceBean.getRoleId();
+        int groupId = userServiceBean.getGroupId();
         if (UserConstant.SYSTEM_USER_ID==roleId && groupId==UserConstant.SYSTEM_GROUP_ID){
             //创建系统用户
             return registerSystemUser(userServiceBean);

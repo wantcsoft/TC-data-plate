@@ -7,6 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
+ * 基础配置信息，设备信息
  * @author WMY
  */
 @Data

@@ -1,4 +1,4 @@
-package com.tcsoft.sample.entity;
+package com.tcsoft.sample.entity.external;
 
 
 import lombok.Data;
@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 从lis之类的系统接收到的关于order字段
  * @author WMY
  */
 @Data

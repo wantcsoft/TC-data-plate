@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
+ * 设备更换的方法，针对多设备同一个注册码的管理
  * @author WMY
  */
 @Data

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
+ * 基础配置信息，测试项目类型，例如生化、免疫、血球等
  * @author WMY
  */
 @Data

@@ -5,13 +5,14 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -23,7 +24,17 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 
-    private static final String CLAIM_KEY_USERNAME = "sub";
+    private static final String CLAIM_KEY_USER_ID = "userId";
+    private static final String CLAIM_KEY_USERNAME = "username";
+    private static final String CLAIM_KEY_GROUP_ID = "groupId";
+    private static final String CLAIM_KEY_ROLE = "role";
+    private static final String CLAIM_KEY_LAST_PASSWORD = "lastPasswordResetDate";
+    private static final String CLAIM_KEY_ACCOUNT_LOCKED = "accountNonLocked";
+    private static final String CLAIM_KEY_ACCOUNT_EXPIRED = "accountNonExpired";
+    private static final String CLAIM_KEY_CREDENTIAL_EXPIRED = "credentialsNonExpired";
+    private static final String CLAIM_KEY_ENABLED = "enabled";
+
+
     private static final String CLAIM_KEY_CREATED = "created";
 
     @Value("${jwt.secret}")
@@ -36,13 +47,18 @@ public class JwtTokenUtil implements Serializable {
         String username;
         try {
             final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
+            username = (String)claims.get(CLAIM_KEY_USERNAME);
         } catch (Exception e) {
             username = null;
         }
         return username;
     }
 
+    /**
+     * 获取token创建的时间
+     * @param token
+     * @return
+     */
     public Date getCreatedDateFromToken(String token) {
         Date created;
         try {
@@ -54,6 +70,11 @@ public class JwtTokenUtil implements Serializable {
         return created;
     }
 
+    /**
+     * 获取token过期时间
+     * @param token
+     * @return
+     */
     public Date getExpirationDateFromToken(String token) {
         Date expiration;
         try {
@@ -63,6 +84,24 @@ public class JwtTokenUtil implements Serializable {
             expiration = null;
         }
         return expiration;
+    }
+
+    public JwtUser getJwtUser(String token){
+        Claims claims = getClaimsFromToken(token);
+        if (claims == null){
+            return null;
+        }else {
+            return new JwtUser((int)claims.get(CLAIM_KEY_USER_ID),
+                    (String) claims.get(CLAIM_KEY_USERNAME),
+                    "",
+                    (int)claims.get(CLAIM_KEY_GROUP_ID),
+                    AuthorityUtils.commaSeparatedStringToAuthorityList((String)claims.get(CLAIM_KEY_ROLE)),
+                    new Date((Long) claims.get(CLAIM_KEY_LAST_PASSWORD)),
+                    (boolean)claims.get(CLAIM_KEY_ACCOUNT_LOCKED),
+                    (boolean)claims.get(CLAIM_KEY_ACCOUNT_EXPIRED),
+                    (boolean)claims.get(CLAIM_KEY_CREDENTIAL_EXPIRED),
+                    (boolean)claims.get(CLAIM_KEY_ENABLED));
+        }
     }
 
     private Claims getClaimsFromToken(String token) {
@@ -78,12 +117,24 @@ public class JwtTokenUtil implements Serializable {
         return claims;
     }
 
+    /**
+     * 设置token过期的时间
+     * @return
+     */
     private Date generateExpirationDate() {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 
+    /**
+     * 查看token是否过期
+     * @param token
+     * @return
+     */
     public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
+        if (expiration == null){
+            return false;
+        }
         return expiration.before(new Date());
     }
 
@@ -91,14 +142,32 @@ public class JwtTokenUtil implements Serializable {
         return (lastPasswordReset != null && created.before(lastPasswordReset));
     }
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
-        claims.put(CLAIM_KEY_CREATED, new Date(System.currentTimeMillis() + 60 *60 *12));
+    /**
+     * 根据用户信息生成token
+     * @param user
+     * @return
+     */
+    public String generateToken(JwtUser user) {
+        Map<String, Object> claims = new HashMap<>(9);
+        claims.put(CLAIM_KEY_USER_ID, user.getUserId());
+        claims.put(CLAIM_KEY_USERNAME, user.getUsername());
+        claims.put(CLAIM_KEY_GROUP_ID, user.getGroupId());
+        StringBuilder role = new StringBuilder();
+        user.getAuthorities().forEach((x) -> role.append(x.toString()).append(","));
+        claims.put(CLAIM_KEY_ROLE, role);
+        claims.put(CLAIM_KEY_LAST_PASSWORD, user.getLastPasswordResetDate());
+        claims.put(CLAIM_KEY_ACCOUNT_LOCKED, user.isAccountNonLocked());
+        claims.put(CLAIM_KEY_ACCOUNT_EXPIRED, user.isAccountNonExpired());
+        claims.put(CLAIM_KEY_CREDENTIAL_EXPIRED, user.isCredentialsNonExpired());
+        claims.put(CLAIM_KEY_ENABLED, user.isEnabled());
+        claims.put(CLAIM_KEY_CREATED, new Date(System.currentTimeMillis()));
         return generateToken(claims);
     }
-    //token加密
-    String generateToken(Map<String, Object> claims) {
+
+    /**
+     * token加密
+     */
+    private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())

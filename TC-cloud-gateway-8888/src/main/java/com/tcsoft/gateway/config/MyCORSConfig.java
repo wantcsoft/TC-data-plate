@@ -7,14 +7,12 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 /**
+ * 网关统一配置跨域
  * @author WMY
  */
 @Configuration
 public class MyCORSConfig {
 
-    /**
-     * 网关统一配置跨域
-     */
     @Bean
     public CorsWebFilter corsConfig(){
         UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();

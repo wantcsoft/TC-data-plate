@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.ToString;
 
+
 /**
+ * 基础配置信息，规则配置
  * @author WMY
  */
 @Data

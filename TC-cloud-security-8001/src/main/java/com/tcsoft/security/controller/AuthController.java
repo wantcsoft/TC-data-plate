@@ -2,7 +2,6 @@ package com.tcsoft.security.controller;
 
 import com.tcsoft.security.entity.*;
 import com.tcsoft.security.service.user.*;
-import com.tcsoft.security.utils.UserConstant;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,41 +17,46 @@ public class AuthController {
     private DevelopRegisterService developRegisterService;
 
     /**
+     * 大数据平台系统登录
+     * @param loginBean
+     * @return
+     */
+    @PostMapping("/login")
+    public ResultData<String> login(@RequestBody UserServiceBean loginBean){
+        if (loginBean.getUsername()==null || loginBean.getPassword()==null){
+            return nullParameter();
+        }else {
+            return userLoginService.login(loginBean.getUsername(), loginBean.getPassword());
+        }
+    }
+
+    /**
      * 用户登录认证,注册开发者账号接口
      * @param userServiceBean
      * @return
      */
-    @PostMapping("/auth")
-    public ResultData createAuthenticationToken(
+    @PostMapping("/develop/register")
+    public ResultData<String> createAuthenticationToken(
             @RequestBody UserServiceBean userServiceBean){
-        if (userServiceBean.getType() != null){
-            switch (userServiceBean.getType()) {
-                case UserConstant.LOGIN:
-                    //用户登录
-                    if (userServiceBean.getUsername()==null || userServiceBean.getPassword()==null){
-                        return nullParameter();
-                    }else {
-                        return userLoginService.login(userServiceBean.getUsername(), userServiceBean.getPassword());
-                    }
-                case UserConstant.CREATE:
-                    //开发者注册账号
-                    if (userServiceBean.getUsername()==null || userServiceBean.getPassword()==null ||
-                    userServiceBean.getToken()==null){
-                        return nullParameter();
-                    }else {
-                        return developRegisterService.register(userServiceBean);
-                    }
-                default:
-                    ResultData<String> resultData = new ResultData<>();
-                    resultData.setCode(401);
-                    resultData.setMessage("type类型不正确");
-                    return resultData;
-            }
+        //开发者注册账号
+        if (userServiceBean.getUsername()==null || userServiceBean.getPassword()==null){
+            return nullParameter();
         }else {
-            ResultData<String> resultData = new ResultData<>();
-            resultData.setCode(401);
-            resultData.setMessage("type没有值");
-            return resultData;
+            return developRegisterService.register(userServiceBean);
+        }
+    }
+
+    /**
+     * 开发者登录接口
+     * @param loginBean
+     * @return
+     */
+    @PostMapping("/develop/login")
+    public ResultData<String> developLogin(@RequestBody UserServiceBean loginBean){
+        if (loginBean.getUsername()==null || loginBean.getPassword()==null){
+            return nullParameter();
+        }else {
+            return userLoginService.developLogin(loginBean.getUsername(), loginBean.getPassword());
         }
     }
 
@@ -66,25 +70,5 @@ public class AuthController {
         resultData.setMessage("缺少必要参数");
         return resultData;
     }
-
-
-//    /**
-//     * token刷新服务
-//     * @param request
-//     * @return
-//     * @throws AuthenticationException
-//     */
-//    @PostAuthorize("returnObject.username == principal.username or hasRole('ROLE_ADMIN')")
-//    @RequestMapping(value = "/refresh", method = RequestMethod.GET)
-//    public ResponseEntity<?> refreshAndGetAuthenticationToken(
-//            HttpServletRequest request) throws AuthenticationException{
-//        String token = request.getHeader(tokenHeader);
-//        String refreshedToken = userService.refresh(token);
-//        if(refreshedToken == null) {
-//            return ResponseEntity.badRequest().body(null);
-//        } else {
-//            return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
-//        }
-//    }
 
 }

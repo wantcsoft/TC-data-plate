@@ -13,7 +13,6 @@ import java.util.Date;
 @ToString
 public class UserServiceBean implements Serializable {
 
-    private String type;
     private Integer userId;
     private Integer groupId;
     private Integer roleId;

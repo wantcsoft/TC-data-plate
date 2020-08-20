@@ -7,10 +7,7 @@ import com.tcsoft.security.entity.UserServiceBean;
 import com.tcsoft.security.service.user.*;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,12 +28,13 @@ public class UserController {
 
     @PostMapping("/user")
     public ResultData<String> userService(@RequestBody UserServiceBean userServiceBean,
+                                  @RequestParam String type,
                                   Authentication authentication){
-        if (userServiceBean.getType() != null){
-            switch (userServiceBean.getType()) {
+        if (type != null){
+            switch (type) {
                 case UserConstant.DELETE:
                     //删除操作,根据userId删除用户
-                    if (userServiceBean.getUserId()==null || userServiceBean.getToken()==null){
+                    if (userServiceBean.getUserId()==null){
                         return nullParameter();
                     }else {
                         int deleteUserId = userServiceBean.getUserId();
@@ -45,8 +43,7 @@ public class UserController {
                 case UserConstant.CREATE:
                     //创建操作
                     if (userServiceBean.getGroupId()==null || userServiceBean.getRoleId()==null ||
-                    userServiceBean.getUsername()== null || userServiceBean.getPassword()==null ||
-                    userServiceBean.getToken()==null){
+                    userServiceBean.getUsername()== null || userServiceBean.getPassword()==null){
                         return nullParameter();
                     }else {
                         return userRegisterService.register(userServiceBean, authentication);
@@ -73,23 +70,20 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResultData<List<UserDao>> getUser(UserServiceBean userServiceBean, Authentication authentication){
-        if (userServiceBean.getType() != null){
-            switch (userServiceBean.getType()) {
-                case UserConstant.QUERY:
-                    return userQueryService.query(userServiceBean, authentication);
-                default:
-                    ResultData<List<UserDao>> resultData = new ResultData<>();
-                    resultData.setCode(401);
-                    resultData.setMessage("type类型不正确");
-                    return resultData;
-            }
+    public ResultData<List<UserDao>> getUser(QueryConditionBean condition,
+                                             Authentication authentication){
+        return userQueryService.query(condition, authentication);
+    }
+
+
+    @GetMapping("/front/user")
+    public ResultData<List<UserServiceBean>> frontGetUser(String username, Authentication authentication){
+        if (username == null){
+            return userQueryService.frontQuery(authentication);
         }else {
-            ResultData<List<UserDao>> resultData = new ResultData<>();
-            resultData.setCode(401);
-            resultData.setMessage("type没有值");
-            return resultData;
+            return userQueryService.frontQueryByName(username, authentication);
         }
+
     }
 
     /**

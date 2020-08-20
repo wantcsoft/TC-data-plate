@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
+ * 基础配置信息，规则分组设置
+ * 一家医院可以设置多组规则，其中IsDefault为True的规则组是运行规则，IsActive忽略
+ * 其他的规则为模拟规则，不会对运行数据产生影响
  * @author WMY
  */
 @Data

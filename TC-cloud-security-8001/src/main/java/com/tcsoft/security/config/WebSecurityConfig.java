@@ -98,15 +98,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                 })
                 .and()
-
                 // 基于token，所以不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
                 .authorizeRequests()
-
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 对于获取token的rest api要允许匿名访问
-                .antMatchers("/auth", "/user").permitAll()
+                .antMatchers("/login", "/register", "/develop/register",
+                        "/develop/login").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
 

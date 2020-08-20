@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
+ * 基础配置信息，规则的类型，例如LIS-IN规则，DataUpdate规则等
  * @author WMY
  */
 @Data

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
+ * 基础配置信息，医院信息
  * @author WMY
  */
 @Data

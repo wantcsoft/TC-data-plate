@@ -3,9 +3,6 @@ package com.tcsoft.security.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tcsoft.security.dao.UserDao;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
 
 
 /**

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
+ * 基础配置信息，PrepLink 的错误代码配置
  * @author WMY
  */
 @Data

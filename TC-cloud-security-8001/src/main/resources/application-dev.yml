@@ -1,7 +1,7 @@
 server:
   port: 8001
-#  servlet:
-#    context-path: /security
+  servlet:
+    context-path: /security
 
 mybatis-plus:
   global-config:
@@ -9,6 +9,9 @@ mybatis-plus:
       logic-delete-field: flag  # 全局逻辑删除的实体字段名
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false   # 关闭驼峰命名
 
 
 spring:
@@ -24,18 +27,24 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 106.14.77.81:8848
-    sentinel:
-      transport:
-        dashboard: 192.168.3.3:8080
-      eager: false
+#        server-addr: 106.14.77.81:8848
+        server-addr: 192.168.3.3:8848
+#    sentinel:
+#      transport:
+#        dashboard: 192.168.3.3:8080
+#      eager: false
 
 # JWT 参数配置
 jwt:
+  # 请求头信息
   header: "Authorization"
+  # 秘钥
   secret: "qazwsxedcrfvtgbyhnujmdssaftghyujkloipmnvgyuhikolp"
+  # 有效期7天
   expiration: 604800
+  # 请求头标志
   tokenHead: "Bearer "
+
   route:
     authentication:
       path: "auth"

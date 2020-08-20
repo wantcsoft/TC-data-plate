@@ -31,7 +31,8 @@ public class ActionCodeController extends BaseController<ActionCodeServiceImpl, 
                                                       @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ActionID", dao.getActionId());
-        queryWrapper = new QueryWrapper<ActionCodeDao>().eq("HospitalID", dao.getHospitalId());
+        queryWrapper = new QueryWrapper<ActionCodeDao>()
+                .eq("HospitalID", dao.getHospitalId());
         return handleRequest(dao, type, deletedMap);
     }
 

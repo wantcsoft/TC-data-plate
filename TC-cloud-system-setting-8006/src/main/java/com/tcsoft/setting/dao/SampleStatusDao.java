@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
+ * 基础配置信息，样本状态，非流水线状态
  * @author WMY
  */
 @Data

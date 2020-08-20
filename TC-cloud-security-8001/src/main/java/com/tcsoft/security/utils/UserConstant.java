@@ -9,6 +9,7 @@ public final class UserConstant {
     public static final String SYSTEM_ADMIN = "系统管理员";
     public static final String SYSTEM_USER = "系统普通用户";
     public static final String HOSPITAL = "医院用户";
+    public static final String DEVELOPER = "开发者用户"; 
 
     public static final int SYSTEM_ADMIN_ID = 1;
     public static final int SYSTEM_USER_ID = 2;

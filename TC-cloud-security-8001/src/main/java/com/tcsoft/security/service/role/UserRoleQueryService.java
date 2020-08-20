@@ -26,11 +26,12 @@ public class UserRoleQueryService {
     public ResultData<List<UserRoleDao>> queryAllRole(String username, ResultData<List<UserRoleDao>> resultData){
         int grade = userRoleMapper.selectById(userMapper.selectOne(
                 new QueryWrapper<UserDao>()
-                        .eq("username", username))
+                        .eq("userName", username))
                                 .getRoleId()).getRoleGrade();
         List<UserRoleDao> userRoleDaoList = userRoleMapper.selectList(
                 new QueryWrapper<UserRoleDao>()
-                    .lt("roleGrade", grade));
+                    .lt("roleGrade", grade)
+                    .orderByAsc("roleId"));
         resultData.setData(userRoleDaoList);
         resultData.setMessage("用户角色获取成功");
         return resultData;
