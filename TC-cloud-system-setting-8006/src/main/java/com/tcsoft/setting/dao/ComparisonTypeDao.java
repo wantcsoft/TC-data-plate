@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * 基础配置信息，映射类型，例如ComparisonTypeID =1 表示映射年龄，2表示映射样本类型
  * @author WMY
  */
 @Data
+@ToString
 @TableName("BSC_ComparisonType")
 public class ComparisonTypeDao {
 

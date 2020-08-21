@@ -1,11 +1,10 @@
 package com.tcsoft.setting.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tcsoft.setting.dao.AgeTypeDao;
 import com.tcsoft.setting.dao.InstrumentDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.InstrumentServiceImpl;
+import com.tcsoft.setting.viewmodel.InstrumentViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,19 +18,27 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class InstrumentController extends BaseController<InstrumentServiceImpl, InstrumentDao> {
+public class InstrumentController extends
+        BaseController<InstrumentServiceImpl, InstrumentDao, InstrumentViewModel> {
+
+    private Integer hospitalId;
 
     public InstrumentController(InstrumentServiceImpl service){
         super(service);
     }
 
     @PostMapping("/instrument")
-    public ResultData<List<InstrumentDao>> instrument(@RequestBody InstrumentDao dao,
+    public ResultData<List<InstrumentViewModel>> instrument(@RequestBody InstrumentDao dao,
                                                         @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("InstrumentID", dao.getInstrumentId());
-        queryWrapper = new QueryWrapper<InstrumentDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<InstrumentViewModel> query(){
+        return service.listViewMode(hospitalId);
     }
 
 }

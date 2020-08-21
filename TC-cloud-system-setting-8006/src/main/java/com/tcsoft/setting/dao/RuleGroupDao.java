@@ -3,6 +3,7 @@ package com.tcsoft.setting.dao;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * 基础配置信息，规则分组设置
@@ -11,6 +12,7 @@ import lombok.Data;
  * @author WMY
  */
 @Data
+@ToString
 @TableName("BSC_RuleGroup")
 public class RuleGroupDao {
 

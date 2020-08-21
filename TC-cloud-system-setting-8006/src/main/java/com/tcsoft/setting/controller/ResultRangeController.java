@@ -9,6 +9,7 @@ import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.InstrumentServiceImpl;
 import com.tcsoft.setting.service.impl.ResultRangeServiceImpl;
 import com.tcsoft.setting.utils.SettingUtilsConstant;
+import com.tcsoft.setting.viewmodel.ResultRangeViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,14 +24,15 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class ResultRangeController extends BaseController<ResultRangeServiceImpl, ResultRangeDao>{
+public class ResultRangeController extends
+        BaseController<ResultRangeServiceImpl, ResultRangeDao, ResultRangeViewModel>{
 
     public ResultRangeController(ResultRangeServiceImpl service){
         super(service);
     }
 
     @PostMapping("/resultRange")
-    public ResultData<List<ResultRangeDao>> resultRange(@RequestBody ResultRangeDao dao,
+    public ResultData<List<ResultRangeViewModel>> resultRange(@RequestBody ResultRangeDao dao,
                                                         @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ResultRangeID", dao.getResultRangeId());

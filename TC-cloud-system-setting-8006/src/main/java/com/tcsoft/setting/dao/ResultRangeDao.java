@@ -2,12 +2,14 @@ package com.tcsoft.setting.dao;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * 基础配置信息，测试项目结果的范围值，用于结果的审核、规则判断等
  * @author WMY
  */
 @Data
+@ToString
 @TableName("BSC_ResultRange")
 public class ResultRangeDao {
 
@@ -53,6 +55,7 @@ public class ResultRangeDao {
     @TableField(value = "IsEnabled")
     private boolean isEnabled = true;
 
+    @TableLogic
     @TableField(value = "IsDeleted")
     private boolean isDeleted = false;
 

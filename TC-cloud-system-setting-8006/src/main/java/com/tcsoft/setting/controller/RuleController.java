@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.setting.dao.RuleDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.RuleServiceImpl;
+import com.tcsoft.setting.viewmodel.RuleViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,14 +19,15 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class RuleController extends BaseController<RuleServiceImpl, RuleDao>{
+public class RuleController extends
+        BaseController<RuleServiceImpl, RuleDao, RuleViewModel>{
 
     public RuleController(RuleServiceImpl service){
         super(service);
     }
 
     @PostMapping("/rule")
-    public ResultData<List<RuleDao>> rule(@RequestBody RuleDao dao,
+    public ResultData<List<RuleViewModel>> rule(@RequestBody RuleDao dao,
                                           @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("RuleID", dao.getRuleId());

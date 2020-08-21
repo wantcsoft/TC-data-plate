@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.TestItemTypeDao;
-import com.tcsoft.setting.mapper.TestItemTypeMapper;
+import com.tcsoft.setting.mysqlmapper.TestItemTypeMapper;
 import com.tcsoft.setting.service.TestItemTypeService;
 import org.springframework.stereotype.Service;
 

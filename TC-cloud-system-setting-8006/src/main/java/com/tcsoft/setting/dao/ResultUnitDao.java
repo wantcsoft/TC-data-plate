@@ -3,6 +3,7 @@ package com.tcsoft.setting.dao;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * 基础配置信息，测试项目结果的单位
@@ -10,6 +11,7 @@ import lombok.Data;
  */
 @Data
 @TableName("BSC_ResultUnit")
+@ToString
 public class ResultUnitDao {
 
     @TableField(value = "HospitalID")

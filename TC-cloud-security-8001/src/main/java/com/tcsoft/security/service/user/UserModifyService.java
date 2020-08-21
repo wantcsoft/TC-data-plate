@@ -6,7 +6,7 @@ import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
-import com.tcsoft.security.mapper.UserMapper;
+import com.tcsoft.security.mysqlmapper.UserMapper;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

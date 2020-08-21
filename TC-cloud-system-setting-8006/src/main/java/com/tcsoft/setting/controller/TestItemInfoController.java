@@ -1,12 +1,10 @@
 package com.tcsoft.setting.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tcsoft.setting.dao.TestItemGroupDao;
 import com.tcsoft.setting.dao.TestItemInfoDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.TestItemInfoServiceImpl;
-import org.bouncycastle.cert.dane.DANEEntry;
+import com.tcsoft.setting.viewmodel.TestItemInfoViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,19 +18,27 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class TestItemInfoController extends BaseController<TestItemInfoServiceImpl, TestItemInfoDao>{
+public class TestItemInfoController extends
+        BaseController<TestItemInfoServiceImpl, TestItemInfoDao, TestItemInfoViewModel>{
+
+    private Integer hospitalId;
 
     public TestItemInfoController(TestItemInfoServiceImpl service) {
         super(service);
     }
 
     @PostMapping("/testItemInfo")
-    public ResultData<List<TestItemInfoDao>> testItemInfo(@RequestBody TestItemInfoDao dao,
+    public ResultData<List<TestItemInfoViewModel>> testItemInfo(@RequestBody TestItemInfoDao dao,
                                                 @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("TestItemID", dao.getTestItemId());
-        queryWrapper = new QueryWrapper<TestItemInfoDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<TestItemInfoViewModel> query(){
+        return service.listViewMode(hospitalId);
     }
 
 }

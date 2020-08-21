@@ -12,7 +12,7 @@ import java.util.Map;
  * 所有的controller的基类
  * @author WMY
  */
-public class BaseController<T extends ServiceImpl<? extends BaseMapper<K>, K>, K> {
+public abstract class BaseController<T extends ServiceImpl<? extends BaseMapper<K>, K>, K, V> {
 
     public final T service;
 
@@ -22,8 +22,8 @@ public class BaseController<T extends ServiceImpl<? extends BaseMapper<K>, K>, K
         this.service = t;
     }
 
-    public ResultData<List<K>> handleRequest(K k ,String type, Map<String, Object> deletedMap){
-        ResultData<List<K>> resultData = new ResultData<>();
+    public ResultData<List<V>> handleRequest(K k ,String type, Map<String, Object> deletedMap){
+        ResultData<List<V>> resultData = new ResultData<>();
         boolean flag = false;
         if (type != null){
             switch (type){
@@ -37,7 +37,7 @@ public class BaseController<T extends ServiceImpl<? extends BaseMapper<K>, K>, K
                     flag = modify(k);
                     break;
                 case SettingUtilsConstant.QUERY:
-                    List<K> list = query();
+                    List<V> list = query();
                     if (list==null){
                         flag = false;
                     }else {
@@ -82,12 +82,8 @@ public class BaseController<T extends ServiceImpl<? extends BaseMapper<K>, K>, K
         }
     }
 
-    public List<K> query(){
-        try {
-            return service.list(queryWrapper);
-        }catch (Exception e){
-            return null;
-        }
+    public List<V> query(){
+        return null;
     }
 
 }

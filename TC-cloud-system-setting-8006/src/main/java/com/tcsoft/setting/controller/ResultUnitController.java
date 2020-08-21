@@ -6,6 +6,7 @@ import com.tcsoft.setting.dao.ResultRangeDao;
 import com.tcsoft.setting.dao.ResultUnitDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.ResultUnitServiceImpl;
+import com.tcsoft.setting.viewmodel.ResultUnitViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,14 +20,15 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class ResultUnitController extends BaseController<ResultUnitServiceImpl, ResultUnitDao>{
+public class ResultUnitController extends
+        BaseController<ResultUnitServiceImpl, ResultUnitDao, ResultUnitViewModel>{
 
     public ResultUnitController(ResultUnitServiceImpl service){
         super(service);
     }
 
     @PostMapping("/resultUnit")
-    public ResultData<List<ResultUnitDao>> resultUnit(@RequestBody ResultUnitDao dao,
+    public ResultData<List<ResultUnitViewModel>> resultUnit(@RequestBody ResultUnitDao dao,
                                                       @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ResultUnitID", dao.getResultUnitId());

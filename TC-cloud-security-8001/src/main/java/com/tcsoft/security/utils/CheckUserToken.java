@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.dao.UserRoleDao;
-import com.tcsoft.security.mapper.UserGroupMapper;
-import com.tcsoft.security.mapper.UserMapper;
-import com.tcsoft.security.mapper.UserRoleMapper;
+import com.tcsoft.security.mysqlmapper.UserGroupMapper;
+import com.tcsoft.security.mysqlmapper.UserMapper;
+import com.tcsoft.security.mysqlmapper.UserRoleMapper;
 
 import javax.annotation.Resource;
 import java.util.Date;

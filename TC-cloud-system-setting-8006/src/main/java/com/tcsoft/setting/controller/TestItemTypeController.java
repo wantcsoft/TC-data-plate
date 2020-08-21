@@ -6,6 +6,7 @@ import com.tcsoft.setting.dao.TestItemInfoDao;
 import com.tcsoft.setting.dao.TestItemTypeDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.TestItemTypeServiceImpl;
+import com.tcsoft.setting.viewmodel.TestItemTypeViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,14 +20,15 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class TestItemTypeController extends BaseController<TestItemTypeServiceImpl, TestItemTypeDao>{
+public class TestItemTypeController extends
+        BaseController<TestItemTypeServiceImpl, TestItemTypeDao, TestItemTypeViewModel>{
 
     public TestItemTypeController(TestItemTypeServiceImpl testItemTypeService) {
         super(testItemTypeService);
     }
 
     @PostMapping("/testItemType")
-    public ResultData<List<TestItemTypeDao>> testItemType(@RequestBody TestItemTypeDao dao,
+    public ResultData<List<TestItemTypeViewModel>> testItemType(@RequestBody TestItemTypeDao dao,
                                                 @RequestParam String type){
         Integer id = dao.getTestItemTypeId();
         Map<String, Object> deletedMap = new HashMap<>(1);

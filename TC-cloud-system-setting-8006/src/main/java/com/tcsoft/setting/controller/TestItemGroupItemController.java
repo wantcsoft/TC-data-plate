@@ -4,6 +4,7 @@ package com.tcsoft.setting.controller;
 import com.tcsoft.setting.dao.TestItemGroupItemDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.TestItemGroupItemServiceImpl;
+import com.tcsoft.setting.viewmodel.TestItemGroupItemViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,14 +18,15 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class TestItemGroupItemController extends BaseController<TestItemGroupItemServiceImpl, TestItemGroupItemDao>{
+public class TestItemGroupItemController extends
+        BaseController<TestItemGroupItemServiceImpl, TestItemGroupItemDao, TestItemGroupItemViewModel>{
 
     public TestItemGroupItemController(TestItemGroupItemServiceImpl service) {
         super(service);
     }
 
     @PostMapping("/testItemGroupItem")
-    public ResultData<List<TestItemGroupItemDao>> testItemGroupItem(@RequestBody TestItemGroupItemDao dao,
+    public ResultData<List<TestItemGroupItemViewModel>> testItemGroupItem(@RequestBody TestItemGroupItemDao dao,
                                                 @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(2);
         deletedMap.put("TestItemGroupID", dao.getTestItemGroupId());

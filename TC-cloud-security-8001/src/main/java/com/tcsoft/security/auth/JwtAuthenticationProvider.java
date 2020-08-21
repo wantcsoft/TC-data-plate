@@ -2,7 +2,7 @@ package com.tcsoft.security.auth;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tcsoft.security.mapper.UserMapper;
+import com.tcsoft.security.mysqlmapper.UserMapper;
 import com.tcsoft.security.dao.UserDao;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.*;

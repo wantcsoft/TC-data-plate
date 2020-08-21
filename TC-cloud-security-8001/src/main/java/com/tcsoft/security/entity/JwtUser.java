@@ -1,5 +1,6 @@
 package com.tcsoft.security.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import java.util.Date;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class JwtUser implements UserDetails {
     private  Integer userId;
     private  String username;
@@ -25,28 +27,5 @@ public class JwtUser implements UserDetails {
     private  boolean accountNonExpired;
     private  boolean credentialsNonExpired;
     private  boolean enabled;
-
-    public JwtUser(
-            Integer userId,
-            String username,
-            String password,
-            Integer groupId,
-            Collection<? extends GrantedAuthority> authorities,
-            Date lastPasswordResetDate,
-            boolean accountNonLocked,
-            boolean accountNonExpired,
-            boolean credentialsNonExpired,
-            boolean enabled) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.groupId = groupId;
-        this.authorities = authorities;
-        this.lastPasswordResetDate = lastPasswordResetDate;
-        this.accountNonLocked = accountNonLocked;
-        this.accountNonExpired = accountNonExpired;
-        this.credentialsNonExpired = credentialsNonExpired;
-        this.enabled = enabled;
-    }
 
 }

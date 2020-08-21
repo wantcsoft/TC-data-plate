@@ -5,6 +5,7 @@ import com.tcsoft.setting.dao.PatientTypeDao;
 import com.tcsoft.setting.dao.PrepLinkAbortCodeDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.PrepLinkAbortCodeServiceImpl;
+import com.tcsoft.setting.viewmodel.PrepLinkAbortCodeViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,19 +19,27 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class PrepLinkAbortCodeController extends BaseController<PrepLinkAbortCodeServiceImpl, PrepLinkAbortCodeDao>{
+public class PrepLinkAbortCodeController extends
+        BaseController<PrepLinkAbortCodeServiceImpl, PrepLinkAbortCodeDao, PrepLinkAbortCodeViewModel>{
+
+    private Integer hospitalId;
 
     public PrepLinkAbortCodeController(PrepLinkAbortCodeServiceImpl service){
         super(service);
     }
 
     @PostMapping("/prepLinkAbortCode")
-    public ResultData<List<PrepLinkAbortCodeDao>> prepLinkAbortCode(@RequestBody PrepLinkAbortCodeDao dao,
+    public ResultData<List<PrepLinkAbortCodeViewModel>> prepLinkAbortCode(@RequestBody PrepLinkAbortCodeDao dao,
                                                                     @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("AbortID", dao.getAbortId());
-        queryWrapper = new QueryWrapper<PrepLinkAbortCodeDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<PrepLinkAbortCodeViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 
 }

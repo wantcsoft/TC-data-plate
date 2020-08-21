@@ -3,12 +3,14 @@ package com.tcsoft.setting.dao;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * 基础配置信息，测试项目映射表，针对一些特定的测试项目，例如LIH测试项目实际运行时将会以三个测试项目代替
  * @author WMY
  */
 @Data
+@ToString
 @TableName("BSC_TestItemDuplicate")
 public class TestItemDuplicateDao {
 

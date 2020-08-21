@@ -4,12 +4,12 @@ package com.tcsoft.setting.controller;
 import com.tcsoft.setting.dao.ComparisonInfoDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.ComparisonInfoServiceImpl;
+import com.tcsoft.setting.viewmodel.ComparisonInfoViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,14 +18,15 @@ import java.util.Map;
  * @author WMY
  */
 @RestController
-public class ComparisonInfoController extends BaseController<ComparisonInfoServiceImpl, ComparisonInfoDao> {
+public class ComparisonInfoController extends
+        BaseController<ComparisonInfoServiceImpl, ComparisonInfoDao, ComparisonInfoViewModel> {
 
     public ComparisonInfoController(ComparisonInfoServiceImpl service){
         super(service);
     }
 
     @PostMapping("/comparisonInfo")
-    public ResultData<List<ComparisonInfoDao>> comparisonInfo(@RequestBody ComparisonInfoDao dao,
+    public ResultData<List<ComparisonInfoViewModel>> comparisonInfo(@RequestBody ComparisonInfoDao dao,
                                                        @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(3);
         deletedMap.put("InstrumentTypeID", dao.getInstrumentTypeId());
@@ -33,6 +34,11 @@ public class ComparisonInfoController extends BaseController<ComparisonInfoServi
         deletedMap.put("InstrumentInfo", dao.getInstrumentInfo());
         System.out.println(dao);
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<ComparisonInfoViewModel> query(){
+        return service.listViewModel();
     }
 
 }

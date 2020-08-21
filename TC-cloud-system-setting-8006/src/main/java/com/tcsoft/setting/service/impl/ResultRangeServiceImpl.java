@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.ResultRangeDao;
-import com.tcsoft.setting.mapper.ResultRangeMapper;
+import com.tcsoft.setting.mysqlmapper.ResultRangeMapper;
 import com.tcsoft.setting.service.ResultRangeService;
 import org.springframework.stereotype.Service;
 

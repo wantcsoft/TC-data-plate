@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.ResultData;
-import com.tcsoft.security.mapper.UserMapper;
-import com.tcsoft.security.mapper.UserRoleMapper;
+import com.tcsoft.security.mysqlmapper.UserMapper;
+import com.tcsoft.security.mysqlmapper.UserRoleMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
