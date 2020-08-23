@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.ResultUnitDao;
 import com.tcsoft.setting.mysqlmapper.ResultUnitMapper;
 import com.tcsoft.setting.service.ResultUnitService;
+import com.tcsoft.setting.viewmodel.ResultUnitViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,5 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ResultUnitServiceImpl extends ServiceImpl<ResultUnitMapper, ResultUnitDao>
         implements ResultUnitService {
+
+    public List<ResultUnitViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
+    }
 
 }

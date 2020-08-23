@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.RuleGroupDao;
 import com.tcsoft.setting.mysqlmapper.RuleGroupMapper;
 import com.tcsoft.setting.service.RuleGroupService;
+import com.tcsoft.setting.viewmodel.RuleGroupViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,5 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class RuleGroupServiceImpl extends ServiceImpl<RuleGroupMapper, RuleGroupDao>
         implements RuleGroupService {
+
+    public List<RuleGroupViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
+    }
 
 }

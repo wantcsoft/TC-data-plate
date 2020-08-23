@@ -33,4 +33,9 @@ public class SampleEventController extends
         return handleRequest(dao, type, deletedMap);
     }
 
+    @Override
+    public List<SampleEventViewModel> query(){
+        return service.listViewModel();
+    }
+
 }

@@ -23,6 +23,8 @@ import java.util.Map;
 public class TestItemDeltaCheckController extends
         BaseController<TestItemDeltaCheckServiceImpl, TestItemDeltaCheckDao, TestItemDeltaCheckViewModel> {
 
+    private Integer hospitalId;
+
     public TestItemDeltaCheckController(TestItemDeltaCheckServiceImpl service) {
         super(service);
     }
@@ -32,8 +34,13 @@ public class TestItemDeltaCheckController extends
                                                    @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("TestItemID", dao.getTestItemId());
-        queryWrapper = new QueryWrapper<TestItemDeltaCheckDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<TestItemDeltaCheckViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 
 }

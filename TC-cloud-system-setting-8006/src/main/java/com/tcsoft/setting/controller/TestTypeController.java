@@ -22,6 +22,8 @@ import java.util.Map;
 public class TestTypeController extends
         BaseController<TestTypeServiceImpl, TestTypeDao, TestTypeViewModel>{
 
+    private Integer hospitalId;
+
     public TestTypeController(TestTypeServiceImpl service) {
         super(service);
     }
@@ -31,8 +33,13 @@ public class TestTypeController extends
                                                 @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("TestTypeID", dao.getTestTypeId());
-        queryWrapper = new QueryWrapper<TestTypeDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<TestTypeViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 
 }

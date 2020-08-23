@@ -23,6 +23,8 @@ import java.util.Map;
 public class TestItemTypeController extends
         BaseController<TestItemTypeServiceImpl, TestItemTypeDao, TestItemTypeViewModel>{
 
+    private Integer hospitalId;
+
     public TestItemTypeController(TestItemTypeServiceImpl testItemTypeService) {
         super(testItemTypeService);
     }
@@ -30,11 +32,15 @@ public class TestItemTypeController extends
     @PostMapping("/testItemType")
     public ResultData<List<TestItemTypeViewModel>> testItemType(@RequestBody TestItemTypeDao dao,
                                                 @RequestParam String type){
-        Integer id = dao.getTestItemTypeId();
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("TestItemTypeID", dao.getTestItemTypeId());
-        queryWrapper = new QueryWrapper<TestItemTypeDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<TestItemTypeViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 
 }

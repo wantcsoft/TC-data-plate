@@ -33,4 +33,9 @@ public class SexTypeController extends
         return handleRequest(dao, type, deletedMap);
     }
 
+    @Override
+    public List<SexTypeViewModel> query(){
+        return service.listViewModel();
+    }
+
 }

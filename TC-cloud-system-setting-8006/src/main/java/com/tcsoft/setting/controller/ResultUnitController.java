@@ -1,8 +1,6 @@
 package com.tcsoft.setting.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tcsoft.setting.dao.ResultRangeDao;
 import com.tcsoft.setting.dao.ResultUnitDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.service.impl.ResultUnitServiceImpl;
@@ -23,6 +21,8 @@ import java.util.Map;
 public class ResultUnitController extends
         BaseController<ResultUnitServiceImpl, ResultUnitDao, ResultUnitViewModel>{
 
+    private Integer hospitalId;
+
     public ResultUnitController(ResultUnitServiceImpl service){
         super(service);
     }
@@ -32,8 +32,13 @@ public class ResultUnitController extends
                                                       @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ResultUnitID", dao.getResultUnitId());
-        queryWrapper = new QueryWrapper<ResultUnitDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<ResultUnitViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 
 }

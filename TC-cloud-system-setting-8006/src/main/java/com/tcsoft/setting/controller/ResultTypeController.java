@@ -33,4 +33,9 @@ public class ResultTypeController extends
         return handleRequest(dao, type, deletedMap);
     }
 
+    @Override
+    public List<ResultTypeViewModel> query(){
+        return service.listViewModel();
+    }
+
 }

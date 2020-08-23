@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.TestItemTypeDao;
 import com.tcsoft.setting.mysqlmapper.TestItemTypeMapper;
 import com.tcsoft.setting.service.TestItemTypeService;
+import com.tcsoft.setting.viewmodel.TestItemTypeViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,5 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestItemTypeServiceImpl extends ServiceImpl<TestItemTypeMapper, TestItemTypeDao>
         implements TestItemTypeService {
+
+    public List<TestItemTypeViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
+    }
 
 }

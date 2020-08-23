@@ -23,6 +23,8 @@ import java.util.Map;
 public class PrepLinkErrorCodeController extends
         BaseController<PrepLinkErrorCodeServiceImpl, PrepLinkErrorCodeDao, PrepLinkErrorCodeViewModel>{
 
+    private Integer hospitalId;
+
     public PrepLinkErrorCodeController(PrepLinkErrorCodeServiceImpl service){
         super(service);
     }
@@ -32,8 +34,13 @@ public class PrepLinkErrorCodeController extends
                                                                     @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ErrorID", dao.getErrorId());
-        queryWrapper = new QueryWrapper<PrepLinkErrorCodeDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<PrepLinkErrorCodeViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 
 }

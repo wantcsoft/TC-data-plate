@@ -21,9 +21,9 @@ public interface SampleTypeMapper extends BaseMapper<SampleTypeDao> {
      * @param hospitalId
      * @return
      */
-    @Select("select *\n" +
-            "from BSC_SampleType\n" +
-            "where HospitalID = #{hospitalId};")
+    @Select("select * from BSC_SampleType\n" +
+            "where IsDeleted = false\n" +
+            "and HospitalID = #{hospitalId};")
     List<SampleTypeViewModel> selectByHospitalId(@Param("hospitalId") Integer hospitalId);
 
 }

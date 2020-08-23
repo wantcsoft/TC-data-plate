@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.RuleTypeDao;
 import com.tcsoft.setting.mysqlmapper.RuleTypeMapper;
 import com.tcsoft.setting.service.RuleTypeService;
+import com.tcsoft.setting.viewmodel.RuleTypeViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,5 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class RuleTypeServiceImpl extends ServiceImpl<RuleTypeMapper, RuleTypeDao>
         implements RuleTypeService {
+
+    public List<RuleTypeViewModel> listViewModel(){
+        return baseMapper.selectAll();
+    }
 
 }

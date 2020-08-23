@@ -33,4 +33,9 @@ public class RuleTypeController extends
         return handleRequest(dao, type, deletedMap);
     }
 
+    @Override
+    public List<RuleTypeViewModel> query(){
+        return service.listViewModel();
+    }
+
 }

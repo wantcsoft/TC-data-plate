@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.TestItemDeltaCheckDao;
 import com.tcsoft.setting.mysqlmapper.TestItemDeltaCheckMapper;
 import com.tcsoft.setting.service.TestItemDeltaCheckService;
+import com.tcsoft.setting.viewmodel.TestItemDeltaCheckViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,5 +21,9 @@ import org.springframework.stereotype.Service;
 public class TestItemDeltaCheckServiceImpl
         extends ServiceImpl<TestItemDeltaCheckMapper, TestItemDeltaCheckDao>
         implements TestItemDeltaCheckService {
+
+    public List<TestItemDeltaCheckViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
+    }
 
 }

@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.SampleEventDao;
 import com.tcsoft.setting.mysqlmapper.SampleEventMapper;
 import com.tcsoft.setting.service.SampleEventService;
+import com.tcsoft.setting.viewmodel.SampleEventViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,5 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class SampleEventServiceImpl extends ServiceImpl<SampleEventMapper, SampleEventDao>
         implements SampleEventService {
+
+    public List<SampleEventViewModel> listViewModel(){
+        return baseMapper.selectAll();
+    }
 
 }

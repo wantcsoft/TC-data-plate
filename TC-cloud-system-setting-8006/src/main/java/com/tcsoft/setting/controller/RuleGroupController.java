@@ -23,6 +23,8 @@ import java.util.Map;
 public class RuleGroupController extends
         BaseController<RuleGroupServiceImpl, RuleGroupDao, RuleGroupViewModel> {
 
+    private Integer hospitalId;
+
     public RuleGroupController(RuleGroupServiceImpl service) {
         super(service);
     }
@@ -32,7 +34,12 @@ public class RuleGroupController extends
                                           @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("RuleGroupID", dao.getRuleGroupId());
-        queryWrapper = new QueryWrapper<RuleGroupDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<RuleGroupViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 }
