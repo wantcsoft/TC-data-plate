@@ -15,6 +15,8 @@ public class TestItemGroupViewModel {
     private Integer testItemGroupId;
     private String groupName;
     private Integer instrumentGroupId;
+
+    private String instrumentGroupName;
     private String comment;
     private boolean isEnabled;
 

@@ -21,8 +21,8 @@ import java.util.List;
 public class ComparisonInfoServiceImpl extends ServiceImpl<ComparisonInfoMapper, ComparisonInfoDao>
         implements ComparisonInfoService {
 
-    public List<ComparisonInfoViewModel> listViewModel(){
-        return baseMapper.selectAll();
+    public List<ComparisonInfoViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
     }
 
 }

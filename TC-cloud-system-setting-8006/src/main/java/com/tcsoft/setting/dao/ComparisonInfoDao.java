@@ -15,6 +15,8 @@ import lombok.ToString;
 @TableName("BSC_ComparisonInfo")
 @ToString
 public class ComparisonInfoDao {
+    @TableId(value = "HospitalID")
+    private Integer hospitalId;
 
     @TableId(value = "InstrumentTypeID")
     private Integer instrumentTypeId;

@@ -21,6 +21,8 @@ import java.util.Map;
 public class ComparisonInfoController extends
         BaseController<ComparisonInfoServiceImpl, ComparisonInfoDao, ComparisonInfoViewModel> {
 
+    private Integer hospitalId;
+
     public ComparisonInfoController(ComparisonInfoServiceImpl service){
         super(service);
     }
@@ -28,17 +30,19 @@ public class ComparisonInfoController extends
     @PostMapping("/comparisonInfo")
     public ResultData<List<ComparisonInfoViewModel>> comparisonInfo(@RequestBody ComparisonInfoDao dao,
                                                        @RequestParam String type){
-        Map<String, Object> deletedMap = new HashMap<>(3);
+        Map<String, Object> deletedMap = new HashMap<>(4);
+        deletedMap.put("HospitalId", dao.getHospitalId());
         deletedMap.put("InstrumentTypeID", dao.getInstrumentTypeId());
         deletedMap.put("ComparisonTypeID", dao.getComparisonTypeId());
         deletedMap.put("InstrumentInfo", dao.getInstrumentInfo());
-        System.out.println(dao);
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
     }
 
     @Override
     public List<ComparisonInfoViewModel> query(){
-        return service.listViewModel();
+        System.out.println("hospital" + hospitalId);
+        return service.listViewModel(hospitalId);
     }
 
 }

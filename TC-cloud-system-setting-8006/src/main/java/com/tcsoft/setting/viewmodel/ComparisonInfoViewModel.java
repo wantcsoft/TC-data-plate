@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class ComparisonInfoViewModel {
-
+    private Integer hospitalId;
     private Integer instrumentTypeId;
     private Integer comparisonTypeId;
 

@@ -24,6 +24,6 @@ public class RuleParamDao {
     private String paramDesc;
 
     @TableField(value = "DataTypeID")
-    private String dataTypeId;
+    private Integer dataTypeId;
 
 }

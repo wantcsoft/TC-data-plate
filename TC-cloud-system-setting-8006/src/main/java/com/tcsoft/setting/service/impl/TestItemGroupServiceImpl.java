@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.TestItemGroupDao;
 import com.tcsoft.setting.mysqlmapper.TestItemGroupMapper;
 import com.tcsoft.setting.service.TestItemGroupService;
+import com.tcsoft.setting.viewmodel.TestItemGroupViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,5 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestItemGroupServiceImpl extends ServiceImpl<TestItemGroupMapper, TestItemGroupDao>
         implements TestItemGroupService {
+
+    public List<TestItemGroupViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
+    }
 
 }

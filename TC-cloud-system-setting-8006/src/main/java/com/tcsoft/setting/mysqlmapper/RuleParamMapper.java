@@ -14,7 +14,11 @@ import java.util.List;
  */
 public interface RuleParamMapper extends BaseMapper<RuleParamDao> {
 
-    @Select("select * from BSC_RuleParam;")
+    @Select("select BSC_RuleParam.RuleParamID, BSC_RuleParam.ParamCode,\n" +
+            "       BSC_RuleParam.ParamDesc, BSC_RuleParam.DataTypeID,\n" +
+            "       BSC_DataType.DataTypeName\n" +
+            "from BSC_RuleParam, BSC_DataType\n" +
+            "where BSC_RuleParam.DataTypeID=BSC_DataType.DataTypeID;")
     List<RuleParamViewModel> selectAll();
 
 }

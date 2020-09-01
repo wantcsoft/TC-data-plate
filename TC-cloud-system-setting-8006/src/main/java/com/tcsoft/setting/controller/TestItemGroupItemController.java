@@ -34,4 +34,9 @@ public class TestItemGroupItemController extends
         return handleRequest(dao, type, deletedMap);
     }
 
+    @Override
+    public List<TestItemGroupItemViewModel> query(){
+        return service.listViewModel();
+    }
+
 }

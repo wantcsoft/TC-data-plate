@@ -14,6 +14,8 @@ public class RuleParamViewModel {
     private Integer ruleParamId;
     private String paramCode;
     private String paramDesc;
-    private String dataTypeId;
+    private Integer dataTypeId;
+
+    private String dataTypeName;
 
 }
