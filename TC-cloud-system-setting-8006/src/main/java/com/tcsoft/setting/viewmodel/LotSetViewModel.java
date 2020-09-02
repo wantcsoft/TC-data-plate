@@ -11,8 +11,11 @@ import lombok.ToString;
 @ToString
 public class LotSetViewModel {
 
+    private String materialName;
+
     private Integer lotSetId;
     private Integer materialId;
+    private Integer hospitalId;
     private String lotSetName;
     private Integer levelCount;
     private String level1Code;

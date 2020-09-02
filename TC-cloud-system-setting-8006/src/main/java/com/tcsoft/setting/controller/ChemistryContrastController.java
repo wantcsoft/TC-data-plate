@@ -1,7 +1,6 @@
 package com.tcsoft.setting.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tcsoft.setting.dao.ChemistryContrastDao;
 import com.tcsoft.setting.entity.ResultData;

@@ -22,6 +22,8 @@ import java.util.Map;
 public class RuleController extends
         BaseController<RuleServiceImpl, RuleDao, RuleViewModel>{
 
+    private Integer hospitalId;
+
     public RuleController(RuleServiceImpl service){
         super(service);
     }
@@ -31,8 +33,13 @@ public class RuleController extends
                                           @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("RuleID", dao.getRuleId());
-        queryWrapper = new QueryWrapper<RuleDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<RuleViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 
 }

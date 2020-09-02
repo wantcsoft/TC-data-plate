@@ -32,4 +32,9 @@ public class SampleStateController extends
         deletedMap.put("SampleStateID", dao.getSampleStateId());
         return handleRequest(dao, type, deletedMap);
     }
+
+    @Override
+    public List<SampleStateViewModel> query(){
+        return service.listViewModel();
+    }
 }

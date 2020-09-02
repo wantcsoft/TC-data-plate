@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.ResultRangeDao;
 import com.tcsoft.setting.mysqlmapper.ResultRangeMapper;
 import com.tcsoft.setting.service.ResultRangeService;
+import com.tcsoft.setting.viewmodel.ResultRangeViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,5 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ResultRangeServiceImpl extends ServiceImpl<ResultRangeMapper, ResultRangeDao>
         implements ResultRangeService {
+
+    public List<ResultRangeViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
+    }
 
 }

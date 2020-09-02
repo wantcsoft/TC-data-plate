@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.LotSetDao;
 import com.tcsoft.setting.mysqlmapper.LotSetMapper;
 import com.tcsoft.setting.service.LotSetService;
+import com.tcsoft.setting.viewmodel.LotSetViewModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -13,4 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class LotSetServiceImpl extends ServiceImpl<LotSetMapper, LotSetDao>
         implements LotSetService {
+
+    public List<LotSetViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
+    }
 }

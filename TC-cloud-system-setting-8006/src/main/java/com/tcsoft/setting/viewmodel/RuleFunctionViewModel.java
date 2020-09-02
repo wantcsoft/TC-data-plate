@@ -11,6 +11,9 @@ import lombok.ToString;
 @ToString
 public class RuleFunctionViewModel {
 
+    private String firstParam;
+    private String secondParam;
+
     private Integer ruleFunctionId;
     private String ruleFunctionName;
     private Integer paramCount;

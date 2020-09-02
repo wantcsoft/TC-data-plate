@@ -15,6 +15,9 @@ import lombok.ToString;
 @ToString
 public class ResultRangeViewModel {
 
+    private String ageTypeName;
+    private String sampleTypeName;
+
     private Integer hospitalId;
     private Integer resultRangeId;
     private Integer lowerAge;
@@ -27,6 +30,7 @@ public class ResultRangeViewModel {
     private float affirmUpperValue;
     private float reportLowerValue;
     private float reportUpperValue;
+    private boolean isDefault;
     private boolean isEnabled = true;
 
 }

@@ -32,4 +32,9 @@ public class RuleFunctionController extends
         return handleRequest(dao, type, deletedMap);
     }
 
+    @Override
+    public List<RuleFunctionViewModel> query(){
+        return service.listViewModel();
+    }
+
 }

@@ -10,10 +10,11 @@ import lombok.ToString;
 @ToString
 public class TestItemGroupItemViewModel {
 
+    private Integer hospitalId;
     private Integer testItemGroupId;
     private Integer testItemId;
 
     private String groupName;
-    private String testItemCode;
+    private String testItemName;
 
 }

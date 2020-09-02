@@ -21,6 +21,8 @@ import java.util.Map;
 public class LotSetController extends
         BaseController<LotSetServiceImpl, LotSetDao, LotSetViewModel>{
 
+    private Integer hospitalId;
+
     public LotSetController(LotSetServiceImpl service) {
         super(service);
     }
@@ -30,6 +32,12 @@ public class LotSetController extends
                                               @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("LotSetID", dao.getLotSetId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<LotSetViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 }

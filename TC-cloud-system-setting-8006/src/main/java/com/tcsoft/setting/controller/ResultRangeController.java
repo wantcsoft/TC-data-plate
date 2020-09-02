@@ -1,21 +1,15 @@
 package com.tcsoft.setting.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tcsoft.setting.dao.InstrumentDao;
-import com.tcsoft.setting.dao.PrepLinkErrorCodeDao;
 import com.tcsoft.setting.dao.ResultRangeDao;
 import com.tcsoft.setting.entity.ResultData;
-import com.tcsoft.setting.service.impl.InstrumentServiceImpl;
 import com.tcsoft.setting.service.impl.ResultRangeServiceImpl;
-import com.tcsoft.setting.utils.SettingUtilsConstant;
 import com.tcsoft.setting.viewmodel.ResultRangeViewModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +21,8 @@ import java.util.Map;
 public class ResultRangeController extends
         BaseController<ResultRangeServiceImpl, ResultRangeDao, ResultRangeViewModel>{
 
+    private Integer hospitalId;
+
     public ResultRangeController(ResultRangeServiceImpl service){
         super(service);
     }
@@ -36,8 +32,13 @@ public class ResultRangeController extends
                                                         @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ResultRangeID", dao.getResultRangeId());
-        queryWrapper = new QueryWrapper<ResultRangeDao>().eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<ResultRangeViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 
 }

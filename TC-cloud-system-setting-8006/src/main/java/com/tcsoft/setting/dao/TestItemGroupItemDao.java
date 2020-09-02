@@ -13,6 +13,8 @@ import lombok.ToString;
 @ToString
 @TableName("BSC_TestItemGroupItem")
 public class TestItemGroupItemDao {
+    @TableId(value = "HospitalID")
+    private Integer hospitalId;
 
     @TableId(value = "TestItemGroupID")
     private Integer testItemGroupId;

@@ -13,6 +13,10 @@ import java.util.Date;
 @ToString
 public class InstrumentViewModel {
 
+    private String instrumentTypeName;
+    private String instrumentGroupName;
+    private String lineTypeName;
+
     private Integer hospitalId;
     private Integer instrumentTypeId;
     private Integer instrumentGroupId;

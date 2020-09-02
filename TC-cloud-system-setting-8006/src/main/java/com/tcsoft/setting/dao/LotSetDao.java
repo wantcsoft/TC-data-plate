@@ -21,6 +21,8 @@ public class LotSetDao {
     private Integer lotSetId;
     @TableField(value = "MaterialID")
     private Integer materialId;
+    @TableField(value = "HospitalID")
+    private Integer hospitalId;
     @TableField(value = "LotSetName")
     private String lotSetName;
     @TableField(value = "LevelCount")

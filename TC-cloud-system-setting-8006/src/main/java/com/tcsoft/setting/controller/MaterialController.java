@@ -23,6 +23,8 @@ import java.util.Map;
 public class MaterialController extends
         BaseController<MaterialServiceImpl, MaterialDao, MaterialViewModel>{
 
+    private Integer hospitalId;
+
     public MaterialController(MaterialServiceImpl service) {
         super(service);
     }
@@ -32,8 +34,12 @@ public class MaterialController extends
                                                   @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("MaterialID", dao.getMaterialId());
-        queryWrapper = new QueryWrapper<MaterialDao>()
-                .eq("HospitalID", dao.getHospitalId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
+    }
+
+    @Override
+    public List<MaterialViewModel> query(){
+        return service.listViewModel(hospitalId);
     }
 }

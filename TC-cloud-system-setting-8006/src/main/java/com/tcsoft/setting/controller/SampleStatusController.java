@@ -33,4 +33,9 @@ public class SampleStatusController extends
         return handleRequest(dao, type, deletedMap);
     }
 
+    @Override
+    public List<SampleStatusViewModel> query(){
+        return service.listViewModel();
+    }
+
 }

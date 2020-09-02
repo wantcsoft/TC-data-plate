@@ -21,6 +21,8 @@ import java.util.Map;
 public class TestItemGroupItemController extends
         BaseController<TestItemGroupItemServiceImpl, TestItemGroupItemDao, TestItemGroupItemViewModel>{
 
+    private Integer hospitalId;
+
     public TestItemGroupItemController(TestItemGroupItemServiceImpl service) {
         super(service);
     }
@@ -31,12 +33,13 @@ public class TestItemGroupItemController extends
         Map<String, Object> deletedMap = new HashMap<>(2);
         deletedMap.put("TestItemGroupID", dao.getTestItemGroupId());
         deletedMap.put("TestItemID", dao.getTestItemId());
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
     }
 
     @Override
     public List<TestItemGroupItemViewModel> query(){
-        return service.listViewModel();
+        return service.listViewModel(hospitalId);
     }
 
 }

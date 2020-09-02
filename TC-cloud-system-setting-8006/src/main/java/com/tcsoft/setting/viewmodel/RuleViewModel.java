@@ -12,6 +12,10 @@ import lombok.ToString;
 @ToString
 public class RuleViewModel {
 
+    private String instrumentGroupName;
+    private String ruleGroupName;
+    private String ruleTypeName;
+
     private Integer hospitalId;
     private Integer ruleGroupId;
     private Integer ruleId;

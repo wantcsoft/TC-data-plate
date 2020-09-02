@@ -32,6 +32,7 @@ public class TestItemInfoController extends
                                                 @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("TestItemID", dao.getTestItemId());
+        System.out.println(dao);
         hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
     }

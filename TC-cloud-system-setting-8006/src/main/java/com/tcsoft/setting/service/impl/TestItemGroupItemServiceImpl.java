@@ -22,8 +22,8 @@ public class TestItemGroupItemServiceImpl
         extends ServiceImpl<TestItemGroupItemMapper, TestItemGroupItemDao>
         implements TestItemGroupItemService {
 
-    public List<TestItemGroupItemViewModel> listViewModel(){
-        return baseMapper.selectAll();
+    public List<TestItemGroupItemViewModel> listViewModel(Integer hospitalId){
+        return baseMapper.selectAll(hospitalId);
     }
 
 }
