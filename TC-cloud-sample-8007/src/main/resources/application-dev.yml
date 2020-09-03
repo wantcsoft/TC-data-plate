@@ -1,5 +1,7 @@
 server:
   port: 8007
+  servlet:
+    context-path: /sample
 
 mybatis-plus:
   global-config:
@@ -61,7 +63,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.3.3:8848
+        server-addr: 106.14.77.81:8848
 
 
     stream:
@@ -75,8 +77,8 @@ spring:
         #接受到的order放入和取出
         output:
           destination: ReceiveOrder    #消息发往的目的地
-          content-type: text/plain    #消息发送的格式，接收端不用指定格式，但是发送端要
-#          content-type: application/json    #消息发送的格式，接收端不用指定格式，但是发送端要
+#          content-type: text/plain    #消息发送的格式，接收端不用指定格式，但是发送端要
+          content-type: application/json    #消息发送的格式，接收端不用指定格式，但是发送端要
           producer:
             partitionCount: 1
         input:
@@ -88,7 +90,7 @@ spring:
         #接收到的result放入和取出
         resultOutput:
           destination: ReceiveResult
-          content-type: text/plain
+          content-type: application/json
           producer:
             partitionCount: 1
 

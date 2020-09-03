@@ -1,6 +1,8 @@
 package com.tcsoft.sample.service.kafka;
 
 
+import com.tcsoft.sample.entity.OrderFromLis;
+import com.tcsoft.sample.entity.OrderToThird;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.integration.support.MessageBuilder;
@@ -9,18 +11,18 @@ import javax.annotation.Resource;
 
 
 /**
- * 这个注解给我们绑定消息通道的，Source是Stream给我们提供的，可以点进去看源码，可以看到output和input,这和配置文件中的output，input对应的。
+ * 将医嘱信息发送到kafka中
  * @author big_john
  */
 @EnableBinding(Source.class)
-public class ReceiveOrderSendService {
+public class SendOrderKafka {
 
     @Resource
     private Source source;
 
-    public boolean send(String receiveOrder) {
+    public boolean send(OrderFromLis order) {
         try {
-            return source.output().send(MessageBuilder.withPayload(receiveOrder).build());
+            return source.output().send(MessageBuilder.withPayload(order).build());
         }catch (Exception e){
             return false;
         }

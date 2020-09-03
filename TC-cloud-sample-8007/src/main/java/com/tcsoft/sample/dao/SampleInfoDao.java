@@ -48,8 +48,8 @@ public class SampleInfoDao implements Serializable {
     @TableField("ConfirmStateID")
     private Integer confirmStateId;
 
-    @TableField("ResultErrroFlag")
-    private Integer resultErrroFlag;
+    @TableField("ResultErrorFlag")
+    private Integer resultErrorFlag;
 
     @TableField("CheckerID")
     private Integer checkerId;

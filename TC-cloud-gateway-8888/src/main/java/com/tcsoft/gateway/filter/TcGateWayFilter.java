@@ -45,7 +45,7 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
         if(token == null){
             return this.setErrorResponse(response,"未携带token");
-        }else if (! token.startsWith("Bearer")){
+        }else if (! token.startsWith("Bearer ")){
             return this.setErrorResponse(response,"token异常");
         }else if (jwtTokenUtil.isTokenExpired(token.substring("Bearer ".length()))){
             return this.setErrorResponse(response,"token过期");

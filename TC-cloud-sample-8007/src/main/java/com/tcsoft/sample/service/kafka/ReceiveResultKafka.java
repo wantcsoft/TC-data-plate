@@ -5,10 +5,11 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 
 /**
+ * 从kafka中获取检测结果
  * @author WMY
  */
 @EnableBinding(ResultChannel.class)
-public class ReceiveResultReceiveService {
+public class ReceiveResultKafka {
 
     @StreamListener(ResultChannel.INPUT)
     public void receive(String result) {

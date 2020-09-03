@@ -32,6 +32,11 @@ public class TcGateWayConfig {
         routes.route("tcsoft-data-platform-system-setting",
                 r -> r.path("/setting/**")
                         .uri("lb://tcsoft-data-platform-system-setting/setting/**"));
+//        样本模块
+        routes.route("tcsoft-data-platform-sample",
+                r -> r.path("/sample/**")
+                        .uri("lb://tcsoft-data-platform-sample/sample/**"));
+
         return routes.build();
     }
 }

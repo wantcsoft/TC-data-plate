@@ -10,10 +10,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-public class SampleMain {
+public class TcSampleMain {
 
     public static void main(String[] args) {
-        SpringApplication.run(SampleMain.class, args);
+        SpringApplication.run(TcSampleMain.class, args);
     }
 
 }

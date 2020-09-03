@@ -49,5 +49,4 @@ public class ProgItemDao implements Serializable {
     @TableField("SendFlag")
     private String sendFlag;
 
-
 }
