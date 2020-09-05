@@ -11,38 +11,38 @@ import java.util.Date;
  * @author big_john
  */
 @Data
-@TableName(value = "user")
+@TableName(value = "User")
 public class UserDao {
 
-    @TableField(value = "userId")
+    @TableField(value = "`UserID`")
     @TableId(type = IdType.AUTO)
     private Integer userId;
 
-    @TableField(value = "groupId")
+    @TableField(value = "`GroupID`")
     private Integer groupId;
 
-    @TableField(value = "roleId")
+    @TableField(value = "`RoleID`")
     private Integer roleId;
 
-    @TableField(value = "userName")
+    @TableField(value = "UserName")
     private String username;
 
-    @TableField(value = "password")
+    @TableField(value = "Password")
     private String password;
 
-    @TableField(value = "lastPasswordResetDate")
+    @TableField(value = "LastPasswordResetDate")
     private Date lastPasswordResetDate;
 
-    @TableField(value = "accountNonLocked")
+    @TableField(value = "AccountNonLocked")
     private boolean accountNonLocked;
 
-    @TableField(value = "accountNonExpired")
+    @TableField(value = "AccountNonExpired")
     private boolean accountNonExpired;
 
-    @TableField(value = "credentialsNonExpired")
+    @TableField(value = "CredentialsNonExpired")
     private boolean credentialsNonExpired;
 
-    @TableField(value = "enabled")
+    @TableField(value = "IsEnabled")
     private boolean enabled;
 
 }

@@ -1,7 +1,7 @@
 package com.tcsoft.sample.service.kafka;
 
 
-import com.tcsoft.sample.entity.OrderFromLis;
+import com.tcsoft.sample.entity.InfoFromLis;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
@@ -15,7 +15,9 @@ import org.springframework.cloud.stream.messaging.Sink;
 public class ReceiveOrderKafka {
 
     @StreamListener(Sink.INPUT)
-    public void receive(OrderFromLis order) {
+    public void receive(InfoFromLis order) {
+
+
         System.out.println(order);
 //        JSONObject jsonObject = JSONObject.parseObject(receiveOrders);
 //        JSONArray orderList = jsonObject.getJSONArray("orderList");

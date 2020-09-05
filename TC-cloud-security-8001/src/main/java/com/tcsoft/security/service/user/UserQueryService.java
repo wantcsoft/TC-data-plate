@@ -42,13 +42,13 @@ public class UserQueryService {
             //根据username查询用户
         } else if (condition.getUsername() != null) {
             UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
-                    .eq("userName", condition.getUsername()));
+                    .eq("UserName", condition.getUsername()));
             return handleSingle(userDao, authentication);
             //根据groupId查询用户
         } else if (condition.getGroupId() != null) {
             JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
             List<UserDao> list = userMapper.selectList(new QueryWrapper<UserDao>()
-                    .eq("groupId", condition.getGroupId()));
+                    .eq("GroupId", condition.getGroupId()));
             if (condition.getGroupId() == UserConstant.SYSTEM_GROUP_ID) {
                 return querySystemAdmin(list, resultData);
             } else {
@@ -66,13 +66,13 @@ public class UserQueryService {
             JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
             Integer roleGrade = userRoleMapper.selectById(userMapper.selectById(jwtUser.getUserId()).getRoleId()).getRoleGrade();
             List<Integer> roleIdList = userRoleMapper.selectList(new QueryWrapper<UserRoleDao>()
-                    .select("roleId")
-                    .lt("roleGrade", roleGrade)).stream()
+                    .select("RoleID")
+                    .lt("RoleGrade", roleGrade)).stream()
                         .map(UserRoleDao::getRoleId)
                         .collect(Collectors.toList());
             List<UserDao> list = userMapper.selectList(new QueryWrapper<UserDao>()
-                    .select("userId", "groupId", "roleId", "userName", "lastPasswordResetDate", "accountNonLocked", "enabled")
-                    .in("roleId", roleIdList));
+                    .select("UserID", "GroupID", "RoleID", "UserName", "LastPasswordResetDate", "AccountNonLocked", "IsEnabled")
+                    .in("RoleID", roleIdList));
             resultData.setMessage("查询成功");
             resultData.setData(list);
             return resultData;
@@ -87,16 +87,16 @@ public class UserQueryService {
         if (UserConstant.SYSTEM_GROUP_ID == groupId){
             Integer roleGrade = userRoleMapper.selectById(userMapper.selectById(jwtUser.getUserId()).getRoleId()).getRoleGrade();
             Map<Integer, String> roleMap = userRoleMapper.selectList(new QueryWrapper<UserRoleDao>()
-                    .select("roleId", "roleDescription")
-                    .lt("roleGrade", roleGrade))
+                    .select("RoleID", "RoleDescription")
+                    .lt("RoleGrade", roleGrade))
                     .stream()
                     .collect(Collectors.toMap(UserRoleDao::getRoleId, UserRoleDao::getRoleDescription));
             Map<Integer, String> groupMap = userGroupMapper.selectList(null)
                     .stream()
                     .collect(Collectors.toMap(UserGroupDao::getGroupId, UserGroupDao::getGroupDescription));
             list = userMapper.selectList(new QueryWrapper<UserDao>()
-                    .select("userId", "groupId", "roleId", "userName", "lastPasswordResetDate", "accountNonLocked", "enabled")
-                    .in("roleId", roleMap.keySet())).stream()
+                    .select("UserID", "GroupID", "RoleID", "UserName", "LastPasswordResetDate", "AccountNonLocked", "IsEnabled")
+                    .in("RoleID", roleMap.keySet())).stream()
                     .map(userDao -> {
                         UserServiceBean userServiceBean = new UserServiceBean();
                         BeanUtils.copyProperties(userDao, userServiceBean);
@@ -110,7 +110,7 @@ public class UserQueryService {
                     .getGroupDescription();
             String roleDescription = userRoleMapper.selectById(userMapper.selectById(jwtUser.getUserId()).getRoleId())
                     .getRoleDescription();
-            list = userMapper.selectList(new QueryWrapper<UserDao>().eq("groupId", groupId))
+            list = userMapper.selectList(new QueryWrapper<UserDao>().eq("GroupID", groupId))
                     .stream()
                     .map(userDao -> {
                         UserServiceBean userServiceBean = new UserServiceBean();
@@ -132,7 +132,7 @@ public class UserQueryService {
         UserRoleDao user = userRoleMapper.selectById(userMapper.selectById(jwtUser.getUserId())
                 .getRoleId());
         UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
-                .eq("userName", username));
+                .eq("UserName", username));
         if (userDao == null){
             resultData.setMessage("没有该用户");
             return resultData;

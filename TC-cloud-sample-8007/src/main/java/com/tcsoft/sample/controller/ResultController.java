@@ -1,12 +1,13 @@
 package com.tcsoft.sample.controller;
 
 
-import com.tcsoft.sample.entity.ResultFromThird;
+import com.tcsoft.sample.entity.InfoFromThird;
 import com.tcsoft.sample.entity.external.SendTest;
 import com.tcsoft.sample.entity.ResultData;
 import com.tcsoft.sample.service.kafka.SendResultKafka;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 检测结果的接口
@@ -21,18 +22,19 @@ public class ResultController {
 
     /**
      * 获取第三方得检测结果
-     * @param result
+     * @param resultList
      * @return
      */
     @PostMapping("/push")
-    public ResultData<String> pushResult(@RequestBody ResultFromThird result){
+    public ResultData<String> pushResult(@RequestBody List<InfoFromThird> resultList){
         ResultData<String> resultData = new ResultData<>();
-        if (sendService.send(result)){
-            resultData.setMessage("上传成功");
-        }else {
-            resultData.setCode(401);
-            resultData.setMessage("上传失败");
-        }
+        resultData.setMessage("上传成功");
+        resultList.forEach((result) -> {
+            if (!sendService.send(result)){
+                resultData.setCode(401);
+                resultData.setMessage("上传失败");
+            }
+        });
         return resultData;
     }
 
@@ -44,14 +46,7 @@ public class ResultController {
     @GetMapping("/pull")
     public ResultData<SendTest> pullResult(@RequestParam Integer sampleNo){
         ResultData<SendTest> resultData = new ResultData<>();
-//        List<ProgItemDao> progItemList = progItemService.list(new QueryWrapper<ProgItemDao>()
-//                .eq("SampleNo", sampleNo));
-//        SampleInfoDao sampleInfoDao = sampleInfoService.getById(sampleNo);
-//        SendTest sendTest = new SendTest();
-//        BeanUtils.copyProperties(sampleInfoDao, sendTest);
-//        sendTest.setProgramTests(progItemList);
-//        resultData.setMessage("操作成功");
-//        resultData.setData(sendTest);
+
         return resultData;
     }
 

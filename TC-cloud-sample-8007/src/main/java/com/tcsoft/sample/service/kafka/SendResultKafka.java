@@ -1,7 +1,7 @@
 package com.tcsoft.sample.service.kafka;
 
 
-import com.tcsoft.sample.entity.ResultFromThird;
+import com.tcsoft.sample.entity.InfoFromThird;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.integration.support.MessageBuilder;
 
@@ -17,7 +17,7 @@ public class SendResultKafka {
     @Resource
     private ResultChannel resultChannel;
 
-    public boolean send(ResultFromThird result) {
+    public boolean send(InfoFromThird result) {
         try {
             return resultChannel.output().send(MessageBuilder.withPayload(result).build());
         }catch (Exception e){

@@ -27,7 +27,7 @@ public class DevelopRegisterService {
         ResultData<String> resultData = new ResultData<>();
         String username = userServiceBean.getUsername();
         UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
-                .eq("userName", username));
+                .eq("UserName", username));
         if (userDao != null){
             resultData.setCode(401);
             resultData.setMessage("该账号已存在");

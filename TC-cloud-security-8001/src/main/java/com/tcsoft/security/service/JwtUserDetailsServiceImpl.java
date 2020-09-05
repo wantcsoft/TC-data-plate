@@ -28,10 +28,10 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
-                .eq("userName", username));
+                .eq("UserName", username));
         UserRoleDao userRoleDao = userRoleMapper.selectById(
                 userMapper.selectOne(new QueryWrapper<UserDao>()
-                    .eq("userName", username)).getRoleId());
+                    .eq("UserName", username)).getRoleId());
         if (userDao == null) {
             throw new UsernameNotFoundException(String.format("没有找到该用户 '%s'.", username));
         } else {

@@ -7,20 +7,20 @@ import lombok.Data;
  * @author big_john
  */
 @Data
-@TableName("userRole")
+@TableName("UserRole")
 public class UserRoleDao {
 
-    @TableField(value = "roleId")
+    @TableField(value = "`RoleID`")
     @TableId(type = IdType.AUTO)
     private Integer roleId;
 
-    @TableField(value = "`role`")
+    @TableField(value = "`Role`")
     private String role;
 
-    @TableField(value = "roleDescription")
+    @TableField(value = "RoleDescription")
     private String roleDescription;
 
-    @TableField(value = "roleGrade")
+    @TableField(value = "RoleGrade")
     private Integer roleGrade;
 
 }

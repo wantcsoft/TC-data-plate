@@ -31,7 +31,7 @@ public class UserRegisterService {
      */
     private boolean checkUserName(String username){
         UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
-                .eq("username", username));
+                .eq("Username", username));
         return userDao == null;
     }
 

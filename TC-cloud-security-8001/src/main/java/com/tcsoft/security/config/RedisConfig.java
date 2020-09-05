@@ -1,4 +1,4 @@
-package com.tcsoft.service01.config;
+package com.tcsoft.security.config;
 
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -17,11 +17,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-    //RedisTemplate序列化配置 -- >  注意要使用 @Qualifier("redisTemplate") 避免歧义（测试类中有使用案例）
     @Bean
     @SuppressWarnings("all")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-        // 我们为了自己开发方便，一般直接使用 <String, Object>
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
 
@@ -33,7 +31,6 @@ public class RedisConfig {
         jackson2JsonRedisSerializer.setObjectMapper(om);
         // String 的序列化
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-
         // key采用String的序列化方式
         template.setKeySerializer(stringRedisSerializer);
         // hash的key也采用String的序列化方式

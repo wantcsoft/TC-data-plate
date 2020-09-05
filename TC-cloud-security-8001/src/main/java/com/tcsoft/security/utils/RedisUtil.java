@@ -1,4 +1,4 @@
-package com.tcsoft.service01.util;
+package com.tcsoft.security.utils;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -43,6 +43,7 @@ public final class RedisUtil {
      * @return 时间(秒) 返回0代表为永久有效
      */
     public long getExpire(String key) {
+        if (key == null)    return -1L;
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
@@ -53,6 +54,7 @@ public final class RedisUtil {
      * @return true 存在 false不存在
      */
     public boolean hasKey(String key) {
+        if (key == null)    return false;
         try {
             return redisTemplate.hasKey(key);
         } catch (Exception e) {
@@ -479,8 +481,9 @@ public final class RedisUtil {
     public boolean lSet(String key, Object value, long time) {
         try {
             redisTemplate.opsForList().rightPush(key, value);
-            if (time > 0)
+            if (time > 0) {
                 expire(key, time);
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();

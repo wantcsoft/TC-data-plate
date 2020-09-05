@@ -4,6 +4,7 @@ package com.tcsoft.security.auth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.mysqlmapper.UserMapper;
 import com.tcsoft.security.dao.UserDao;
+import com.tcsoft.security.utils.RedisUtil;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -23,9 +24,10 @@ import java.util.*;
 public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Resource
     private PasswordEncoder passwordEncoder;
-
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RedisUtil redisUtil;
 
     @SneakyThrows
     @Override
@@ -34,7 +36,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         // 根据用户名查询系统中的用户信息
         UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
-                .eq("userName", username));
+                .eq("UserName", username));
         // 如果用户列表为空，说明没有匹配的用户，抛出 UsernameNotFoundException
         if (Objects.isNull(userDao)) {
             throw new UsernameNotFoundException(String.format("No qualified userDao[%s]!", username));
@@ -56,6 +58,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         }
         // 如果用户登录时输入的密码和系统中密码匹配，则返回一个完全填充的 Authentication 对象
         if (passwordEncoder.matches(authentication.getCredentials().toString(), userDao.getPassword())){
+
             return new UsernamePasswordAuthenticationToken(authentication, authentication.getCredentials(), new ArrayList<>());
         }
         // 如果密码不匹配则返回 null（此处可以抛异常，试具体应用场景而定）

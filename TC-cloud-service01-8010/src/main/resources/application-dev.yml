@@ -3,16 +3,16 @@ server:
 
 
 spring:
-  data:
-    mongodb:
-      host: 192.168.3.3
-      port: 27017
-      database: test
+#  data:
+#    mongodb:
+#      host: 192.168.3.3
+#      port: 27017
+#      database: test
 
   redis:
-    host: 127.0.0.1
+    host: 106.14.77.81
     port: 6379
-    password: 123456
+    password: TCsoft123..
     database: 0
     lettuce:
       pool:

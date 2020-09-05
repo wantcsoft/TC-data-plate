@@ -7,17 +7,17 @@ import lombok.Data;
  * @author big_john
  */
 @Data
-@TableName("userGroup")
+@TableName("UserGroup")
 public class UserGroupDao {
 
-    @TableField(value = "groupId")
+    @TableField(value = "`GroupID`")
     @TableId(type = IdType.AUTO)
     private Integer groupId;
 
-    @TableField(value = "`group`")
+    @TableField(value = "`Group`")
     private String group;
 
-    @TableField(value = "groupDescription")
+    @TableField(value = "GroupDescription")
     private String groupDescription;
 
 }

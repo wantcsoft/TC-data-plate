@@ -22,13 +22,8 @@ public class UserRoleController {
     private UserRoleQueryService userRoleQueryService;
 
     @GetMapping("/role")
-    public ResultData<List<UserRoleDao>> getAuthority(Authentication authentication){
+    public ResultData<List<UserRoleDao>> getRole(Authentication authentication){
         ResultData<List<UserRoleDao>> resultData = new ResultData<>();
-        if (authentication == null || authentication.getPrincipal() == null) {
-            resultData.setCode(402);
-            resultData.setMessage("操作失败");
-            return resultData;
-        }
         try{
             JwtUser user = (JwtUser) authentication.getPrincipal();
             return userRoleQueryService.queryAllRole(user.getUsername(), resultData);

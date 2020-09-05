@@ -28,7 +28,7 @@ public class UserGroupService {
     public ResultData<List<UserGroupDao>> getUserGroup(String username) {
         ResultData<List<UserGroupDao>> resultData = new ResultData<>();
         UserDao user = userMapper.selectOne(new QueryWrapper<UserDao>()
-                .eq("userName", username));
+                .eq("UserName", username));
         if (user == null){
             resultData.setCode(401);
             resultData.setMessage("操作失败");
@@ -57,9 +57,9 @@ public class UserGroupService {
             resultData.setMessage("操作失败");
         }else {
             UserGroupDao userGroupDao = userGroupMapper.selectOne(new QueryWrapper<UserGroupDao>()
-                    .eq("`group`", groupDao.getGroup())
+                    .eq("Group", groupDao.getGroup())
                     .or()
-                    .eq("groupDescription", groupDao.getGroupDescription()));
+                    .eq("GroupDescription", groupDao.getGroupDescription()));
             if (userGroupDao != null) {
                 resultData.setCode(403);
                 resultData.setMessage("操作失败");
@@ -92,8 +92,8 @@ public class UserGroupService {
         return resultData;
     }
 
-//    @PreAuthorize("hasRole('system_user')")
-    @PreAuthorize("hasAuthority('admin') and hasRole('system_user')")
+    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
+//    @PreAuthorize("hasAuthority('admin') and hasRole('system_user')")
     public ResultData<String> modifyGroup(UserGroupDao groupDao){
         ResultData<String> resultData = new ResultData<>();
         if (groupDao.getGroup()==null ||groupDao.getGroupDescription()==null || groupDao.getGroupId()==null){
@@ -104,11 +104,11 @@ public class UserGroupService {
             resultData.setMessage("操作失败");
         }else {
             UserGroupDao userGroupDao = userGroupMapper.selectOne(new QueryWrapper<UserGroupDao>()
-                    .ne("groupId", groupDao.getGroupId())
+                    .ne("GroupID", groupDao.getGroupId())
                     .and(i -> {
-                        i.eq("`group`", groupDao.getGroup())
+                        i.eq("Group", groupDao.getGroup())
                                 .or()
-                                .eq("groupDescription", groupDao.getGroupDescription());
+                                .eq("GroupDescription", groupDao.getGroupDescription());
                     }));
             if (userGroupDao != null) {
                 resultData.setCode(403);

@@ -1,8 +1,8 @@
 package com.tcsoft.sample.controller;
 
 
-import com.tcsoft.sample.entity.OrderFromLis;
-import com.tcsoft.sample.entity.OrderToThird;
+import com.tcsoft.sample.entity.InfoFromLis;
+import com.tcsoft.sample.entity.InfoToThird;
 import com.tcsoft.sample.entity.ResultData;
 import com.tcsoft.sample.service.kafka.SendOrderKafka;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +23,19 @@ public class OrderController {
 
     /**
      * 从lis获取医嘱信息
-     * @param order
+     * @param orderList
      * @return
      */
     @PostMapping("/push")
-    public ResultData<String> pushOrder(@RequestBody OrderFromLis order) {
+    public ResultData<String> pushOrder(@RequestBody List<InfoFromLis> orderList) {
         ResultData<String> resultData = new ResultData<>();
-        if (sendService.send(order)){
-            resultData.setMessage("上传成功");
-        }else {
-            resultData.setCode(401);
-            resultData.setMessage("上传失败");
-        }
+        resultData.setMessage("上传成功");
+        orderList.forEach((order) -> {
+            if (!sendService.send(order)){
+                resultData.setCode(401);
+                resultData.setMessage("上传失败");
+            }
+        });
         return resultData;
     }
 
@@ -44,16 +45,9 @@ public class OrderController {
      * @return
      */
     @GetMapping("/pull")
-    public ResultData<List<OrderToThird>> pullOrder(){
-        ResultData<List<OrderToThird>> resultData = new ResultData<>();
-//        List<ResultDao> resultDaoList = resultService.list(new QueryWrapper<ResultDao>()
-//                .eq("SampleNo", sampleNo));
-//        SampleInfoDao sampleInfoDao = sampleInfoService.getById(sampleNo);
-//        SendOrder sendOrder = new SendOrder();
-//        BeanUtils.copyProperties(sampleInfoDao, sendOrder);
-//        sendOrder.setResultDaoList(resultDaoList);
-//        resultData.setMessage("操作成功");
-//        resultData.setData(sendOrder);
+    public ResultData<List<InfoToThird>> pullOrder(){
+        ResultData<List<InfoToThird>> resultData = new ResultData<>();
+
         return resultData;
     }
 

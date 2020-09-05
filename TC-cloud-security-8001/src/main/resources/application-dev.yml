@@ -24,6 +24,18 @@ spring:
     url: jdbc:mysql://106.14.77.81:3306/tc_data_plat?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  redis:
+    host: 106.14.77.81
+    port: 6379
+    password: TCsoft123..
+    database: 0
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: 300ms
+        max-idle: 16
+        min-idle: 8
+
   cloud:
     nacos:
       discovery:

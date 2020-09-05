@@ -92,8 +92,8 @@ public class UserModifyService {
         }else {
             //检查新的用户名是否重名
             if (userMapper.selectOne(new QueryWrapper<UserDao>()
-                    .eq("userName", modifyUser.getUsername())
-                    .ne("userId", modifyUser.getUserId())) != null){
+                    .eq("UserName", modifyUser.getUsername())
+                    .ne("UserId", modifyUser.getUserId())) != null){
                 resultData.setCode(401);
                 resultData.setMessage("用户名已存在");
             }else {
