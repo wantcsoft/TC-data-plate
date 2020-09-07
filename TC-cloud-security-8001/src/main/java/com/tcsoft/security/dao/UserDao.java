@@ -45,4 +45,8 @@ public class UserDao {
     @TableField(value = "IsEnabled")
     private boolean enabled;
 
+    @TableLogic
+    @TableField(value = "IsDeleted")
+    private boolean deleted;
+
 }

@@ -2,9 +2,12 @@ package com.tcsoft.sample.service.kafka;
 
 
 import com.tcsoft.sample.entity.InfoFromLis;
+import com.tcsoft.sample.mapper.InfoFromLisMapper;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -13,12 +16,12 @@ import org.springframework.cloud.stream.messaging.Sink;
  */
 @EnableBinding(Sink.class)
 public class ReceiveOrderKafka {
+    @Resource
+    private InfoFromLisMapper infoFromLisMapper;
 
     @StreamListener(Sink.INPUT)
     public void receive(InfoFromLis order) {
-
-
-        System.out.println(order);
+        boolean flag = saveOrder(order);
 //        JSONObject jsonObject = JSONObject.parseObject(receiveOrders);
 //        JSONArray orderList = jsonObject.getJSONArray("orderList");
 //        orderList.forEach((order) -> {
@@ -29,6 +32,10 @@ public class ReceiveOrderKafka {
 //                e.printStackTrace();
 //            }
 //        });
+    }
+
+    private boolean saveOrder(InfoFromLis order){
+        return infoFromLisMapper.insert(order) == 1;
     }
 
 }

@@ -4,6 +4,7 @@ package com.tcsoft.sample.controller;
 import com.tcsoft.sample.entity.InfoFromLis;
 import com.tcsoft.sample.entity.InfoToThird;
 import com.tcsoft.sample.entity.ResultData;
+import com.tcsoft.sample.service.InfoFromLisService;
 import com.tcsoft.sample.service.kafka.SendOrderKafka;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,8 @@ public class OrderController {
 
     @Resource
     private SendOrderKafka sendService;
+    @Resource
+    private InfoFromLisService service;
 
     /**
      * 从lis获取医嘱信息
@@ -27,16 +30,10 @@ public class OrderController {
      * @return
      */
     @PostMapping("/push")
-    public ResultData<String> pushOrder(@RequestBody List<InfoFromLis> orderList) {
-        ResultData<String> resultData = new ResultData<>();
-        resultData.setMessage("上传成功");
-        orderList.forEach((order) -> {
-            if (!sendService.send(order)){
-                resultData.setCode(401);
-                resultData.setMessage("上传失败");
-            }
-        });
-        return resultData;
+    public void pushOrder(@RequestBody List<InfoFromLis> orderList) {
+        for (InfoFromLis order:orderList){
+            sendService.send(order);
+        }
     }
 
     /**
@@ -45,9 +42,10 @@ public class OrderController {
      * @return
      */
     @GetMapping("/pull")
-    public ResultData<List<InfoToThird>> pullOrder(){
-        ResultData<List<InfoToThird>> resultData = new ResultData<>();
-
+    public ResultData<List<InfoFromLis>> pullOrder(){
+        ResultData<List<InfoFromLis>> resultData = new ResultData<>();
+        List<InfoFromLis> list = service.list();
+        resultData.setData(list);
         return resultData;
     }
 

@@ -32,21 +32,15 @@ public class UserGroupController {
     }
 
     @PostMapping("/group")
-    public ResultData<String> group(@RequestBody UserGroupDao userGroupDao,
+    public ResultData<String> group(@RequestBody UserGroupDao dao,
                                     @RequestParam String type){
-        if (userGroupDao == null){
-            ResultData<String> resultData = new ResultData<>();
-            resultData.setCode(403);
-            resultData.setMessage("操作失败");
-            return resultData;
-        }
         switch (type){
             case UserConstant.CREATE:
-                return groupService.createGroup(userGroupDao);
+                return groupService.createGroup(dao);
             case UserConstant.DELETE:
-                return groupService.deleteGroup(userGroupDao);
+                return groupService.deleteGroup(dao);
             case UserConstant.MODIFY:
-                return groupService.modifyGroup(userGroupDao);
+                return groupService.modifyGroup(dao);
             default:
                 ResultData<String> resultData = new ResultData<>();
                 resultData.setCode(403);

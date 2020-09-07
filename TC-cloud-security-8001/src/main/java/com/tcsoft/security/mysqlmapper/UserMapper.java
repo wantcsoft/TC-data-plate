@@ -20,14 +20,14 @@ public interface UserMapper extends BaseMapper<UserDao> {
      * @return
      */
     @Select("select User.UserID as userId, User.GroupID as groupId, User.RoleID as roleId,\n" +
-            "       User.UserName as userName, User.Password as password,\n" +
+            "       User.UserName as userName,\n" +
             "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enable,\n" +
             "       UserGroup.GroupDescription as groupDescription,\n" +
             "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +
             "from User, UserRole, UserGroup\n" +
             "where User.GroupID = UserGroup.GroupID\n" +
             "and  User.RoleID = UserRole.RoleID\n" +
-            "and User.GroupDescription != '系统';")
+            "and UserGroup.GroupDescription != '系统';")
     List<UserServiceBean> selectUserAllGroupId();
 
     /**
@@ -36,7 +36,7 @@ public interface UserMapper extends BaseMapper<UserDao> {
      * @return
      */
     @Select("select User.UserID as userId, User.GroupID as groupId, User.RoleID as roleId,\n" +
-            "       User.UserName as userName, User.Password as password,\n" +
+            "       User.UserName as userName,\n" +
             "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enabled,\n" +
             "       UserGroup.GroupDescription as groupDescription, UserGroup.Group as `group`,\n" +
             "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +
@@ -44,14 +44,14 @@ public interface UserMapper extends BaseMapper<UserDao> {
             "where User.GroupID = UserGroup.GroupID\n" +
             "and User.RoleID = UserRole.RoleID\n" +
             "and UserGroup.Group = #{group};")
-    List<UserServiceBean> selectUserByGroup(@Param("groupId")String group);
+    List<UserServiceBean> selectUserByGroup(@Param("group")String group);
 
     /**
      * 查询出所有的用户除了系统管理员
      * @return
      */
     @Select("select User.UserID as userId, User.GroupID as groupId, User.RoleID as roleId,\n" +
-            "       User.UserName as userName, User.Password as password,\n" +
+            "       User.UserName as userName,\n" +
             "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enabled,\n" +
             "       UserGroup.GroupDescription as groupDescription, UserGroup.Group as `group`,\n" +
             "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +
@@ -67,7 +67,7 @@ public interface UserMapper extends BaseMapper<UserDao> {
      * @return
      */
     @Select("select User.UserID as userId, User.GroupID as groupId, User.RoleID as roleId,\n" +
-            "       User.UserName as userName, User.Password as password,\n" +
+            "       User.UserName as userName,\n" +
             "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enabled,\n" +
             "       UserGroup.GroupDescription as groupDescription, UserGroup.Group as `group`,\n" +
             "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +

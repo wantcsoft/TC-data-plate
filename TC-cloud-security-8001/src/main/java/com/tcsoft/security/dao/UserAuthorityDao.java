@@ -1,9 +1,7 @@
 package com.tcsoft.security.dao;
 
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.ToString;
 
@@ -12,10 +10,10 @@ import lombok.ToString;
  */
 @Data
 @ToString
-@TableName("Authority")
-public class AuthorityDao {
+@TableName("UserAuthority")
+public class UserAuthorityDao {
 
-    @TableId(value = "AuthorityID")
+    @TableId(value = "AuthorityID", type = IdType.AUTO)
     private Integer authorityId;
 
     @TableField(value = "Authority")
@@ -23,5 +21,9 @@ public class AuthorityDao {
 
     @TableField(value = "AuthorityDescription")
     private String authorityDescription;
+
+    @TableLogic
+    @TableField(value = "IsDeleted")
+    private boolean deleted;
 
 }

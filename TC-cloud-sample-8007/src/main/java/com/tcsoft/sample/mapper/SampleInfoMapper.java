@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author WMY
  * @since 2020-08-10
  */
-@Mapper
 public interface SampleInfoMapper extends BaseMapper<SampleInfoDao> {
 
 }

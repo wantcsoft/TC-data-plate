@@ -23,4 +23,8 @@ public class UserRoleDao {
     @TableField(value = "RoleGrade")
     private Integer roleGrade;
 
+    @TableLogic
+    @TableField(value = "IsDeleted")
+    private boolean deleted;
+
 }

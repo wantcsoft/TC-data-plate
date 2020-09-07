@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ public class JwtTokenUtil implements Serializable {
     private static final String CLAIM_KEY_USER_ID = "userId";
     private static final String CLAIM_KEY_USERNAME = "username";
     private static final String CLAIM_KEY_GROUP_ID = "groupId";
+    private static final String CLAIM_KEY_ROLE = "role";
     private static final String CLAIM_KEY_CREATED = "created";
 
     @Value("${jwt.secret}")
@@ -84,6 +86,8 @@ public class JwtTokenUtil implements Serializable {
             jwtUser.setUserId((int)claims.get(CLAIM_KEY_USER_ID));
             jwtUser.setUsername((String)claims.get(CLAIM_KEY_USERNAME));
             jwtUser.setGroupId((int)claims.get(CLAIM_KEY_GROUP_ID));
+            jwtUser.setAuthorities(AuthorityUtils
+                    .commaSeparatedStringToAuthorityList((String)claims.get(CLAIM_KEY_ROLE)));
             return jwtUser;
         }
     }
@@ -132,10 +136,13 @@ public class JwtTokenUtil implements Serializable {
      * @return
      */
     public String generateToken(JwtUser user) {
-        Map<String, Object> claims = new HashMap<>(9);
+        Map<String, Object> claims = new HashMap<>(5);
         claims.put(CLAIM_KEY_USER_ID, user.getUserId());
         claims.put(CLAIM_KEY_USERNAME, user.getUsername());
         claims.put(CLAIM_KEY_GROUP_ID, user.getGroupId());
+        StringBuilder role = new StringBuilder();
+        user.getAuthorities().forEach((x) -> role.append(x.toString()).append(","));
+        claims.put(CLAIM_KEY_ROLE, role);
         claims.put(CLAIM_KEY_CREATED, new Date(System.currentTimeMillis()));
         return generateToken(claims);
     }
