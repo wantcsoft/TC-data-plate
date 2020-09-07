@@ -1,6 +1,5 @@
 package com.tcsoft.security.controller;
 
-import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.entity.QueryConditionBean;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
@@ -69,19 +68,14 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user")
-    public ResultData<List<UserDao>> getUser(QueryConditionBean condition,
-                                             Authentication authentication){
-        return userQueryService.query(condition, authentication);
-    }
-
-
-    @GetMapping("/front/user")
-    public ResultData<List<UserServiceBean>> frontGetUser(String username, Authentication authentication){
-        if (username == null){
-            return userQueryService.frontQuery(authentication);
+    @GetMapping("/getUser")
+    public ResultData<List<UserServiceBean>> getUser(QueryConditionBean condition,
+                                                     Authentication authentication){
+        if (condition.getUserId()==null && condition.getUsername()==null &&
+                condition.getGroup()==null){
+            return userQueryService.query(authentication);
         }else {
-            return userQueryService.frontQueryByName(username, authentication);
+            return userQueryService.queryByCondition(condition, authentication);
         }
 
     }

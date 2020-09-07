@@ -6,18 +6,11 @@ package com.tcsoft.security.utils;
  */
 public final class UserConstant {
 
-    public static final String SYSTEM_ADMIN = "系统管理员";
-    public static final String SYSTEM_USER = "系统普通用户";
-    public static final String HOSPITAL = "医院用户";
-    public static final String DEVELOPER = "开发者用户"; 
+    public static final String SYSTEM_ADMIN = "ROLE_system_admin";
+    public static final String SYSTEM_USER = "ROLE_system_user";
+    public static final String HOSPITAL = "ROLE_hospital";
 
-    public static final int SYSTEM_ADMIN_ID = 1;
-    public static final int SYSTEM_USER_ID = 2;
-    public static final int DEVELOPER_ID = 3;
-    public static final int HOSPITAL_ID = 4;
-
-    public static final String SYSTEM_GROUP = "系统用户";
-    public static final int SYSTEM_GROUP_ID = 1;
+    public static final String SYSTEM_GROUP = "system";
 
     public static final int PASSWORD_LENGTH_MIN = 6;
     public static final int PASSWORD_LENGTH_MAX = 20;

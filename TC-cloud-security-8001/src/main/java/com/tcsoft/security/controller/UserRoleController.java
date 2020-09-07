@@ -21,7 +21,7 @@ public class UserRoleController {
     @Resource
     private UserRoleQueryService userRoleQueryService;
 
-    @GetMapping("/role")
+    @GetMapping("/getRole")
     public ResultData<List<UserRoleDao>> getRole(Authentication authentication){
         ResultData<List<UserRoleDao>> resultData = new ResultData<>();
         try{

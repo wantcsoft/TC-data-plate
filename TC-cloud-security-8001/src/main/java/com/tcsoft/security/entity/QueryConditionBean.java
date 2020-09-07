@@ -10,6 +10,6 @@ public class QueryConditionBean {
 
     private Integer userId;
     private String username;
-    private Integer groupId;
+    private String group;
 
 }

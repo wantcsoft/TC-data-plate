@@ -42,22 +42,6 @@ public class UserLoginService {
         return resultData;
     }
 
-    public ResultData<String> developLogin(String username, String password){
-        ResultData<String> resultData = new ResultData<>();
-        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-        final Authentication authentication = authenticationManager.authenticate(upToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final JwtUser jwtUser = (JwtUser) userDetailsService.loadUserByUsername(username);
-        if (jwtUser.getGroupId() != null && UserConstant.SYSTEM_GROUP_ID != jwtUser.getGroupId()){
-            resultData.setCode(401);
-            resultData.setMessage("登陆失败");
-        }else {
-            final String token = tokenHead + jwtTokenUtil.generateToken(jwtUser);
-            resultData.setMessage("登陆成功");
-            resultData.setData(token);
-        }
-        return resultData;
-    }
 
     // token刷新服务
     public String refresh(String oldToken) {

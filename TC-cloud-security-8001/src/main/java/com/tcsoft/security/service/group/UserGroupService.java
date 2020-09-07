@@ -29,14 +29,10 @@ public class UserGroupService {
         ResultData<List<UserGroupDao>> resultData = new ResultData<>();
         UserDao user = userMapper.selectOne(new QueryWrapper<UserDao>()
                 .eq("UserName", username));
-        if (user == null){
-            resultData.setCode(401);
-            resultData.setMessage("操作失败");
-            return resultData;
-        }
         Integer groupId = user.getGroupId();
+        UserGroupDao groupDao = userGroupMapper.selectById(user.getGroupId());
         List<UserGroupDao> userGroupDaoList = new ArrayList<>();
-        if (groupId == 1){
+        if (UserConstant.SYSTEM_GROUP.equals(groupDao.getGroup())){
             userGroupDaoList = userGroupMapper.selectList(null);
         }else {
             UserGroupDao userGroupDao = userGroupMapper.selectById(groupId);
@@ -78,7 +74,7 @@ public class UserGroupService {
     @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
     public ResultData<String> deleteGroup(UserGroupDao groupDao){
         ResultData<String> resultData = new ResultData<>();
-        if (groupDao.getGroupId()==null || groupDao.getGroupId()== UserConstant.SYSTEM_GROUP_ID){
+        if (groupDao.getGroupId()==null || UserConstant.SYSTEM_GROUP.equals(groupDao.getGroup())){
             resultData.setCode(403);
             resultData.setMessage("操作失败");
         }else {
@@ -93,13 +89,12 @@ public class UserGroupService {
     }
 
     @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
-//    @PreAuthorize("hasAuthority('admin') and hasRole('system_user')")
     public ResultData<String> modifyGroup(UserGroupDao groupDao){
         ResultData<String> resultData = new ResultData<>();
         if (groupDao.getGroup()==null ||groupDao.getGroupDescription()==null || groupDao.getGroupId()==null){
             resultData.setCode(403);
             resultData.setMessage("操作失败");
-        }else if (groupDao.getGroupId() == UserConstant.SYSTEM_GROUP_ID) {
+        }else if (UserConstant.SYSTEM_GROUP.equals(groupDao.getGroup())) {
             resultData.setCode(403);
             resultData.setMessage("操作失败");
         }else {

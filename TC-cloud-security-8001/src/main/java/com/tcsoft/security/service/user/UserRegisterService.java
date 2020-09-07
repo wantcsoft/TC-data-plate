@@ -2,10 +2,14 @@ package com.tcsoft.security.service.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
+import com.tcsoft.security.dao.UserGroupDao;
+import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
+import com.tcsoft.security.mysqlmapper.UserGroupMapper;
 import com.tcsoft.security.mysqlmapper.UserMapper;
+import com.tcsoft.security.mysqlmapper.UserRoleMapper;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -23,6 +27,8 @@ public class UserRegisterService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private UserGroupMapper userGroupMapper;
 
     /**
      * 检查username是否重复的情况
@@ -42,20 +48,18 @@ public class UserRegisterService {
      */
     public ResultData<String> register(UserServiceBean userServiceBean,
                                         Authentication authentication){
-        System.out.println(userServiceBean);
-        int roleId = userServiceBean.getRoleId();
-        int groupId = userServiceBean.getGroupId();
-        if (UserConstant.SYSTEM_USER_ID==roleId && groupId==UserConstant.SYSTEM_GROUP_ID){
+        String group = userServiceBean.getGroup();
+        String role = userServiceBean.getRole();
+        if (UserConstant.SYSTEM_USER.equals(role) &&
+                UserConstant.SYSTEM_GROUP.equals(group)){
             //创建系统用户
             return registerSystemUser(userServiceBean);
-        }else if (UserConstant.DEVELOPER_ID ==roleId && groupId==UserConstant.SYSTEM_GROUP_ID){
-            //创建开发者用户
-            return registerDeveloper(userServiceBean);
-        }else if (UserConstant.HOSPITAL_ID==roleId){
+        }else if (UserConstant.HOSPITAL.equals(role)){
             JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
-            if (jwtUser.getGroupId()==UserConstant.SYSTEM_GROUP_ID){
+            UserGroupDao jwtGroup = userGroupMapper.selectById(jwtUser.getGroupId());
+            if (UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup())){
                 return registerHospital(userServiceBean);
-            }else if (jwtUser.getGroupId()==groupId){
+            }else if (jwtGroup.getGroup().equals(group)){
                 return registerHospital(userServiceBean);
             }
         }
@@ -67,11 +71,6 @@ public class UserRegisterService {
 
     @PreAuthorize("hasRole('system_admin')")
     private ResultData<String> registerSystemUser(UserServiceBean userServiceBean){
-        return registerUser(userServiceBean);
-    }
-
-    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
-    private ResultData<String> registerDeveloper(UserServiceBean userServiceBean){
         return registerUser(userServiceBean);
     }
 

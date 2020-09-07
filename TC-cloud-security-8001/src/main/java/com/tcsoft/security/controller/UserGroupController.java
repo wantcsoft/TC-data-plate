@@ -33,7 +33,7 @@ public class UserGroupController {
 
     @PostMapping("/group")
     public ResultData<String> group(@RequestBody UserGroupDao userGroupDao,
-                                    @RequestParam String type, Authentication authentication){
+                                    @RequestParam String type){
         if (userGroupDao == null){
             ResultData<String> resultData = new ResultData<>();
             resultData.setCode(403);
@@ -46,7 +46,6 @@ public class UserGroupController {
             case UserConstant.DELETE:
                 return groupService.deleteGroup(userGroupDao);
             case UserConstant.MODIFY:
-                System.out.println(authentication.getAuthorities().toString());
                 return groupService.modifyGroup(userGroupDao);
             default:
                 ResultData<String> resultData = new ResultData<>();

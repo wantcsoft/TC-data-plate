@@ -20,7 +20,6 @@ public class InfoFromLis {
      */
     private String sampleId;            //样本条码号
     private String sampleTypeName;      //样本类型名称
-    private String testTypeName;        //测试类型名称
     private Date collectTime;           //样本采集时间
     private String rackNo;              //样本位置信息：架号
     private String cupNo;               //样本位置信息：杯号
@@ -39,6 +38,7 @@ public class InfoFromLis {
      * 编程信息
      */
     private String testItemCode;        //测试项目代码
+    private String testTypeName;        //测试类型名称
     private Integer replicateTimes;     //复制次数
 
     /**

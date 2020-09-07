@@ -2,9 +2,13 @@ package com.tcsoft.security.service.user;
 
 
 import com.tcsoft.security.dao.UserDao;
+import com.tcsoft.security.dao.UserGroupDao;
+import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.mysqlmapper.UserGroupMapper;
 import com.tcsoft.security.mysqlmapper.UserMapper;
+import com.tcsoft.security.mysqlmapper.UserRoleMapper;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -20,6 +24,10 @@ public class UserDeleteService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private UserRoleMapper userRoleMapper;
+    @Resource
+    private UserGroupMapper userGroupMapper;
 
     /**
      * 删除方法总入口
@@ -29,14 +37,15 @@ public class UserDeleteService {
     public ResultData<String> delete(int deleteUserId, Authentication authentication){
         UserDao deleteUserDao = userMapper.selectById(deleteUserId);
         if (deleteUserDao!=null){
-            if (deleteUserDao.getRoleId()==UserConstant.SYSTEM_USER_ID){
+            UserRoleDao deleteRole = userRoleMapper.selectById(deleteUserDao.getRoleId());
+            if (UserConstant.SYSTEM_USER.equals(deleteRole.getRole())){
                 return deleteSystemUser(deleteUserId);
-            }else if (deleteUserDao.getRoleId()==UserConstant.DEVELOPER_ID){
-                return deleteDeveloper(deleteUserId);
-            }else if (deleteUserDao.getRoleId()==UserConstant.HOSPITAL_ID){
+            }else if (UserConstant.HOSPITAL.equals(deleteRole.getRole())){
                 JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
-                if (jwtUser.getGroupId() != UserConstant.SYSTEM_GROUP_ID &&
-                        !jwtUser.getGroupId().equals(deleteUserDao.getGroupId())){
+                UserGroupDao jwtGroup = userGroupMapper.selectById(jwtUser.getGroupId());
+                UserGroupDao deleteGroup = userGroupMapper.selectById(deleteUserDao.getGroupId());
+                if (!UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup()) &&
+                        !jwtGroup.getGroup().equals(deleteGroup.getGroup())){
                     ResultData<String> resultData = new ResultData<>();
                     resultData.setCode(401);
                     resultData.setMessage("权限不足");
@@ -47,17 +56,12 @@ public class UserDeleteService {
         }
         ResultData<String> resultData = new ResultData<>();
         resultData.setCode(401);
-        resultData.setMessage("用户信息异常");
+        resultData.setMessage("用户不存在");
         return resultData;
     }
 
     @PreAuthorize("hasRole('system_admin')")
     private ResultData<String> deleteSystemUser(int id){
-        return deleteById(id);
-    }
-
-    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
-    private ResultData<String> deleteDeveloper(int id){
         return deleteById(id);
     }
 

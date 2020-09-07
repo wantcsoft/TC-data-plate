@@ -23,6 +23,7 @@ public class UserServiceBean implements Serializable {
     private boolean credentialsNonExpired = false;
     private boolean enabled = true;
 
+    private String group;
     private String groupDescription;
 
     private String role;
