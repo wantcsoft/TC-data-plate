@@ -23,6 +23,7 @@ public interface UserMapper extends BaseMapper<UserDao> {
             "       User.UserName as userName,\n" +
             "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enable,\n" +
             "       UserGroup.GroupDescription as groupDescription,\n" +
+            "       User.AccountNonLocked as accountNonLocked,\n" +
             "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +
             "from User, UserRole, UserGroup\n" +
             "where User.GroupID = UserGroup.GroupID\n" +
@@ -39,6 +40,7 @@ public interface UserMapper extends BaseMapper<UserDao> {
             "       User.UserName as userName,\n" +
             "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enabled,\n" +
             "       UserGroup.GroupDescription as groupDescription, UserGroup.Group as `group`,\n" +
+            "       User.AccountNonLocked as accountNonLocked,\n" +
             "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +
             "from User, UserRole, UserGroup\n" +
             "where User.GroupID = UserGroup.GroupID\n" +
@@ -54,6 +56,7 @@ public interface UserMapper extends BaseMapper<UserDao> {
             "       User.UserName as userName,\n" +
             "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enabled,\n" +
             "       UserGroup.GroupDescription as groupDescription, UserGroup.Group as `group`,\n" +
+            "       User.AccountNonLocked as accountNonLocked,\n" +
             "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +
             "from User, UserRole, UserGroup\n" +
             "where User.GroupID = UserGroup.GroupID\n" +
@@ -70,6 +73,7 @@ public interface UserMapper extends BaseMapper<UserDao> {
             "       User.UserName as userName,\n" +
             "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enabled,\n" +
             "       UserGroup.GroupDescription as groupDescription, UserGroup.Group as `group`,\n" +
+            "       User.AccountNonLocked as accountNonLocked,\n" +
             "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +
             "from User, UserRole, UserGroup\n" +
             "where User.GroupID = UserGroup.GroupID\n" +

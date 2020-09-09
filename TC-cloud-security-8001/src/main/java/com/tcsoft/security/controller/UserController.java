@@ -41,7 +41,7 @@ public class UserController {
                     }
                 case UserConstant.CREATE:
                     //创建操作
-                    if (userServiceBean.getGroupId()==null || userServiceBean.getRoleId()==null ||
+                    if (userServiceBean.getGroup()==null || userServiceBean.getRole()==null ||
                     userServiceBean.getUsername()== null || userServiceBean.getPassword()==null){
                         return nullParameter();
                     }else {
@@ -68,7 +68,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getUser")
+    @GetMapping("/user")
     public ResultData<List<UserServiceBean>> getUser(QueryConditionBean condition,
                                                      Authentication authentication){
         if (condition.getUserId()==null && condition.getUsername()==null &&
@@ -77,7 +77,6 @@ public class UserController {
         }else {
             return userQueryService.queryByCondition(condition, authentication);
         }
-
     }
 
     /**

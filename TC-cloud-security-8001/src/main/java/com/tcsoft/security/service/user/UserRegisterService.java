@@ -28,10 +28,12 @@ public class UserRegisterService {
     @Resource
     private UserMapper userMapper;
     @Resource
-    private UserGroupMapper userGroupMapper;
+    private UserGroupMapper groupMapper;
+    @Resource
+    private UserRoleMapper roleMapper;
 
     /**
-     * 检查username是否重复的情况
+     * 检查username是否被注册
      * @param username
      * @return
      */
@@ -56,7 +58,7 @@ public class UserRegisterService {
             return registerSystemUser(userServiceBean);
         }else if (UserConstant.HOSPITAL.equals(role)){
             JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
-            UserGroupDao jwtGroup = userGroupMapper.selectById(jwtUser.getGroupId());
+            UserGroupDao jwtGroup = groupMapper.selectById(jwtUser.getGroupId());
             if (UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup())){
                 return registerHospital(userServiceBean);
             }else if (jwtGroup.getGroup().equals(group)){
@@ -95,8 +97,10 @@ public class UserRegisterService {
                 return resultData;
             } else {
                 UserDao userDao = new UserDao();
-                userDao.setGroupId(userServiceBean.getGroupId());
-                userDao.setRoleId(userServiceBean.getRoleId());
+                userDao.setGroupId(groupMapper.selectOne(new QueryWrapper<UserGroupDao>()
+                        .eq("`Group`", userServiceBean.getGroup())).getGroupId());
+                userDao.setRoleId(roleMapper.selectOne(new QueryWrapper<UserRoleDao>()
+                        .eq("`Role`", userServiceBean.getRole())).getRoleId());
                 userDao.setUsername(userServiceBean.getUsername());
                 //密码加密
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

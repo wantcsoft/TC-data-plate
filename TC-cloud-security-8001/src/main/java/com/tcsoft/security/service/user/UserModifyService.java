@@ -124,9 +124,9 @@ public class UserModifyService {
         UserDao newUserDao = new UserDao();
         newUserDao.setUserId(modifyUser.getUserId());
         newUserDao.setRoleId(userRoleMapper.selectOne(new QueryWrapper<UserRoleDao>()
-                .eq("Role", modifyUser.getRole())).getRoleId());
+                .eq("`Role`", modifyUser.getRole())).getRoleId());
         newUserDao.setGroupId(userGroupMapper.selectOne(new QueryWrapper<UserGroupDao>()
-                .eq("Group", modifyUser.getGroup())).getGroupId());
+                .eq("`Group`", modifyUser.getGroup())).getGroupId());
         if (modifyUser.getUsername() != null && !"".equals(modifyUser.getUsername())){
             List<UserDao> list = userMapper.selectList(new QueryWrapper<UserDao>()
                     .eq("UserName", modifyUser.getUsername()));
