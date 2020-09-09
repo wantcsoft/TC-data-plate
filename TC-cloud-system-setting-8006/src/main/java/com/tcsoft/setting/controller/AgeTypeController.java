@@ -34,7 +34,7 @@ public class AgeTypeController extends
 
     @Override
     public List<AgeTypeViewModel> query(){
-        return service.listViewMode(hospitalId);
+        return service.listViewModel(hospitalId);
     }
 
 }

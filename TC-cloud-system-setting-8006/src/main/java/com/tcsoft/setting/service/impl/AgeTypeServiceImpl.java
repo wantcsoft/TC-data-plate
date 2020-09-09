@@ -21,7 +21,7 @@ import java.util.List;
 public class AgeTypeServiceImpl extends ServiceImpl<AgeTypeMapper, AgeTypeDao>
         implements AgeTypeService {
 
-    public List<AgeTypeViewModel> listViewMode(Integer hospitalId) {
+    public List<AgeTypeViewModel> listViewModel(Integer hospitalId) {
         return baseMapper.selectByHospitalId(hospitalId);
     }
 

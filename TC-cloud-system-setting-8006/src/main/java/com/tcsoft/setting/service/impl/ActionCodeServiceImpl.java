@@ -21,7 +21,7 @@ import java.util.List;
 public class ActionCodeServiceImpl extends ServiceImpl<ActionCodeMapper, ActionCodeDao>
         implements ActionCodeService {
 
-    public List<ActionCodeViewModel> listViewMode(Integer hospitalId) {
+    public List<ActionCodeViewModel> listViewModel(Integer hospitalId) {
         return baseMapper.selectByHospitalId(hospitalId);
     }
 

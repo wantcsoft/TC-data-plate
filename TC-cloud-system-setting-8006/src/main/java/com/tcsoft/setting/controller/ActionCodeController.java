@@ -37,7 +37,7 @@ public class ActionCodeController extends
 
     @Override
     public List<ActionCodeViewModel> query(){
-        return service.listViewMode(hospitalId);
+        return service.listViewModel(hospitalId);
     }
 
 }
