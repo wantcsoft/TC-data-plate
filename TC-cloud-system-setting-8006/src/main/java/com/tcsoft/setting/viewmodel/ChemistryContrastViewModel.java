@@ -15,7 +15,7 @@ public class ChemistryContrastViewModel {
     private Integer sampleTypeId;
     private Integer instrumentId;
 
-    private String testItemCode;
+    private String testItemName;
     private String sampleTypeName;
     private String instrumentName;
     private String chemCode;

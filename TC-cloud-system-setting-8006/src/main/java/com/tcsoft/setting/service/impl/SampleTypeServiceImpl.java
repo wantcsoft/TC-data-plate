@@ -22,7 +22,7 @@ import java.util.List;
 public class SampleTypeServiceImpl extends ServiceImpl<SampleTypeMapper, SampleTypeDao>
         implements SampleTypeService {
 
-    public List<SampleTypeViewModel> listViewMode(Integer hospitalId) {
+    public List<SampleTypeViewModel> listViewModel(Integer hospitalId) {
         return baseMapper.selectByHospitalId(hospitalId);
     }
 

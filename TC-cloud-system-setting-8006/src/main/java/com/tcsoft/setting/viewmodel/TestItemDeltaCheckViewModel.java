@@ -13,6 +13,9 @@ public class TestItemDeltaCheckViewModel {
 
     private Integer hospitalId;
     private Integer testItemId;
+
+    private String testItemName;
+
     private String formula;
     private Integer dayRange;
 

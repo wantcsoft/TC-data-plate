@@ -23,7 +23,7 @@ public interface ChemistryContrastMapper extends BaseMapper<ChemistryContrastDao
     @Select("select BSC_ChemistryContrast.HospitalID, BSC_ChemistryContrast.TestItemID,\n" +
             "       BSC_ChemistryContrast.SampleTypeID, BSC_ChemistryContrast.IsProgrammed,\n" +
             "       BSC_ChemistryContrast.InstrumentID, BSC_ChemistryContrast.ChemCode,\n" +
-            "       BSC_ChemistryContrast.IsEnabled, BSC_TestItemInfo.TestItemCode,\n" +
+            "       BSC_ChemistryContrast.IsEnabled, BSC_TestItemInfo.TestItemName,\n" +
             "       BSC_SampleType.SampleTypeName, BSC_Instrument.InstrumentName\n" +
             "from BSC_ChemistryContrast, BSC_TestItemInfo, BSC_SampleType, BSC_Instrument\n" +
             "where BSC_ChemistryContrast.InstrumentID=BSC_Instrument.InstrumentID\n" +

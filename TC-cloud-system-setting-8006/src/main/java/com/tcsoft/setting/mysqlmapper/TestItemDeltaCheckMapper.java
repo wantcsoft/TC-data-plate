@@ -15,8 +15,13 @@ import java.util.List;
  */
 public interface TestItemDeltaCheckMapper extends BaseMapper<TestItemDeltaCheckDao> {
 
-    @Select("select * from BSC_TestItemDeltaCheck\n" +
-            "where HospitalID = #{hospitalId};")
+    @Select("select BSC_TestItemDeltaCheck.TestItemID, BSC_TestItemDeltaCheck.HospitalID,\n" +
+            "       BSC_TestItemDeltaCheck.Formula, BSC_TestItemDeltaCheck.DayRange,\n" +
+            "       BSC_TestItemInfo.TestItemName\n" +
+            "from BSC_TestItemDeltaCheck, BSC_TestItemInfo\n" +
+            "where BSC_TestItemDeltaCheck.HospitalID = #{hospitalId}\n" +
+            "and BSC_TestItemInfo.IsDeleted = false\n" +
+            "and BSC_TestItemDeltaCheck.TestItemID = BSC_TestItemInfo.TestItemID;")
     List<TestItemDeltaCheckViewModel> selectAll(@Param("hospitalId")Integer hospitalId);
 
 }

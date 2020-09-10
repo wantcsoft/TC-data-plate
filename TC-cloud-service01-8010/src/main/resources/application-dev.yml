@@ -3,12 +3,6 @@ server:
 
 
 spring:
-#  data:
-#    mongodb:
-#      host: 192.168.3.3
-#      port: 27017
-#      database: test
-
   redis:
     host: 106.14.77.81
     port: 6379

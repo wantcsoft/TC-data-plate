@@ -16,7 +16,7 @@ import java.util.List;
 public class ChemistryContrastServiceImpl extends ServiceImpl<ChemistryContrastMapper, ChemistryContrastDao>
         implements ChemistryContrastService {
 
-    public List<ChemistryContrastViewModel> listViewMode(Integer hospitalId) {
+    public List<ChemistryContrastViewModel> listViewModel(Integer hospitalId) {
         return baseMapper.selectByHospitalId(hospitalId);
     }
 }

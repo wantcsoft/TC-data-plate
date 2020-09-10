@@ -21,7 +21,7 @@ import java.util.List;
 public class InstrumentServiceImpl extends ServiceImpl<InstrumentMapper, InstrumentDao>
         implements InstrumentService {
 
-    public List<InstrumentViewModel> listViewMode(Integer hospitalId) {
+    public List<InstrumentViewModel> listViewModel(Integer hospitalId) {
         return baseMapper.selectByHospitalId(hospitalId);
     }
 

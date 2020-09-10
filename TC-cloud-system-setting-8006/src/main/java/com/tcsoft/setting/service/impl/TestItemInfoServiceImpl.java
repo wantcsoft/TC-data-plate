@@ -21,7 +21,7 @@ import java.util.List;
 public class TestItemInfoServiceImpl extends ServiceImpl<TestItemInfoMapper, TestItemInfoDao>
         implements TestItemInfoService {
 
-    public List<TestItemInfoViewModel> listViewMode(Integer hospitalId) {
+    public List<TestItemInfoViewModel> listViewModel(Integer hospitalId) {
         return baseMapper.selectByHospitalId(hospitalId);
     }
 

@@ -30,7 +30,7 @@ public class TestItemInfoDao {
     private Integer printOrder;
 
     @TableField(value = "IsQCItem")
-    private boolean isQCItem = false;
+    private boolean isQcItem = false;
 
     @TableField(value = "Accuracy")
     private float accuracy = 0.01f;
@@ -53,8 +53,8 @@ public class TestItemInfoDao {
     @TableField(value = "TestItemTypeID")
     private Integer testItemTypeId;
 
-    @TableField(value = "ResultTypeID")
-    private Integer resultTypeId;
+    @TableField(value = "DataTypeID")
+    private Integer dataTypeId;
 
     @TableField(value = "IsProgrammed")
     private boolean isProgrammed = false;

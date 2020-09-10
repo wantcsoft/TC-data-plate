@@ -1,5 +1,6 @@
 package com.tcsoft.service01.controller;
 
+import com.tcsoft.service01.entity.AuditStateViewModel;
 import com.tcsoft.service01.entity.Dog;
 import com.tcsoft.service01.entity.User;
 import com.tcsoft.service01.util.RedisUtil;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 
 /**
@@ -36,9 +38,9 @@ public class TestController {
 
     @GetMapping("/redis/get")
     public Object getKey(){
-        Object o = redisUtil.get("1010101");
-        System.out.println(o);
-        return o;
+        Map<Object, Object> auditState = redisUtil.hmget("AuditState");
+        System.out.println(auditState.get("auditStateId=2"));
+        return "hello";
     }
 
 //    @GetMapping("/mongo/set")

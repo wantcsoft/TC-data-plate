@@ -14,10 +14,10 @@ import lombok.ToString;
 @TableName("BSC_TestItemDeltaCheck")
 public class TestItemDeltaCheckDao {
 
-    @TableField(value = "HospitalID")
+    @TableId(value = "HospitalID")
     private Integer hospitalId;
 
-    @TableId(value = "TestItemID", type = IdType.AUTO)
+    @TableId(value = "TestItemID")
     private Integer testItemId;
 
     @TableField(value = "Formula")
