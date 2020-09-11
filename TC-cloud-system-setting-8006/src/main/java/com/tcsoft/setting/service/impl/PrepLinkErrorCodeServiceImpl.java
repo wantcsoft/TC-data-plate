@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.PrepLinkErrorCodeDao;
-import com.tcsoft.setting.mysqlmapper.PrepLinkErrorCodeMapper;
+import com.tcsoft.setting.mapper.PrepLinkErrorCodeMapper;
 import com.tcsoft.setting.service.PrepLinkErrorCodeService;
 import com.tcsoft.setting.viewmodel.PrepLinkErrorCodeViewModel;
 import org.springframework.stereotype.Service;

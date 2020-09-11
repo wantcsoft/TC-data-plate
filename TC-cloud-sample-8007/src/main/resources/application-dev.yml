@@ -3,6 +3,9 @@ server:
   servlet:
     context-path: /sample
 
+#系统配置模块的微服务名称（注册成功进nacos的微服务提供者）
+setting-service-url: http://tcsoft-data-platform-system-setting
+
 mybatis-plus:
   global-config:
     db-config:
@@ -18,6 +21,18 @@ mybatis-plus:
 spring:
   application:
     name: tcsoft-data-platform-sample
+
+  redis:
+    host: 106.14.77.81
+    port: 6379
+    password: TCsoft123..
+    database: 0
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: 300ms
+        max-idle: 16
+        min-idle: 8
 
   datasource:
     username: root

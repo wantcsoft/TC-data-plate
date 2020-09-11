@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.TestItemGroupDao;
-import com.tcsoft.setting.mysqlmapper.TestItemGroupMapper;
+import com.tcsoft.setting.mapper.TestItemGroupMapper;
 import com.tcsoft.setting.service.TestItemGroupService;
 import com.tcsoft.setting.viewmodel.TestItemGroupViewModel;
 import org.springframework.stereotype.Service;

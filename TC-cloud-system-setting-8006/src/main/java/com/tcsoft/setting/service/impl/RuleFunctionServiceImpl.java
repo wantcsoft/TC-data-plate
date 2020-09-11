@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.RuleFunctionDao;
-import com.tcsoft.setting.mysqlmapper.RuleFunctionMapper;
+import com.tcsoft.setting.mapper.RuleFunctionMapper;
 import com.tcsoft.setting.service.RuleFunctionService;
 import com.tcsoft.setting.viewmodel.RuleFunctionViewModel;
 import org.springframework.stereotype.Service;

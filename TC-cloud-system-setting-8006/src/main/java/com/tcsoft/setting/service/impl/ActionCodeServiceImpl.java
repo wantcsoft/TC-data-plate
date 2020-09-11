@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.ActionCodeDao;
-import com.tcsoft.setting.mysqlmapper.ActionCodeMapper;
+import com.tcsoft.setting.mapper.ActionCodeMapper;
 import com.tcsoft.setting.service.ActionCodeService;
 import com.tcsoft.setting.viewmodel.ActionCodeViewModel;
 import org.springframework.stereotype.Service;

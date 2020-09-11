@@ -11,7 +11,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("com.tcsoft.setting.mysqlmapper")
+@MapperScan("com.tcsoft.setting.mapper")
 public class TcSettingMain {
 
     public static void main(String[] args) {

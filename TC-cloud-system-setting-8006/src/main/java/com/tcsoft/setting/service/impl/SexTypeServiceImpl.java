@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.SexTypeDao;
-import com.tcsoft.setting.mysqlmapper.SexTypeMapper;
+import com.tcsoft.setting.mapper.SexTypeMapper;
 import com.tcsoft.setting.service.SexTypeService;
 import com.tcsoft.setting.viewmodel.SexTypeViewModel;
 import org.springframework.stereotype.Service;

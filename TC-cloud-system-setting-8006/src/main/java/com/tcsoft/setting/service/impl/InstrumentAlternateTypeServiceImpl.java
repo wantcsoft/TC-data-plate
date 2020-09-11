@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.InstrumentAlternateTypeDao;
-import com.tcsoft.setting.mysqlmapper.InstrumentAlternateTypeMapper;
+import com.tcsoft.setting.mapper.InstrumentAlternateTypeMapper;
 import com.tcsoft.setting.service.InstrumentAlternateTypeService;
 import com.tcsoft.setting.viewmodel.InstrumentAlternateTypeViewModel;
 import org.springframework.stereotype.Service;

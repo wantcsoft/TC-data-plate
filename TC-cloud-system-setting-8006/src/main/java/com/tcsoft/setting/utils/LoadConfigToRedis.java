@@ -179,7 +179,7 @@ public class LoadConfigToRedis {
             map.put("comparisonTypeId="+comparisonType.getComparisonTypeId(), comparisonType);
         }
         try {
-            redisUtil.hmset("ConfirmState", map);
+            redisUtil.hmset("ComparisonType", map);
             log.info("comparisonType load success ");
         }catch (Exception e){
             log.error("comparisonType load fail " + e);
@@ -230,13 +230,16 @@ public class LoadConfigToRedis {
         List<HospitalInfoViewModel> list = hospitalInfoService.listViewMode();
         //先清空hospitalIdList列表
         hospitalIdList.clear();
-        Map<String, Object> map = new HashMap<>(list.size());
+        Map<String, Object> hospitalIdMap = new HashMap<>(list.size());
+        Map<String, Object> hospitalCodeMap = new HashMap<>(list.size());
         for (HospitalInfoViewModel hospitalInfo:list) {
-            map.put("hospitalId="+hospitalInfo.getHospitalId(), hospitalInfo);
+            hospitalIdMap.put("hospitalId="+hospitalInfo.getHospitalId(), hospitalInfo);
+            hospitalCodeMap.put("hospitalCode="+hospitalInfo.getHospitalCode(), hospitalInfo);
             hospitalIdList.add(hospitalInfo.getHospitalId());
         }
         try {
-            redisUtil.hmset("HospitalInfo", map);
+            redisUtil.hmset("HospitalInfo:hospitalId", hospitalIdMap);
+            redisUtil.hmset("HospitalInfo:hospitalCode", hospitalCodeMap);
             log.info("HospitalInfo load success ");
         }catch (Exception e){
             log.error("HospitalInfo load fail " + e);
@@ -514,12 +517,15 @@ public class LoadConfigToRedis {
     private void loadPatientType(){
         for (int hospitalId:hospitalIdList){
             List<PatientTypeViewModel> list = patientTypeService.listViewModel(hospitalId);
-            Map<String, Object> map = new HashMap<>(list.size());
+            Map<String, Object> patientTypeIdMap = new HashMap<>(list.size());
+            Map<String, Object> patientTypeNameMap = new HashMap<>(list.size());
             for (PatientTypeViewModel patientType:list) {
-                map.put("patientTypeId="+patientType.getPatientTypeId(), patientType);
+                patientTypeIdMap.put("patientTypeId="+patientType.getPatientTypeId(), patientType);
+                patientTypeNameMap.put("patientTypeName="+patientType.getPatientTypeName(), patientType);
             }
             try {
-                redisUtil.hmset("PatientType:hospitalId="+hospitalId, map);
+                redisUtil.hmset("PatientType:patientTypeId:hospitalId="+hospitalId, patientTypeIdMap);
+                redisUtil.hmset("PatientType:patientTypeName:hospitalId="+hospitalId, patientTypeNameMap);
                 log.info("PatientType load success ");
             }catch (Exception e){
                 log.error("PatientType load fail " + e);
@@ -634,12 +640,15 @@ public class LoadConfigToRedis {
     private void loadSampleType(){
         for (int hospitalId:hospitalIdList){
             List<SampleTypeViewModel> list = sampleTypeService.listViewModel(hospitalId);
-            Map<String, Object> map = new HashMap<>(list.size());
+            Map<String, Object> sampleTypeIdMap = new HashMap<>(list.size());
+            Map<String, Object> sampleTypeNameMap = new HashMap<>(list.size());
             for (SampleTypeViewModel sampleType:list) {
-                map.put("sampleTypeId="+sampleType.getSampleTypeId(), sampleType);
+                sampleTypeIdMap.put("sampleTypeId="+sampleType.getSampleTypeId(), sampleType);
+                sampleTypeNameMap.put("sampleTypeName="+sampleType.getSampleTypeName(), sampleType);
             }
             try {
-                redisUtil.hmset("SampleType:hospitalId="+hospitalId, map);
+                redisUtil.hmset("SampleType:sampleTypeId:hospitalId="+hospitalId, sampleTypeIdMap);
+                redisUtil.hmset("SampleType:sampleTypeName:hospitalId="+hospitalId, sampleTypeNameMap);
                 log.info("SampleType load success ");
             }catch (Exception e){
                 log.error("SampleType load fail " + e);
@@ -886,12 +895,15 @@ public class LoadConfigToRedis {
     private void loadTestItemInfo(){
         for (int hospitalId:hospitalIdList){
             List<TestItemInfoViewModel> list = testItemInfoService.listViewModel(hospitalId);
-            Map<String, Object> map = new HashMap<>(list.size());
+            Map<String, Object> testItemIdMap = new HashMap<>(list.size());
+            Map<String, Object> testItemNameMap = new HashMap<>(list.size());
             for (TestItemInfoViewModel testItemInfo:list) {
-                map.put("TestItemId"+testItemInfo.getTestItemId(), testItemInfo);
+                testItemIdMap.put("TestItemId"+testItemInfo.getTestItemId(), testItemInfo);
+                testItemNameMap.put("TestItemName"+testItemInfo.getTestItemName(), testItemInfo);
             }
             try {
-                redisUtil.hmset("TestItemInfo:hospitalId="+hospitalId, map);
+                redisUtil.hmset("TestItemInfo:testItemId:hospitalId="+hospitalId, testItemIdMap);
+                redisUtil.hmset("TestItemInfo:testItemName:hospitalId="+hospitalId, testItemNameMap);
                 log.info("TestItemInfo load success ");
             }catch (Exception e){
                 log.error("TestItemInfo load fail " + e);

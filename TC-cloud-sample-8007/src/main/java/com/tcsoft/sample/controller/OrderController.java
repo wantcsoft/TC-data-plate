@@ -2,7 +2,6 @@ package com.tcsoft.sample.controller;
 
 
 import com.tcsoft.sample.entity.InfoFromLis;
-import com.tcsoft.sample.entity.InfoToThird;
 import com.tcsoft.sample.entity.ResultData;
 import com.tcsoft.sample.service.InfoFromLisService;
 import com.tcsoft.sample.service.kafka.SendOrderKafka;

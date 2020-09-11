@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.TestItemDeltaCheckDao;
-import com.tcsoft.setting.mysqlmapper.TestItemDeltaCheckMapper;
+import com.tcsoft.setting.mapper.TestItemDeltaCheckMapper;
 import com.tcsoft.setting.service.TestItemDeltaCheckService;
 import com.tcsoft.setting.viewmodel.TestItemDeltaCheckViewModel;
 import org.springframework.stereotype.Service;

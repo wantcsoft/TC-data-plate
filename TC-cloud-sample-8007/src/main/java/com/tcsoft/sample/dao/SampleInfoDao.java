@@ -39,11 +39,11 @@ public class SampleInfoDao implements Serializable {
     @TableField("RackNo")
     private String rackNo;
 
-    @TableField("CollectTime")
-    private Date collectTime;
-
     @TableField("CupNo")
     private String cupNo;
+
+    @TableField("CollectTime")
+    private Date collectTime;
 
     @TableField("ConfirmStateID")
     private Integer confirmStateId;

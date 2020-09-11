@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.InstrumentGroupDao;
-import com.tcsoft.setting.mysqlmapper.InstrumentGroupMapper;
+import com.tcsoft.setting.mapper.InstrumentGroupMapper;
 import com.tcsoft.setting.service.InstrumentGroupService;
 import com.tcsoft.setting.viewmodel.InstrumentGroupViewModel;
 import org.springframework.stereotype.Service;

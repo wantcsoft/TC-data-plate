@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.AgeTypeDao;
-import com.tcsoft.setting.mysqlmapper.AgeTypeMapper;
+import com.tcsoft.setting.mapper.AgeTypeMapper;
 import com.tcsoft.setting.service.AgeTypeService;
 import com.tcsoft.setting.viewmodel.AgeTypeViewModel;
 import org.springframework.stereotype.Service;

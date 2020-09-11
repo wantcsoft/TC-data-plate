@@ -2,7 +2,7 @@ package com.tcsoft.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.dao.PrepLinkAbortCodeDao;
-import com.tcsoft.setting.mysqlmapper.PrepLinkAbortCodeMapper;
+import com.tcsoft.setting.mapper.PrepLinkAbortCodeMapper;
 import com.tcsoft.setting.service.PrepLinkAbortCodeService;
 import com.tcsoft.setting.viewmodel.PrepLinkAbortCodeViewModel;
 import org.springframework.stereotype.Service;
