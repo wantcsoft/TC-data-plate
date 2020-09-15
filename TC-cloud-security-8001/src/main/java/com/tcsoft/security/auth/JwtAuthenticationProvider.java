@@ -2,8 +2,9 @@ package com.tcsoft.security.auth;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tcsoft.security.mysqlmapper.UserMapper;
+import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.dao.UserDao;
+import com.tcsoft.security.mapper.UserPermissionMapper;
 import com.tcsoft.security.utils.RedisUtil;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.*;
@@ -28,6 +29,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     private UserMapper userMapper;
     @Resource
     private RedisUtil redisUtil;
+    @Resource
+    private UserPermissionMapper userPermissionMapper;
 
     @SneakyThrows
     @Override
@@ -58,7 +61,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         }
         // 如果用户登录时输入的密码和系统中密码匹配，则返回一个完全填充的 Authentication 对象
         if (passwordEncoder.matches(authentication.getCredentials().toString(), userDao.getPassword())){
-
+            loadRedis(userDao.getUserId());
             return new UsernamePasswordAuthenticationToken(authentication, authentication.getCredentials(), new ArrayList<>());
         }
         // 如果密码不匹配则返回 null（此处可以抛异常，试具体应用场景而定）
@@ -68,5 +71,18 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> aClass) {
         return true;
+    }
+
+    /**
+     * 登录时将用户权限信息放入redis中
+     * @param userId
+     */
+    private void loadRedis(int userId){
+        redisUtil.setRemove("Authority:userId="+userId);
+        List<String> list = userPermissionMapper.selectAuthorityByUserId(userId);
+        Object[] array = list.toArray();
+        // 设置过期时间为7天
+        long time = System.currentTimeMillis() + 604800 * 1000;
+        redisUtil.sSetAndTime("Authority:userId="+userId, time, array);
     }
 }

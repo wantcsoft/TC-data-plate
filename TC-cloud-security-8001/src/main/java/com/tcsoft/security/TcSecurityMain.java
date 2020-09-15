@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("com.tcsoft.security.mysqlmapper")
+@MapperScan("com.tcsoft.security.mapper")
 //开启事务
 @EnableTransactionManagement
 public class TcSecurityMain {

@@ -1,8 +1,11 @@
 package com.tcsoft.gateway.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tcsoft.gateway.entity.JwtUser;
 import com.tcsoft.gateway.utils.JwtTokenUtil;
+import com.tcsoft.gateway.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -26,29 +29,46 @@ import java.util.Set;
 @Component
 @Slf4j
 public class TcGateWayFilter implements GlobalFilter, Ordered {
+    // 系统超级管理员userId
+    @Value("${jwt.userId}")
+    private Integer userId;
+
+    @Resource
+    private RedisUtil redisUtil;
+
     @Resource
     private JwtTokenUtil jwtTokenUtil;
-    private static final Set<String> IGNORE = new HashSet<>(Arrays
-            .asList("/security/login", "/security/register", "/security/develop/register",
-                    "/security/develop/login"));
+
+    private static final String TOKEN_HEAD = "Bearer ";
+
+    private static final String SECURITY = "/security/";
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-//        如果请求的登录连接或者注册链接，不进行拦截
-        if (IGNORE.contains(request.getPath().toString())){
+        String url = request.getPath().toString();
+        // 如果请求的安全模块，不进行拦截
+        if (url.startsWith(SECURITY)){
             return chain.filter(exchange);
         }
-//        获取请求头中的token
+        // 获取请求头中的token
         String token = request.getHeaders().getFirst("Authorization");
-//        简单验证一下token是否为空，格式是否正确
+        // 简单验证一下token是否为空，格式是否正确
         ServerHttpResponse response = exchange.getResponse();
         if(token == null){
             return this.setErrorResponse(response,"未携带token");
-        }else if (! token.startsWith("Bearer ")){
+        }else if (! token.startsWith(TOKEN_HEAD)){
             return this.setErrorResponse(response,"token异常");
-        }else if (jwtTokenUtil.isTokenExpired(token.substring("Bearer ".length()))){
+        }else if (jwtTokenUtil.isTokenExpired(token.substring(TOKEN_HEAD.length()))){
             return this.setErrorResponse(response,"token过期");
+        }
+        token = token.substring(TOKEN_HEAD.length());
+        JwtUser jwtUser = jwtTokenUtil.getJwtUser(token);
+        if (!jwtUser.getUserId().equals(userId)){
+            boolean flag = redisUtil.sHasKey("Authority:userId=" + jwtUser.getUserId(), url);
+            if (!flag){
+                return this.setErrorResponse(response, "你没有权限访问");
+            }
         }
         return  chain.filter(exchange);
     }
@@ -75,4 +95,5 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
     public int getOrder() {
         return 0;
     }
+
 }

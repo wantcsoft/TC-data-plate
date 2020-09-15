@@ -1,4 +1,4 @@
-package com.tcsoft.security.mysqlmapper;
+package com.tcsoft.security.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tcsoft.security.dao.UserPermissionDao;
@@ -13,9 +13,18 @@ import java.util.List;
  * @author WMY
  */
 public interface UserPermissionMapper extends BaseMapper<UserPermissionDao> {
-
     /**
      * 通过userId查询出该用户所有的权限
+     * @param userId
+     * @return
+     */
+    @Select("select UserAuthority.Authority\n" +
+            "from UserPermission, UserAuthority\n" +
+            "where UserPermission.AuthorityID = UserAuthority.AuthorityID;")
+    List<String> selectAuthorityByUserId(@Param("userId")Integer userId);
+
+    /**
+     * 通过userId查询出该用户所有的权限ID
      * @param userId
      * @return
      */

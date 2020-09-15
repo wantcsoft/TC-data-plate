@@ -1,4 +1,4 @@
-package com.tcsoft.security.utils;
+package com.tcsoft.gateway.utils;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

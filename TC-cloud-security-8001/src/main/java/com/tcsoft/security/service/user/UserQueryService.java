@@ -4,20 +4,17 @@ package com.tcsoft.security.service.user;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserGroupDao;
-import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.*;
-import com.tcsoft.security.mysqlmapper.UserGroupMapper;
-import com.tcsoft.security.mysqlmapper.UserMapper;
-import com.tcsoft.security.mysqlmapper.UserRoleMapper;
+import com.tcsoft.security.mapper.UserGroupMapper;
+import com.tcsoft.security.mapper.UserMapper;
+import com.tcsoft.security.mapper.UserRoleMapper;
 import com.tcsoft.security.utils.UserConstant;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author big_john

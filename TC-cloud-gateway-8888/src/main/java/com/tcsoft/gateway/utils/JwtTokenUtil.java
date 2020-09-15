@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 
 /**
@@ -19,28 +19,16 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 
+    private static final String CLAIM_KEY_USER_ID = "userId";
+    private static final String CLAIM_KEY_USERNAME = "username";
+    private static final String CLAIM_KEY_GROUP_ID = "groupId";
+    private static final String CLAIM_KEY_CREATED = "created";
+
     @Value("${jwt.secret}")
     private String secret;
 
     /**
-     * 根据token获取用户名
-     * @param token
-     * @return
-     */
-    public String getUsernameFromToken(String token) {
-        String username;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
-    }
-
-
-    /**
-     * 获取token到期时间
+     * 获取token过期时间
      * @param token
      * @return
      */
@@ -55,11 +43,19 @@ public class JwtTokenUtil implements Serializable {
         return expiration;
     }
 
-    /**
-     * 根据token获取用户信息
-     * @param token
-     * @return
-     */
+    public JwtUser getJwtUser(String token){
+        Claims claims = getClaimsFromToken(token);
+        if (claims == null){
+            return null;
+        }else {
+            JwtUser jwtUser = new JwtUser();
+            jwtUser.setUserId((int)claims.get(CLAIM_KEY_USER_ID));
+            jwtUser.setUsername((String)claims.get(CLAIM_KEY_USERNAME));
+            jwtUser.setGroupId((int)claims.get(CLAIM_KEY_GROUP_ID));
+            return jwtUser;
+        }
+    }
+
     private Claims getClaimsFromToken(String token) {
         Claims claims;
         try {

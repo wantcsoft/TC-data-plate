@@ -2,6 +2,7 @@ package com.tcsoft.gateway.entity;
 
 
 import lombok.Data;
+
 import java.util.Date;
 
 
@@ -11,12 +12,12 @@ import java.util.Date;
 @Data
 public class JwtUser {
 
-    private final Integer userId;
-    private final String username;
-    private final String password;
-    private final Integer groupId;
-    private final Date lastPasswordResetDate;
-    private final boolean accountNonLocked;
-    private final boolean enabled;
+    private Integer userId;
+    private String username;
+    private String password;
+    private Integer groupId;
+    private Date lastPasswordResetDate;
+    private boolean accountNonLocked;
+    private boolean enabled;
 
 }

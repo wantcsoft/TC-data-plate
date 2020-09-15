@@ -5,10 +5,24 @@ server:
 jwt:
   # 秘钥
   secret: "qazwsxedcrfvtgbyhnujmdssaftghyujkloipmnvgyuhikolp"
+  userId: 1
 
 spring:
   application:
     name: tcsoft-data-platform-gateway
+
+  redis:
+    host: 106.14.77.81
+    port: 6379
+    password: TCsoft123..
+    database: 0
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: 300ms
+        max-idle: 16
+        min-idle: 8
+
   cloud:
     nacos:
       discovery:

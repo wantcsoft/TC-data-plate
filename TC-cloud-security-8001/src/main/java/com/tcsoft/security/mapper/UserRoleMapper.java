@@ -1,4 +1,4 @@
-package com.tcsoft.security.mysqlmapper;
+package com.tcsoft.security.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tcsoft.security.dao.UserRoleDao;

@@ -3,7 +3,7 @@ package com.tcsoft.security.service.permission;
 
 import com.tcsoft.security.dao.UserPermissionDao;
 import com.tcsoft.security.entity.ResultData;
-import com.tcsoft.security.mysqlmapper.UserPermissionMapper;
+import com.tcsoft.security.mapper.UserPermissionMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

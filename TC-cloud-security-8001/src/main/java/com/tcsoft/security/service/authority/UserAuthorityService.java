@@ -2,7 +2,7 @@ package com.tcsoft.security.service.authority;
 
 import com.tcsoft.security.dao.UserAuthorityDao;
 import com.tcsoft.security.entity.ResultData;
-import com.tcsoft.security.mysqlmapper.UserAuthorityMapper;
+import com.tcsoft.security.mapper.UserAuthorityMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
