@@ -50,24 +50,24 @@ public class UserRegisterService {
      */
     public ResultData<String> register(UserServiceBean userServiceBean,
                                         Authentication authentication){
-        String group = userServiceBean.getGroup();
-        String role = userServiceBean.getRole();
-        if (UserConstant.SYSTEM_USER.equals(role) &&
-                UserConstant.SYSTEM_GROUP.equals(group)){
-            //创建系统用户
+        UserGroupDao groupDao = groupMapper.selectById(userServiceBean.getGroupId());
+        UserRoleDao roleDao = roleMapper.selectById(userServiceBean.getRole());
+        userServiceBean.setGroup(groupDao.getGroup());
+        userServiceBean.setRole(roleDao.getRole());
+        if (UserConstant.SYSTEM_USER.equals(roleDao.getRole())){
+            //创建系统组的系统用户
             return registerSystemUser(userServiceBean);
-        }else if (UserConstant.HOSPITAL.equals(role)){
+        }else if (UserConstant.HOSPITAL.equals(roleDao.getRole())){
             JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
             UserGroupDao jwtGroup = groupMapper.selectById(jwtUser.getGroupId());
-            if (UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup())){
-                return registerHospital(userServiceBean);
-            }else if (jwtGroup.getGroup().equals(group)){
+            if (UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup()) ||
+                    jwtGroup.getGroup().equals(groupDao.getGroup())){
                 return registerHospital(userServiceBean);
             }
         }
         ResultData<String> resultData = new ResultData<>();
         resultData.setCode(401);
-        resultData.setMessage("权限不足");
+        resultData.setMessage("创建失败");
         return resultData;
     }
 
@@ -97,10 +97,8 @@ public class UserRegisterService {
                 return resultData;
             } else {
                 UserDao userDao = new UserDao();
-                userDao.setGroupId(groupMapper.selectOne(new QueryWrapper<UserGroupDao>()
-                        .eq("`Group`", userServiceBean.getGroup())).getGroupId());
-                userDao.setRoleId(roleMapper.selectOne(new QueryWrapper<UserRoleDao>()
-                        .eq("`Role`", userServiceBean.getRole())).getRoleId());
+                userDao.setGroupId(userServiceBean.getGroupId());
+                userDao.setRoleId(userServiceBean.getRoleId());
                 userDao.setUsername(userServiceBean.getUsername());
                 //密码加密
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

@@ -3,14 +3,10 @@ package com.tcsoft.security.service.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
-import com.tcsoft.security.dao.UserGroupDao;
-import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
-import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
-import com.tcsoft.security.mapper.UserRoleMapper;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -29,10 +25,6 @@ public class UserModifyService {
 
     @Resource
     private UserMapper userMapper;
-    @Resource
-    private UserRoleMapper userRoleMapper;
-    @Resource
-    private UserGroupMapper userGroupMapper;
 
     /**
      * 用户信息修改唯一入口
@@ -51,16 +43,17 @@ public class UserModifyService {
         }else {
             UserServiceBean userServiceBean = list.get(0);
             JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+            // 自己修改自己的信息
+            if (modifyUser.getUserId().equals(jwtUser.getUserId())){
+                return modifySelf(modifyUser);
+            }
             UserServiceBean jwtUserService = userMapper.selectUserById(jwtUser.getUserId()).get(0);
-            if (UserConstant.SYSTEM_USER.equals(userServiceBean.getRole()) ||
-                    UserConstant.SYSTEM_ADMIN.equals(userServiceBean.getRole())){
-                return systemAdminModify(modifyUser);
+            if (UserConstant.SYSTEM_USER.equals(userServiceBean.getRole())){
+                return modifySystemUser(modifyUser);
             }else if (UserConstant.HOSPITAL.equals(userServiceBean.getRole()) &&
-                    UserConstant.SYSTEM_GROUP.equals(jwtUserService.getGroup())){
-                return systemUserModify(modifyUser);
-            }else if (UserConstant.HOSPITAL.equals(userServiceBean.getRole()) &&
-                    !UserConstant.SYSTEM_GROUP.equals(jwtUserService.getGroup())){
-                return hospitalModify(modifyUser);
+                        (   UserConstant.SYSTEM_GROUP.equals(jwtUserService.getGroup()) ||
+                            userServiceBean.getGroup().equals(jwtUserService.getGroup())    )){
+                return modifyHospital(modifyUser);
             }
         }
         ResultData<String> resultData = new ResultData<>();
@@ -70,26 +63,20 @@ public class UserModifyService {
     }
 
     @PreAuthorize("hasRole('system_admin')")
-    private ResultData<String> systemAdminModify(UserServiceBean modifyUser){
-        return checkModify(modifyUser);
-    }
-
-    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
-    private ResultData<String> systemUserModify(UserServiceBean modifyUser){
+    private ResultData<String> modifySystemUser(UserServiceBean modifyUser){
         return checkModify(modifyUser);
     }
 
     @PreAuthorize("hasAnyRole('system_admin', 'system_user', 'hospital')")
-    private ResultData<String> hospitalModify(UserServiceBean modifyUser){
+    private ResultData<String> modifyHospital(UserServiceBean modifyUser){
         return checkModify(modifyUser);
     }
 
     private ResultData<String> checkModify(UserServiceBean modifyUser){
-        if (UserConstant.SYSTEM_ADMIN.equals(modifyUser.getRole())){
-            return modifyToSystem(modifyUser);
-        }else if (UserConstant.SYSTEM_USER.equals(modifyUser.getRole())){
+        UserServiceBean userService = userMapper.selectUserById(modifyUser.getUserId()).get(0);
+        if (UserConstant.SYSTEM_USER.equals(userService.getRole())){
             return modifyToSystemUser(modifyUser);
-        }else if (UserConstant.HOSPITAL.equals(modifyUser.getRole())){
+        }else if (UserConstant.HOSPITAL.equals(userService.getRole())){
             return modifyToHospital(modifyUser);
         }else {
             ResultData<String> resultData = new ResultData<>();
@@ -100,11 +87,6 @@ public class UserModifyService {
     }
 
     @PreAuthorize("hasRole('system_admin')")
-    private ResultData<String> modifyToSystem(UserServiceBean modifyUser){
-        return modifyUser(modifyUser);
-    }
-
-    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
     private ResultData<String> modifyToSystemUser(UserServiceBean modifyUser){
         return modifyUser(modifyUser);
     }
@@ -123,14 +105,15 @@ public class UserModifyService {
         ResultData<String> resultData = new ResultData<>();
         UserDao newUserDao = new UserDao();
         newUserDao.setUserId(modifyUser.getUserId());
-        newUserDao.setRoleId(userRoleMapper.selectOne(new QueryWrapper<UserRoleDao>()
-                .eq("`Role`", modifyUser.getRole())).getRoleId());
-        newUserDao.setGroupId(userGroupMapper.selectOne(new QueryWrapper<UserGroupDao>()
-                .eq("`Group`", modifyUser.getGroup())).getGroupId());
+        newUserDao.setRoleId(modifyUser.getRoleId());
+        if (modifyUser.getGroupId() != null){
+            newUserDao.setGroupId(modifyUser.getGroupId());
+        }
         if (modifyUser.getUsername() != null && !"".equals(modifyUser.getUsername())){
             List<UserDao> list = userMapper.selectList(new QueryWrapper<UserDao>()
-                    .eq("UserName", modifyUser.getUsername()));
-            if (list.size() == 0){
+                    .eq("UserName", modifyUser.getUsername())
+                    .ne("UserID", modifyUser.getUserId()));
+            if (list.size() != 0){
                 resultData.setCode(401);
                 resultData.setMessage("用户名已被使用");
                 return resultData;
@@ -161,4 +144,42 @@ public class UserModifyService {
         }
         return resultData;
     }
+
+    private ResultData<String> modifySelf(UserServiceBean modifyUser){
+        ResultData<String> resultData = new ResultData<>();
+        UserDao userDao = userMapper.selectById(modifyUser.getUserId());
+        if (modifyUser.getUsername() != null && !"".equals(modifyUser.getUsername())){
+            List<UserDao> list = userMapper.selectList(new QueryWrapper<UserDao>()
+                    .eq("UserName", modifyUser.getUsername())
+                    .ne("UserID", modifyUser.getUserId()));
+            if (list.size() != 0){
+                resultData.setCode(401);
+                resultData.setMessage("用户名已被使用");
+                return resultData;
+            }else {
+                userDao.setUsername(modifyUser.getUsername());
+            }
+        }
+        if (modifyUser.getPassword() != null && !"".equals(modifyUser.getPassword())){
+            if (modifyUser.getPassword().length() < UserConstant.PASSWORD_LENGTH_MIN ||
+                    modifyUser.getPassword().length() > UserConstant.PASSWORD_LENGTH_MAX) {
+                resultData.setCode(401);
+                resultData.setMessage("密码长度异常，更新失败");
+                return resultData;
+            }else {
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                userDao.setPassword(encoder.encode(modifyUser.getPassword()));
+                userDao.setLastPasswordResetDate(new Date());
+            }
+        }
+        if (userMapper.updateById(userDao) == 1){
+            resultData.setCode(200);
+            resultData.setMessage("用户信息更新成功");
+        }else{
+            resultData.setCode(401);
+            resultData.setMessage("用户信息更新失败");
+        }
+        return resultData;
+    }
+
 }

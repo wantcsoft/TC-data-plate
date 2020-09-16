@@ -6,10 +6,12 @@ import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.service.role.UserRoleQueryService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,15 +25,12 @@ public class UserRoleController {
 
     @GetMapping("/getRole")
     public ResultData<List<UserRoleDao>> getRole(Authentication authentication){
-        ResultData<List<UserRoleDao>> resultData = new ResultData<>();
-        try{
-            JwtUser user = (JwtUser) authentication.getPrincipal();
-            return userRoleQueryService.queryAllRole(user.getUsername(), resultData);
-        }catch (Exception e){
-            resultData.setCode(402);
-            resultData.setMessage("操作失败");
-            return resultData;
+        JwtUser user = (JwtUser) authentication.getPrincipal();
+        String role = "";
+        for (GrantedAuthority i : user.getAuthorities()){
+            role = i.getAuthority();
         }
+        return userRoleQueryService.queryAllRole(role, user.getGroupId());
     }
 
 }

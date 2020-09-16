@@ -1,4 +1,4 @@
-package com.tcsoft.setting.config;
+package com.tcsoft.security.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -14,12 +14,12 @@ import javax.annotation.Resource;
 public class MyCommandLineRunner implements CommandLineRunner {
 
     @Resource
-    private LoadConfigToRedis loadConfigToRedis;
+    private LoadInfoToRedis loadInfoToRedis;
 
     @Override
     public void run(String... var1){
-        loadConfigToRedis.start();
-        log.info("配置类全部加载完成");
+        loadInfoToRedis.start();
+        log.info("加载完成");
     }
 
 }

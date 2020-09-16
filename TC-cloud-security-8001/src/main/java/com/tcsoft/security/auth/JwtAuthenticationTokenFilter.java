@@ -33,7 +33,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private JwtTokenUtil jwtTokenUtil;
     @Value("${jwt.header}")
-    private String tokenHeader;
+    private String header;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
@@ -47,7 +47,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain chain) throws ServletException, IOException {
         if (!IGNORE.contains(request.getRequestURI())){
-            String authHeader = request.getHeader(this.tokenHeader);
+            String authHeader = request.getHeader(header);
             final String authToken = authHeader.substring(tokenHead.length());
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
             logger.info("checking authentication " + username);

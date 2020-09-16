@@ -18,11 +18,11 @@ import java.util.Date;
 @TableName("WOR_SampleInfo")
 public class SampleInfoDao implements Serializable {
 
-    @TableField("HospitalID")
-    private Integer hospitalId;
-
     @TableId(value = "SampleNo", type = IdType.AUTO)
     private Integer sampleNo;
+
+    @TableField("HospitalID")
+    private Integer hospitalId;
 
     @TableField("SampleID")
     private String sampleId;
@@ -60,6 +60,9 @@ public class SampleInfoDao implements Serializable {
     @TableField("TestFree")
     private Float testFree;
 
+    @TableField("ParentSampleNo")
+    private Integer parentSampleNo;
+
     @TableField("PatientCardNo")
     private String patientCardNo;
 
@@ -95,8 +98,5 @@ public class SampleInfoDao implements Serializable {
 
     @TableField("IsDiluted")
     private Boolean isDiluted;
-
-    @TableField("ParentSampleNo")
-    private Integer parentSampleNo;
 
 }

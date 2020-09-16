@@ -41,7 +41,7 @@ public class UserController {
                     }
                 case UserConstant.CREATE:
                     //创建操作
-                    if (userServiceBean.getGroup()==null || userServiceBean.getRole()==null ||
+                    if (userServiceBean.getGroupId()==null || userServiceBean.getRoleId()==null ||
                     userServiceBean.getUsername()== null || userServiceBean.getPassword()==null){
                         return nullParameter();
                     }else {
@@ -49,7 +49,7 @@ public class UserController {
                     }
                 case UserConstant.MODIFY:
                     //修改操作
-                    if (userServiceBean.getUserId()==null){
+                    if (userServiceBean.getUserId()==null || userServiceBean.getRoleId()==null){
                         return nullParameter();
                     }else {
                         return userModifyService.modify(userServiceBean, authentication);

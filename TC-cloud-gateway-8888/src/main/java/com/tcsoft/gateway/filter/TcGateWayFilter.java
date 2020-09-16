@@ -2,6 +2,7 @@ package com.tcsoft.gateway.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tcsoft.gateway.entity.JwtUser;
+import com.tcsoft.gateway.entity.UserGroupDao;
 import com.tcsoft.gateway.utils.JwtTokenUtil;
 import com.tcsoft.gateway.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -38,10 +40,20 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
 
     @Resource
     private JwtTokenUtil jwtTokenUtil;
-
     private static final String TOKEN_HEAD = "Bearer ";
-
     private static final String SECURITY = "/security/";
+    private static final String SYSTEM_GROUP = "system";
+    private static final HashSet<String> SETTING_URLS = new HashSet<>(
+            Arrays.asList(new String[]{"/setting/actionCode", "/setting/setting/getAgeType",
+            "/setting/setting/getInstrumentGroup", "/setting/getInstrumentType",
+            "/setting/getPatientType", "/setting/getPrepLinkAbortCode",
+            "/setting/getPrepLinkErrorCode", "/setting/getResultRange",
+            "/setting/getResultUnit", "/setting/getRuleGroup", "/setting/getSampleType",
+            "/setting/getTestItemType", "/setting/getTestType", "/setting/getChemistryContrast",
+            "/setting/getComparisonInfo", "/setting/getInstrument", "/setting/getLotSet",
+            "/setting/getMaterial", "/setting/getRule", "/setting/getTestItemDeltaCheck",
+            "/setting/getTestItemGroup", "/setting/getTestItemGroupItem",
+            "/setting/getTestItemInfo"}));
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -62,6 +74,7 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
         }else if (jwtTokenUtil.isTokenExpired(token.substring(TOKEN_HEAD.length()))){
             return this.setErrorResponse(response,"token过期");
         }
+        // 验证是否有权访问该url
         token = token.substring(TOKEN_HEAD.length());
         JwtUser jwtUser = jwtTokenUtil.getJwtUser(token);
         if (!jwtUser.getUserId().equals(userId)){
@@ -69,6 +82,17 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
             if (!flag){
                 return this.setErrorResponse(response, "你没有权限访问");
             }
+        }
+        // 当访问系统基础配置信息
+        System.out.println(request.getPath());
+        if (SETTING_URLS.contains(url)){
+
+            System.out.println(request.getQueryParams().getFirst("hospitalId"));
+//            Map<Object, Object> map = redisUtil.hmget("UserGroup");
+//            UserGroupDao groupDao = (UserGroupDao) map.get("groupId=" + jwtUser.getGroupId());
+//            if (!SYSTEM_GROUP.equals(groupDao.getGroup())){
+//                System.out.println(request.getQueryParams());
+//            }
         }
         return  chain.filter(exchange);
     }

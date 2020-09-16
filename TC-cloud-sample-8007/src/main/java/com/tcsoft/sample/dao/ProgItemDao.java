@@ -25,9 +25,6 @@ public class ProgItemDao implements Serializable {
     @TableField("ReplicateTimes")
     private Integer replicateTimes;
 
-    @TableField("IsTested")
-    private Boolean isTested = false;
-
     @TableField("ProgTime")
     private Date progTime;
 
@@ -42,6 +39,9 @@ public class ProgItemDao implements Serializable {
 
     @TableField("ReflexTimes")
     private Integer reflexTimes;
+
+    @TableField("IsTested")
+    private Boolean isTested = false;
 
     @TableField("IsAliquot")
     private Boolean isAliquot;

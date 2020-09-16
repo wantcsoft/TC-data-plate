@@ -21,20 +21,21 @@ import java.util.List;
 public class UserGroupService {
 
     @Resource
-    private UserMapper userMapper;
-    @Resource
     private UserGroupMapper userGroupMapper;
 
-    public ResultData<List<UserGroupDao>> getUserGroup(String username) {
+    public ResultData<List<UserGroupDao>> getUserGroup(String role, int groupId) {
         ResultData<List<UserGroupDao>> resultData = new ResultData<>();
-        UserDao user = userMapper.selectOne(new QueryWrapper<UserDao>()
-                .eq("UserName", username));
-        Integer groupId = user.getGroupId();
-        UserGroupDao groupDao = userGroupMapper.selectById(user.getGroupId());
+        UserGroupDao groupDao = userGroupMapper.selectById(groupId);
         List<UserGroupDao> userGroupDaoList = new ArrayList<>();
-        if (UserConstant.SYSTEM_GROUP.equals(groupDao.getGroup())){
+        if (UserConstant.SYSTEM_ADMIN.equals(role)){
+            // 系统管理员获取所有的群组信息
             userGroupDaoList = userGroupMapper.selectList(null);
+        }else if (UserConstant.SYSTEM_GROUP.equals(groupDao.getGroup())){
+            // 系统组可以查看所有的医院
+            userGroupDaoList = userGroupMapper.selectList(new QueryWrapper<UserGroupDao>()
+                    .ne("`Group`", UserConstant.SYSTEM_GROUP));
         }else {
+            // 医院组只能查看自己所在医院
             UserGroupDao userGroupDao = userGroupMapper.selectById(groupId);
             userGroupDaoList.add(userGroupDao);
         }
@@ -44,7 +45,7 @@ public class UserGroupService {
 
     }
 
-    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
+    @PreAuthorize("hasRole('system_admin')")
     public ResultData<String> createGroup(UserGroupDao groupDao){
         ResultData<String> resultData = new ResultData<>();
         System.out.println(groupDao);
@@ -71,7 +72,7 @@ public class UserGroupService {
         return resultData;
     }
 
-    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
+    @PreAuthorize("hasRole('system_admin')")
     public ResultData<String> deleteGroup(UserGroupDao groupDao){
         ResultData<String> resultData = new ResultData<>();
         if (groupDao.getGroupId()==null || UserConstant.SYSTEM_GROUP.equals(groupDao.getGroup())){
@@ -88,7 +89,7 @@ public class UserGroupService {
         return resultData;
     }
 
-    @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
+    @PreAuthorize("hasRole('system_admin')")
     public ResultData<String> modifyGroup(UserGroupDao groupDao){
         ResultData<String> resultData = new ResultData<>();
         if (groupDao.getGroup()==null ||groupDao.getGroupDescription()==null || groupDao.getGroupId()==null){

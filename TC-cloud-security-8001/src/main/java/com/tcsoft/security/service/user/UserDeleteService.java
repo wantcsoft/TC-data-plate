@@ -6,6 +6,7 @@ import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.entity.UserServiceBean;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.mapper.UserRoleMapper;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author big_john
@@ -35,18 +37,22 @@ public class UserDeleteService {
      * @return
      */
     public ResultData<String> delete(int deleteUserId, Authentication authentication){
-        UserDao deleteUserDao = userMapper.selectById(deleteUserId);
-        if (deleteUserDao!=null){
-            UserRoleDao deleteRole = userRoleMapper.selectById(deleteUserDao.getRoleId());
-            if (UserConstant.SYSTEM_USER.equals(deleteRole.getRole())){
+        ResultData<String> resultData = new ResultData<>();
+        List<UserServiceBean> list = userMapper.selectUserById(deleteUserId);
+        if (list.size() == 0){
+            resultData.setCode(401);
+            resultData.setMessage("用户不存在");
+        }else {
+            UserServiceBean userService = list.get(0);
+            // 删除系统用户
+            if (UserConstant.SYSTEM_USER.equals(userService.getRole())){
                 return deleteSystemUser(deleteUserId);
-            }else if (UserConstant.HOSPITAL.equals(deleteRole.getRole())){
+            // 删除医院用户
+            }else if (UserConstant.HOSPITAL.equals(userService.getRole())){
                 JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
-                UserGroupDao jwtGroup = userGroupMapper.selectById(jwtUser.getGroupId());
-                UserGroupDao deleteGroup = userGroupMapper.selectById(deleteUserDao.getGroupId());
-                if (!UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup()) &&
-                        !jwtGroup.getGroup().equals(deleteGroup.getGroup())){
-                    ResultData<String> resultData = new ResultData<>();
+                UserServiceBean jwtUserService = userMapper.selectUserById(jwtUser.getUserId()).get(0);
+                if (!UserConstant.SYSTEM_GROUP.equals(jwtUserService.getGroup()) &&
+                        !jwtUserService.getGroup().equals(userService.getGroup())){
                     resultData.setCode(401);
                     resultData.setMessage("权限不足");
                     return resultData;
@@ -54,9 +60,6 @@ public class UserDeleteService {
                 return deleteHospital(deleteUserId);
             }
         }
-        ResultData<String> resultData = new ResultData<>();
-        resultData.setCode(401);
-        resultData.setMessage("用户不存在");
         return resultData;
     }
 

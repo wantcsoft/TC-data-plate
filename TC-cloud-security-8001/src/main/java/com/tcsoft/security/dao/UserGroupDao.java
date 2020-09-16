@@ -20,9 +20,4 @@ public class UserGroupDao {
     @TableField(value = "GroupDescription")
     private String groupDescription;
 
-    @TableLogic
-    @TableField(value = "IsDeleted")
-    private boolean deleted;
-
-
 }

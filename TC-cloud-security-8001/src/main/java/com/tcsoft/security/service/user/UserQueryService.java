@@ -7,7 +7,6 @@ import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.entity.*;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
-import com.tcsoft.security.mapper.UserRoleMapper;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -26,8 +25,6 @@ public class UserQueryService {
     private UserMapper userMapper;
     @Resource
     private UserGroupMapper userGroupMapper;
-    @Resource
-    private UserRoleMapper userRoleMapper;
 
     public ResultData<List<UserServiceBean>> query(Authentication authentication){
         ResultData<List<UserServiceBean>> resultData = new ResultData<>();
@@ -42,7 +39,7 @@ public class UserQueryService {
                 list = userMapper.selectUserAllGroupId();
             }
         }else {
-            list = userMapper.selectUserByGroup(serviceBean.getGroup());
+            list = userMapper.selectSameGroup(serviceBean.getGroup(), jwtUser.getUserId());
         }
         resultData.setMessage("查询成功");
         resultData.setData(list);
@@ -56,6 +53,11 @@ public class UserQueryService {
         UserGroupDao jwtGroup = userGroupMapper.selectById(jwtUser);
         if (condition.getUserId() != null){
             //        根据userId查询
+            if (condition.getUserId().equals(jwtUser.getUserId())){
+                resultData.setData(userMapper.selectUserById(condition.getUserId()));
+                resultData.setMessage("查询成功");
+                return resultData;
+            }
             UserDao userDao = userMapper.selectById(condition.getUserId());
             UserGroupDao userGroupDao = userGroupMapper.selectById(userDao.getGroupId());
             if (UserConstant.SYSTEM_GROUP.equals(userGroupDao.getGroup())){
@@ -70,14 +72,19 @@ public class UserQueryService {
             //        根据username查询
             UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()
                     .eq("UserName", condition.getUsername()));
+            if (userDao.getUserId().equals(jwtUser.getUserId())){
+                resultData.setData(userMapper.selectUserById(userDao.getUserId()));
+                resultData.setMessage("查询成功");
+                return resultData;
+            }
             UserGroupDao userGroupDao = userGroupMapper.selectById(userDao.getGroupId());
             if (UserConstant.SYSTEM_GROUP.equals(userGroupDao.getGroup())){
-                return querySystemUserById(resultData, condition.getUserId());
+                return querySystemUserById(resultData, userDao.getUserId());
             }else if (!UserConstant.SYSTEM_GROUP.equals(userGroupDao.getGroup()) &&
                     UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup())){
-                return queryAnyHospital(resultData, condition.getUserId());
+                return queryAnyHospital(resultData, userDao.getUserId());
             }else if (userDao.getGroupId().equals(jwtUser.getGroupId())){
-                return querySameHospital(resultData, condition.getUserId());
+                return querySameHospital(resultData, userDao.getUserId());
             }
         }else if (condition.getGroup() != null && !"".equals(condition.getGroup())){
             //        根据group查询

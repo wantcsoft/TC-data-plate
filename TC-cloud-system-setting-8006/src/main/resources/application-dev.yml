@@ -14,6 +14,14 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: false   # 关闭驼峰命名
 
+# JWT 参数配置
+jwt:
+  # 请求头信息
+  header: "Authorization"
+  # 秘钥
+  secret: "qazwsxedcrfvtgbyhnujmdssaftghyujkloipmnvgyuhikolp"
+  # 请求头标志
+  tokenHead: "Bearer "
 
 spring:
   application:

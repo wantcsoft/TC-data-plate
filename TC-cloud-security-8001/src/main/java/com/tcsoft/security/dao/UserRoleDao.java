@@ -20,11 +20,4 @@ public class UserRoleDao {
     @TableField(value = "RoleDescription")
     private String roleDescription;
 
-    @TableField(value = "RoleGrade")
-    private Integer roleGrade;
-
-    @TableLogic
-    @TableField(value = "IsDeleted")
-    private boolean deleted;
-
 }

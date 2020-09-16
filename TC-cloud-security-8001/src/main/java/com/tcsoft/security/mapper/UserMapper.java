@@ -49,6 +49,25 @@ public interface UserMapper extends BaseMapper<UserDao> {
     List<UserServiceBean> selectUserByGroup(@Param("group")String group);
 
     /**
+     * 查询和自己同意医院的用户（不包括自己）
+     * @param group
+     * @param userId
+     * @return
+     */
+    @Select("select User.UserID as userId, User.GroupID as groupId, User.RoleID as roleId,\n" +
+            "       User.UserName as userName,\n" +
+            "       User.LastPasswordResetDate as lastPasswordResetDate, User.IsEnabled as enabled,\n" +
+            "       UserGroup.GroupDescription as groupDescription, UserGroup.Group as `group`,\n" +
+            "       User.AccountNonLocked as accountNonLocked,\n" +
+            "       UserRole.RoleDescription as roleDescription, UserRole.Role as role\n" +
+            "from User, UserRole, UserGroup\n" +
+            "where User.GroupID = UserGroup.GroupID\n" +
+            "and User.RoleID = UserRole.RoleID\n" +
+            "and User.UserID != #{userId}\n" +
+            "and UserGroup.Group = #{group};")
+    List<UserServiceBean> selectSameGroup(@Param("group")String group, @Param("userId")Integer userId);
+
+    /**
      * 查询出所有的用户除了系统管理员
      * @return
      */

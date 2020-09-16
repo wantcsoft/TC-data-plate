@@ -1,13 +1,18 @@
 package com.tcsoft.setting.controller.query;
 
 
+import com.tcsoft.setting.dao.AuditStateDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.utils.RedisUtil;
+import com.tcsoft.setting.viewmodel.ActionCodeViewModel;
+import com.tcsoft.setting.viewmodel.AuditStateViewModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,13 +26,16 @@ public class GetSettingInfoController {
 
 //    =====================================基础配置与医院无关=============================================
 
-    @GetMapping("/getAuditState")
-    public ResultData<Map<Object, Object>> getAuditState(){
-        ResultData<Map<Object, Object>> resultData = new ResultData<>();
+    @GetMapping("/auditState")
+    public ResultData<List<AuditStateViewModel>> getAuditState(){
+        ResultData<List<AuditStateViewModel>> resultData = new ResultData<>();
+        List<AuditStateViewModel> list = new ArrayList<>();
         try {
-            Map<Object, Object> map = redisUtil.hmget("AuditState");
+            redisUtil.hmget("AuditState").forEach((x,y) -> {
+                list.add((AuditStateViewModel) y);
+            });
             resultData.setMessage("获取成功");
-            resultData.setData(map);
+            resultData.setData(list);
         }catch (Exception e){
             resultData.setCode(401);
             resultData.setMessage("获取失败");
@@ -35,7 +43,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getComparisonType")
+    @GetMapping("/comparisonType")
     public ResultData<Map<Object, Object>> getComparisonType(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -49,7 +57,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getConfirmState")
+    @GetMapping("/confirmState")
     public ResultData<Map<Object, Object>> getConfirmState(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -63,7 +71,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getDataType")
+    @GetMapping("/dataType")
     public ResultData<Map<Object, Object>> getDataType(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -77,7 +85,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getHospitalInfo")
+    @GetMapping("/hospitalInfo")
     public ResultData<Map<Object, Object>> getHospitalInfo(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -91,7 +99,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getInstrumentAlternateType")
+    @GetMapping("/instrumentAlternateType")
     public ResultData<Map<Object, Object>> getInstrumentAlternateType(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -105,7 +113,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getLineType")
+    @GetMapping("/lineType")
     public ResultData<Map<Object, Object>> getLineType(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -119,7 +127,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getResultType")
+    @GetMapping("/resultType")
     public ResultData<Map<Object, Object>> getResultType(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -133,7 +141,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getRuleType")
+    @GetMapping("/ruleType")
     public ResultData<Map<Object, Object>> getRuleType(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -147,7 +155,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getSampleEvent")
+    @GetMapping("/sampleEvent")
     public ResultData<Map<Object, Object>> getSampleEvent(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -161,7 +169,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getSampleState")
+    @GetMapping("/sampleState")
     public ResultData<Map<Object, Object>> getSampleState(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -175,7 +183,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getSampleStatus")
+    @GetMapping("/sampleStatus")
     public ResultData<Map<Object, Object>> getSampleStatus(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -189,7 +197,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getSexType")
+    @GetMapping("/sexType")
     public ResultData<Map<Object, Object>> getSexType(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -203,7 +211,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getRuleFunction")
+    @GetMapping("/ruleFunction")
     public ResultData<Map<Object, Object>> getRuleFunction(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -217,7 +225,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getRuleParam")
+    @GetMapping("/ruleParam")
     public ResultData<Map<Object, Object>> getRuleParam(){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -233,14 +241,17 @@ public class GetSettingInfoController {
 
 //    ====================================跟医院相关====================================================
 
-    @GetMapping("/getActionCode")
-    public ResultData<Map<Object, Object>> getActionCode(@RequestParam("hospitalId")Integer hospitalId){
-        ResultData<Map<Object, Object>> resultData = new ResultData<>();
+    @GetMapping("/actionCode")
+    public ResultData<List<ActionCodeViewModel>> getActionCode(@RequestParam("hospitalId")Integer hospitalId){
+        ResultData<List<ActionCodeViewModel>> resultData = new ResultData<>();
+        List<ActionCodeViewModel> list = new ArrayList<>();
         try {
             String key = "ActionCode:hospitalId="+hospitalId;
-            Map<Object, Object> map = redisUtil.hmget(key);
+            redisUtil.hmget(key).forEach((x,y) -> {
+                list.add((ActionCodeViewModel) y);
+            });
             resultData.setMessage("获取成功");
-            resultData.setData(map);
+            resultData.setData(list);
         }catch (Exception e){
             resultData.setCode(401);
             resultData.setMessage("获取失败");
@@ -248,7 +259,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getAgeType")
+    @GetMapping("/ageType")
     public ResultData<Map<Object, Object>> getAgeType(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -263,7 +274,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getInstrumentGroup")
+    @GetMapping("/instrumentGroup")
     public ResultData<Map<Object, Object>> getInstrumentGroup(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -278,7 +289,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getInstrumentType")
+    @GetMapping("/instrumentType")
     public ResultData<Map<Object, Object>> getInstrumentType(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -293,7 +304,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getPatientType")
+    @GetMapping("/patientType")
     public ResultData<Map<Object, Object>> getPatientType(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -308,7 +319,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getPrepLinkAbortCode")
+    @GetMapping("/prepLinkAbortCode")
     public ResultData<Map<Object, Object>> getPrepLinkAbortCode(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -323,7 +334,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getPrepLinkErrorCode")
+    @GetMapping("/prepLinkErrorCode")
     public ResultData<Map<Object, Object>> getPrepLinkErrorCode(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -338,7 +349,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getResultRange")
+    @GetMapping("/resultRange")
     public ResultData<Map<Object, Object>> getResultRange(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -353,7 +364,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getResultUnit")
+    @GetMapping("/resultUnit")
     public ResultData<Map<Object, Object>> getResultUnit(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -368,7 +379,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getRuleGroup")
+    @GetMapping("/ruleGroup")
     public ResultData<Map<Object, Object>> getRuleGroup(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -383,7 +394,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getSampleType")
+    @GetMapping("/sampleType")
     public ResultData<Map<Object, Object>> getSampleType(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -398,7 +409,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getTestItemType")
+    @GetMapping("/testItemType")
     public ResultData<Map<Object, Object>> getTestItemType(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -413,7 +424,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getTestType")
+    @GetMapping("/testType")
     public ResultData<Map<Object, Object>> getTestType(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -428,7 +439,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getChemistryContrast")
+    @GetMapping("/chemistryContrast")
     public ResultData<Map<Object, Object>> getChemistryContrast(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -443,7 +454,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getComparisonInfo")
+    @GetMapping("/comparisonInfo")
     public ResultData<Map<Object, Object>> getComparisonInfo(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -458,7 +469,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getInstrument")
+    @GetMapping("/instrument")
     public ResultData<Map<Object, Object>> getInstrument(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -473,7 +484,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getLotSet")
+    @GetMapping("/lotSet")
     public ResultData<Map<Object, Object>> getLotSet(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -488,7 +499,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getMaterial")
+    @GetMapping("/material")
     public ResultData<Map<Object, Object>> getMaterial(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -503,7 +514,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getRule")
+    @GetMapping("/rule")
     public ResultData<Map<Object, Object>> getRule(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -518,7 +529,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getTestItemDeltaCheck")
+    @GetMapping("/testItemDeltaCheck")
     public ResultData<Map<Object, Object>> getTestItemDeltaCheck(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -533,7 +544,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getTestItemGroup")
+    @GetMapping("/testItemGroup")
     public ResultData<Map<Object, Object>> getTestItemGroup(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -548,7 +559,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getTestItemGroupItem")
+    @GetMapping("/testItemGroupItem")
     public ResultData<Map<Object, Object>> getTestItemGroupItem(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
@@ -563,7 +574,7 @@ public class GetSettingInfoController {
         return resultData;
     }
 
-    @GetMapping("/getTestItemInfo")
+    @GetMapping("/testItemInfo")
     public ResultData<Map<Object, Object>> getTestItemInfo(@RequestParam("hospitalId")Integer hospitalId){
         ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {

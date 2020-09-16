@@ -22,8 +22,4 @@ public class UserAuthorityDao {
     @TableField(value = "AuthorityDescription")
     private String authorityDescription;
 
-    @TableLogic
-    @TableField(value = "IsDeleted")
-    private boolean deleted;
-
 }

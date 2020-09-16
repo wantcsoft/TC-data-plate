@@ -6,18 +6,20 @@ import com.tcsoft.sample.dao.SampleInfoDao;
 import com.tcsoft.sample.entity.InfoFromLis;
 import com.tcsoft.sample.mapper.ProgItemMapper;
 import com.tcsoft.sample.mapper.SampleInfoMapper;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 
 /**
  * 从kafka中获取医嘱信息进行信息处理
  * @author WMY
  */
+@Slf4j
 @EnableBinding(Sink.class)
 public class ReceiveOrderKafka {
 
@@ -26,22 +28,14 @@ public class ReceiveOrderKafka {
     @Resource
     private ProgItemMapper progItemMapper;
 
-    @Value("${setting-service-url}")
-    private String settingUrl;
-
     @StreamListener(Sink.INPUT)
     public void receive(InfoFromLis order) {
         boolean flag = saveOrder(order);
-//        JSONObject jsonObject = JSONObject.parseObject(receiveOrders);
-//        JSONArray orderList = jsonObject.getJSONArray("orderList");
-//        orderList.forEach((order) -> {
-//            ObjectMapper om = new ObjectMapper();
-//            try {
-//                ReceiveOrder receiveOrder = om.readValue(JSON.toJSONString(order), ReceiveOrder.class);
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//        });
+        if (flag) {
+            log.info(order.getSampleId() + "保存成功");
+        }else {
+            log.error(order.getSampleId() + "保存失败");
+        }
     }
 
     private boolean saveOrder(InfoFromLis order){
@@ -53,6 +47,7 @@ public class ReceiveOrderKafka {
         sampleInfo.setRackNo(order.getRackNo());
         sampleInfo.setCupNo(order.getCupNo());
         sampleInfo.setCollectTime(order.getCollectTime());
+        sampleInfo.setParentSampleNo(order.getParentSampleNo());
         sampleInfo.setPatientCardNo(order.getPatientCardNo());
         sampleInfo.setPatientBedNo(order.getPatientBedNo());
         sampleInfo.setPatientTypeId(order.getPatientTypeId());
@@ -60,18 +55,26 @@ public class ReceiveOrderKafka {
         sampleInfo.setPatientAge(order.getPatientAge());
         sampleInfo.setAgeTypeId(order.getAgeTypeId());
         sampleInfo.setSexTypeId(order.getSexTypeId());
-        sampleInfo.setParentSampleNo(order.getParentSampleNo());
+        sampleInfo.setDiagnosis(order.getDiagnosis());
 //        保存样本信息
-        sampleInfoMapper.insert(sampleInfo);
+        int sampleInfoFlag = sampleInfoMapper.insert(sampleInfo);
+        if (sampleInfoFlag != 1) {
+            return false;
+        }
 
         Integer sampleNo = sampleInfoMapper.selectSampleNo(order.getSampleId(), order.getCollectTime());
         ProgItemDao progItem = new ProgItemDao();
         progItem.setSampleNo(sampleNo);
         progItem.setTestItemId(order.getTestItemId());
         progItem.setReplicateTimes(order.getReplicateTimes());
+        progItem.setProgTime(order.getProgTime());
+        progItem.setProgSendTime(new Date());
+        progItem.setIsAliquot(order.getIsAliquot());
 //        保存编程信息
-        progItemMapper.insert(progItem);
-
+        int progItemFlag = progItemMapper.insert(progItem);
+        if (progItemFlag != 1) {
+            return false;
+        }
         return true;
     }
 

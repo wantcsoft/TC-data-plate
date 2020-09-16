@@ -3,10 +3,13 @@ package com.tcsoft.security.service.role;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
+import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.mapper.UserRoleMapper;
+import com.tcsoft.security.utils.UserConstant;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,19 +24,24 @@ public class UserRoleQueryService {
     @Resource
     private UserRoleMapper userRoleMapper;
     @Resource
-    private UserMapper userMapper;
+    private UserGroupMapper userGroupMapper;
 
-    public ResultData<List<UserRoleDao>> queryAllRole(String username, ResultData<List<UserRoleDao>> resultData){
-        int grade = userRoleMapper.selectById(userMapper.selectOne(
-                new QueryWrapper<UserDao>()
-                        .eq("UserName", username))
-                                .getRoleId()).getRoleGrade();
-        List<UserRoleDao> userRoleDaoList = userRoleMapper.selectList(
-                new QueryWrapper<UserRoleDao>()
-                    .lt("RoleGrade", grade)
-                    .orderByAsc("RoleID"));
-        resultData.setData(userRoleDaoList);
-        resultData.setMessage("用户角色获取成功");
+    public ResultData<List<UserRoleDao>> queryAllRole(String role, Integer groupId){
+        ResultData<List<UserRoleDao>> resultData = new ResultData<>();
+        UserGroupDao groupDao = userGroupMapper.selectById(groupId);
+        if ("".equals(role)) {
+            resultData.setCode(401);
+            resultData.setMessage("获取失败");
+        }else if (UserConstant.SYSTEM_ADMIN.equals(role)){
+            List<UserRoleDao> list = userRoleMapper.selectList(null);
+            resultData.setMessage("用户角色获取成功");
+            resultData.setData(list);
+        }else {
+            List<UserRoleDao> list = userRoleMapper.selectList(new QueryWrapper<UserRoleDao>()
+                    .eq("Role", UserConstant.HOSPITAL));
+            resultData.setMessage("用户角色获取成功");
+            resultData.setData(list);
+        }
         return resultData;
     }
 }

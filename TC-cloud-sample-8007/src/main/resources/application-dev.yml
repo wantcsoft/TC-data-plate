@@ -3,8 +3,6 @@ server:
   servlet:
     context-path: /sample
 
-#系统配置模块的微服务名称（注册成功进nacos的微服务提供者）
-setting-service-url: http://tcsoft-data-platform-system-setting
 
 mybatis-plus:
   global-config:

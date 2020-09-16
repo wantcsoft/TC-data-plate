@@ -1,6 +1,7 @@
-package com.tcsoft.setting.utils;
+package com.tcsoft.setting.config;
 
 import com.tcsoft.setting.service.impl.*;
+import com.tcsoft.setting.utils.RedisUtil;
 import com.tcsoft.setting.viewmodel.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -103,10 +104,6 @@ public class LoadConfigToRedis {
     private TestItemInfoServiceImpl testItemInfoService;
 
     public void start(){
-        configLoadProxy();
-    }
-
-    public void configLoadProxy(){
         loadAuditState();
         loadComparisonType();
         loadConfirmState();
