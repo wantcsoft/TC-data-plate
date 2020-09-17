@@ -31,7 +31,7 @@ public class ActionCodeController extends
                                                       @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ActionID", dao.getActionId());
-        this.hospitalId = dao.getHospitalId();
+        hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
     }
 

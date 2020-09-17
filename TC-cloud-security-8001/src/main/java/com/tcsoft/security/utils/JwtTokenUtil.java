@@ -18,7 +18,7 @@ import java.util.*;
  * @author big_john
  */
 @Component
-public class JwtTokenUtil implements Serializable {
+public final class  JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 

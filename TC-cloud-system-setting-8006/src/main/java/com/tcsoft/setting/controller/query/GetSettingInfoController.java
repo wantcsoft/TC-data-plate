@@ -1,11 +1,9 @@
 package com.tcsoft.setting.controller.query;
 
 
-import com.tcsoft.setting.dao.AuditStateDao;
 import com.tcsoft.setting.entity.ResultData;
 import com.tcsoft.setting.utils.RedisUtil;
-import com.tcsoft.setting.viewmodel.ActionCodeViewModel;
-import com.tcsoft.setting.viewmodel.AuditStateViewModel;
+import com.tcsoft.setting.viewmodel.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,15 +25,12 @@ public class GetSettingInfoController {
 //    =====================================基础配置与医院无关=============================================
 
     @GetMapping("/auditState")
-    public ResultData<List<AuditStateViewModel>> getAuditState(){
-        ResultData<List<AuditStateViewModel>> resultData = new ResultData<>();
-        List<AuditStateViewModel> list = new ArrayList<>();
+    public ResultData<Map<Object, Object>> getAuditState(){
+        ResultData<Map<Object, Object>> resultData = new ResultData<>();
         try {
-            redisUtil.hmget("AuditState").forEach((x,y) -> {
-                list.add((AuditStateViewModel) y);
-            });
+            Map<Object, Object> map = redisUtil.hmget("AuditState");
             resultData.setMessage("获取成功");
-            resultData.setData(list);
+            resultData.setData(map);
         }catch (Exception e){
             resultData.setCode(401);
             resultData.setMessage("获取失败");

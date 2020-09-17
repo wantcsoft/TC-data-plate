@@ -1,6 +1,7 @@
 package com.tcsoft.gateway.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tcsoft.gateway.entity.HospitalInfoViewModel;
 import com.tcsoft.gateway.entity.JwtUser;
 import com.tcsoft.gateway.entity.UserGroupDao;
 import com.tcsoft.gateway.utils.JwtTokenUtil;
@@ -10,18 +11,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
@@ -40,20 +48,21 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
 
     @Resource
     private JwtTokenUtil jwtTokenUtil;
+
     private static final String TOKEN_HEAD = "Bearer ";
     private static final String SECURITY = "/security/";
     private static final String SYSTEM_GROUP = "system";
     private static final HashSet<String> SETTING_URLS = new HashSet<>(
-            Arrays.asList(new String[]{"/setting/actionCode", "/setting/setting/getAgeType",
-            "/setting/setting/getInstrumentGroup", "/setting/getInstrumentType",
-            "/setting/getPatientType", "/setting/getPrepLinkAbortCode",
-            "/setting/getPrepLinkErrorCode", "/setting/getResultRange",
-            "/setting/getResultUnit", "/setting/getRuleGroup", "/setting/getSampleType",
-            "/setting/getTestItemType", "/setting/getTestType", "/setting/getChemistryContrast",
-            "/setting/getComparisonInfo", "/setting/getInstrument", "/setting/getLotSet",
-            "/setting/getMaterial", "/setting/getRule", "/setting/getTestItemDeltaCheck",
-            "/setting/getTestItemGroup", "/setting/getTestItemGroupItem",
-            "/setting/getTestItemInfo"}));
+            Arrays.asList(new String[]{"/setting/actionCode", "/setting/ageType",
+            "/setting/instrumentGroup", "/setting/instrumentType",
+            "/setting/patientType", "/setting/prepLinkAbortCode",
+            "/setting/prepLinkErrorCode", "/setting/resultRange",
+            "/setting/resultUnit", "/setting/ruleGroup", "/setting/sampleType",
+            "/setting/testItemType", "/setting/testType", "/setting/chemistryContrast",
+            "/setting/comparisonInfo", "/setting/instrument", "/setting/lotSet",
+            "/setting/material", "/setting/rule", "/setting/testItemDeltaCheck",
+            "/setting/testItemGroup", "/setting/testItemGroupItem",
+            "/setting/testItemInfo"}));
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -84,16 +93,22 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
             }
         }
         // 当访问系统基础配置信息
-        System.out.println(request.getPath());
-        if (SETTING_URLS.contains(url)){
-
-            System.out.println(request.getQueryParams().getFirst("hospitalId"));
-//            Map<Object, Object> map = redisUtil.hmget("UserGroup");
-//            UserGroupDao groupDao = (UserGroupDao) map.get("groupId=" + jwtUser.getGroupId());
-//            if (!SYSTEM_GROUP.equals(groupDao.getGroup())){
-//                System.out.println(request.getQueryParams());
+//        if (SETTING_URLS.contains(url)){
+//            UserGroupDao groupDao = (UserGroupDao) redisUtil.hmget("UserGroup").get("groupId=" + jwtUser.getGroupId());
+//            System.out.println(groupDao);
+//            HttpMethod method = request.getMethod();
+//            if (HttpMethod.GET.equals(method)){
+//                String paramHospitalId = request.getQueryParams().getFirst("hospitalId");
+//                HospitalInfoViewModel hospitalInfo = (HospitalInfoViewModel) redisUtil.hmget("HospitalInfo:hospitalId").get("hospitalId=" + paramHospitalId);
+//                UserGroupDao groupDao = (UserGroupDao) redisUtil.hmget("UserGroup").get("groupId=" + jwtUser.getGroupId());
+//                System.out.println(groupDao);
+//                if (!SYSTEM_GROUP.equals(groupDao.getGroup())){
+//                    if (!hospitalInfo.getHospitalName().equals(groupDao.getGroup())){
+//                        return this.setErrorResponse(response,"你没有操作权限");
+//                    }
+//                }
 //            }
-        }
+//        }
         return  chain.filter(exchange);
     }
 

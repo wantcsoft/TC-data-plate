@@ -1,5 +1,7 @@
 package com.tcsoft.security.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.utils.RedisUtil;
@@ -23,15 +25,21 @@ public class LoadInfoToRedis {
     @Resource
     private RedisUtil redisUtil;
 
-    public void start(){
+    public void start() {
         loadGroup();
     }
 
-    private void loadGroup(){
+    private void loadGroup() {
         List<UserGroupDao> list = groupMapper.selectList(null);
         Map<String, Object> map = new HashMap<>(list.size());
-        for (UserGroupDao group : list) {
-            map.put("groupId="+group.getGroupId(), group);
+        for (UserGroupDao item : list) {
+            ObjectMapper om = new ObjectMapper();
+            try {
+                String group = om.writeValueAsString(item);
+                map.put("groupId="+item.getGroupId(), group);
+            }catch (Exception e){
+                log.error("UserGroup" + item.getGroupId() + "load fail " + e);
+            }
         }
         try {
             redisUtil.hmset("UserGroup", map);
