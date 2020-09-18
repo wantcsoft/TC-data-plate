@@ -7,7 +7,7 @@ import java.util.Date;
 
 
 /**
- * 数据库的映射对象
+ * 数据表User的映射对象
  * @author big_john
  */
 @Data

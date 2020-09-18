@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 用户角色信息查询接口
  * @author big_john
  */
 @Service
@@ -26,6 +27,12 @@ public class UserRoleQueryService {
     @Resource
     private UserGroupMapper userGroupMapper;
 
+    /**
+     * 查询出比自己角色更低的所有角色
+     * @param role
+     * @param groupId
+     * @return
+     */
     public ResultData<List<UserRoleDao>> queryAllRole(String role, Integer groupId){
         ResultData<List<UserRoleDao>> resultData = new ResultData<>();
         UserGroupDao groupDao = userGroupMapper.selectById(groupId);

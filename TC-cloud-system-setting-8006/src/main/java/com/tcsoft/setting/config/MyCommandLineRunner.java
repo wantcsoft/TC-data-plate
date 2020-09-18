@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
+ * spring boot项目完全启动之后执行run方法
  * @author WMY
  */
 @Component

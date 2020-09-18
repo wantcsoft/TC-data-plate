@@ -7,6 +7,7 @@ import java.util.Date;
 
 
 /**
+ * jwt秘钥中解析出的对象
  * @author big_john
  */
 @Data

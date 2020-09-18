@@ -1,5 +1,6 @@
 package com.tcsoft.setting.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcsoft.setting.service.impl.*;
 import com.tcsoft.setting.utils.RedisUtil;
 import com.tcsoft.setting.viewmodel.*;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 将所有的配置项加载到redis数据库中
  * @author WMY
  */
 @Slf4j
@@ -154,14 +156,20 @@ public class LoadConfigToRedis {
     private void loadAuditState(){
         List<AuditStateViewModel> list = auditStateService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (AuditStateViewModel auditState:list) {
-            map.put("auditStateId="+auditState.getAuditStateId(), auditState);
+            try {
+                String value = om.writeValueAsString(auditState);
+                map.put("auditStateId="+auditState.getAuditStateId(), value);
+            }catch (Exception e){
+                log.error("auditState序列化失败");
+            }
         }
         try {
             redisUtil.hmset("AuditState", map);
-            log.info("AuditState load success ");
+            log.info("AuditState 加载成功 ");
         }catch (Exception e){
-            log.error("AuditState load fail " + e);
+            log.error("AuditState 加载失败 " + e);
         }
     }
 
@@ -172,14 +180,20 @@ public class LoadConfigToRedis {
     private void loadComparisonType(){
         List<ComparisonTypeViewModel> list = comparisonTypeService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (ComparisonTypeViewModel comparisonType:list) {
-            map.put("comparisonTypeId="+comparisonType.getComparisonTypeId(), comparisonType);
+            try {
+                String value = om.writeValueAsString(comparisonType);
+                map.put("comparisonTypeId="+comparisonType.getComparisonTypeId(), value);
+            }catch (Exception e){
+                log.error("ComparisonType序列化失败");
+            }
         }
         try {
             redisUtil.hmset("ComparisonType", map);
-            log.info("comparisonType load success ");
+            log.info("comparisonType 加载成功 ");
         }catch (Exception e){
-            log.error("comparisonType load fail " + e);
+            log.error("comparisonType 加载失败 " + e);
         }
     }
 
@@ -190,14 +204,20 @@ public class LoadConfigToRedis {
     private void loadConfirmState(){
         List<ConfirmStateViewModel> list = confirmStateService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (ConfirmStateViewModel confirmState:list) {
-            map.put("confirmStateId="+confirmState.getConfirmStateId(), confirmState);
+            try {
+                String value = om.writeValueAsString(confirmState);
+                map.put("confirmStateId="+confirmState.getConfirmStateId(), value);
+            }catch (Exception e){
+                log.error("ConfirmState序列化失败");
+            }
         }
         try {
             redisUtil.hmset("ConfirmState", map);
-            log.info("ConfirmState load success ");
+            log.info("ConfirmState 加载成功 ");
         }catch (Exception e){
-            log.error("ConfirmState load fail " + e);
+            log.error("ConfirmState 加载失败 " + e);
         }
     }
 
@@ -208,14 +228,20 @@ public class LoadConfigToRedis {
     private void loadDataType(){
         List<DataTypeViewModel> list = dataTypeService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (DataTypeViewModel dataType:list) {
-            map.put("dataTypeId="+dataType.getDataTypeId(), dataType);
+            try {
+                String value = om.writeValueAsString(dataType);
+                map.put("dataTypeId="+dataType.getDataTypeId(), value);
+            }catch (Exception e){
+                log.error("DataType序列化失败");
+            }
         }
         try {
             redisUtil.hmset("DataType", map);
-            log.info("DataType load success ");
+            log.info("DataType 加载成功 ");
         }catch (Exception e){
-            log.error("DataType load fail " + e);
+            log.error("DataType 加载失败 " + e);
         }
     }
 
@@ -229,17 +255,23 @@ public class LoadConfigToRedis {
         hospitalIdList.clear();
         Map<String, Object> hospitalIdMap = new HashMap<>(list.size());
         Map<String, Object> hospitalCodeMap = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (HospitalInfoViewModel hospitalInfo:list) {
-            hospitalIdMap.put("hospitalId="+hospitalInfo.getHospitalId(), hospitalInfo);
-            hospitalCodeMap.put("hospitalCode="+hospitalInfo.getHospitalCode(), hospitalInfo);
             hospitalIdList.add(hospitalInfo.getHospitalId());
+            try {
+                String value = om.writeValueAsString(hospitalInfo);
+                hospitalIdMap.put("hospitalId="+hospitalInfo.getHospitalId(), value);
+                hospitalCodeMap.put("hospitalCode="+hospitalInfo.getHospitalCode(), value);
+            }catch (Exception e){
+                log.error("HospitalInfo序列化失败");
+            }
         }
         try {
             redisUtil.hmset("HospitalInfo:hospitalId", hospitalIdMap);
             redisUtil.hmset("HospitalInfo:hospitalCode", hospitalCodeMap);
-            log.info("HospitalInfo load success ");
+            log.info("HospitalInfo 加载成功 ");
         }catch (Exception e){
-            log.error("HospitalInfo load fail " + e);
+            log.error("HospitalInfo 加载失败 " + e);
         }
     }
 
@@ -250,14 +282,20 @@ public class LoadConfigToRedis {
     private void loadInstrumentAlternateType(){
         List<InstrumentAlternateTypeViewModel> list = instrumentAlternateTypeService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (InstrumentAlternateTypeViewModel instrumentAlternateType:list) {
-            map.put("instrumentAlternateTypeId="+instrumentAlternateType.getInstrumentAlternateTypeId(), instrumentAlternateType);
+            try {
+                String value = om.writeValueAsString(instrumentAlternateType);
+                map.put("instrumentAlternateTypeId="+instrumentAlternateType.getInstrumentAlternateTypeId(), value);
+            }catch (Exception e){
+                log.error("InstrumentAlternateType序列化失败");
+            }
         }
         try {
             redisUtil.hmset("InstrumentAlternateType", map);
-            log.info("InstrumentAlternateType load success ");
+            log.info("InstrumentAlternateType 加载成功 ");
         }catch (Exception e){
-            log.error("InstrumentAlternateType load fail " + e);
+            log.error("InstrumentAlternateType 加载失败 " + e);
         }
     }
 
@@ -268,14 +306,20 @@ public class LoadConfigToRedis {
     private void loadLineType(){
         List<LineTypeViewModel> list = lineTypeService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (LineTypeViewModel lineType:list) {
-            map.put("lineTypeId="+lineType.getLineTypeId(), lineType);
+            try {
+                String value = om.writeValueAsString(lineType);
+                map.put("lineTypeId="+lineType.getLineTypeId(), value);
+            }catch (Exception e){
+                log.error("LineType 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("LineType", map);
-            log.info("LineType load success ");
+            log.info("LineType 加载成功 ");
         }catch (Exception e){
-            log.error("LineType load fail " + e);
+            log.error("LineType 加载失败 " + e);
         }
     }
 
@@ -286,14 +330,20 @@ public class LoadConfigToRedis {
     private void loadResultType(){
         List<ResultTypeViewModel> list = resultTypeService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (ResultTypeViewModel resultType:list) {
-            map.put("ResultTypeId="+resultType.getResultTypeId(), resultType);
+            try {
+                String value = om.writeValueAsString(resultType);
+                map.put("ResultTypeId="+resultType.getResultTypeId(), value);
+            }catch (Exception e){
+                log.error("ResultType 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("ResultType", map);
-            log.info("ResultType load success ");
+            log.info("ResultType 加载成功 ");
         }catch (Exception e){
-            log.error("ResultType load fail " + e);
+            log.error("ResultType 加载失败 " + e);
         }
     }
 
@@ -304,14 +354,20 @@ public class LoadConfigToRedis {
     private void loadRuleType(){
         List<RuleTypeViewModel> list = ruleTypeService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (RuleTypeViewModel ruleType:list) {
-            map.put("ruleTypeId="+ruleType.getRuleTypeId(), ruleType);
+            try {
+                String value = om.writeValueAsString(ruleType);
+                map.put("ruleTypeId="+ruleType.getRuleTypeId(), value);
+            }catch (Exception e){
+                log.error("RuleType 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("RuleType", map);
-            log.info("RuleType load success ");
+            log.info("RuleType 加载成功 ");
         }catch (Exception e){
-            log.error("RuleType load fail " + e);
+            log.error("RuleType 加载失败 " + e);
         }
     }
 
@@ -322,14 +378,20 @@ public class LoadConfigToRedis {
     private void loadSampleEvent(){
         List<SampleEventViewModel> list = sampleEventService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (SampleEventViewModel sampleEvent:list) {
-            map.put("sampleEventId="+sampleEvent.getSampleEventId(), sampleEvent);
+            try {
+                String value = om.writeValueAsString(sampleEvent);
+                map.put("sampleEventId="+sampleEvent.getSampleEventId(), value);
+            }catch (Exception e){
+                log.error("SampleEvent 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("SampleEvent", map);
-            log.info("SampleEvent load success ");
+            log.info("SampleEvent 加载成功 ");
         }catch (Exception e){
-            log.error("SampleEvent load fail " + e);
+            log.error("SampleEvent 加载失败 " + e);
         }
     }
 
@@ -340,14 +402,20 @@ public class LoadConfigToRedis {
     private void loadSampleState(){
         List<SampleStateViewModel> list = sampleStateService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (SampleStateViewModel sampleState:list) {
-            map.put("sampleStateId="+sampleState.getSampleStateId(), sampleState);
+            try {
+                String value = om.writeValueAsString(sampleState);
+                map.put("sampleStateId="+sampleState.getSampleStateId(), value);
+            }catch (Exception e){
+                log.error("SampleState 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("SampleState", map);
-            log.info("SampleState load success ");
+            log.info("SampleState 加载成功 ");
         }catch (Exception e){
-            log.error("SampleState load fail " + e);
+            log.error("SampleState 加载失败 " + e);
         }
     }
 
@@ -358,14 +426,20 @@ public class LoadConfigToRedis {
     private void loadSampleStatus(){
         List<SampleStatusViewModel> list = sampleStatusService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (SampleStatusViewModel sampleStatus:list) {
-            map.put("sampleStatusId="+sampleStatus.getSampleStatusId(), sampleStatus);
+            try {
+                String value = om.writeValueAsString(sampleStatus);
+                map.put("sampleStatusId="+sampleStatus.getSampleStatusId(), value);
+            }catch (Exception e){
+                log.error("SampleStatus 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("SampleStatus", map);
-            log.info("SampleStatus load success ");
+            log.info("SampleStatus 加载成功 ");
         }catch (Exception e){
-            log.error("SampleStatus load fail " + e);
+            log.error("SampleStatus 加载失败 " + e);
         }
     }
 
@@ -376,14 +450,20 @@ public class LoadConfigToRedis {
     private void loadSexType(){
         List<SexTypeViewModel> list = sexTypeService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (SexTypeViewModel sexType:list) {
-            map.put("sexTypeId="+sexType.getSexTypeId(), sexType);
+            try {
+                String value = om.writeValueAsString(sexType);
+                map.put("sexTypeId="+sexType.getSexTypeId(), value);
+            }catch (Exception e){
+                log.error("SexType 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("SexType", map);
-            log.info("SexType load success ");
+            log.info("SexType 加载成功 ");
         }catch (Exception e){
-            log.error("SexType load fail " + e);
+            log.error("SexType 加载失败 " + e);
         }
     }
 
@@ -396,14 +476,20 @@ public class LoadConfigToRedis {
     private void loadRuleFunction(){
         List<RuleFunctionViewModel> list = ruleFunctionService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (RuleFunctionViewModel ruleFunction:list) {
-            map.put("ruleFunctionId="+ruleFunction.getRuleFunctionId(), ruleFunction);
+            try {
+                String value = om.writeValueAsString(ruleFunction);
+                map.put("ruleFunctionId="+ruleFunction.getRuleFunctionId(), value);
+            }catch (Exception e){
+                log.error("RuleFunction 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("RuleFunction", map);
-            log.info("RuleFunction load success ");
+            log.info("RuleFunction 加载成功 ");
         }catch (Exception e){
-            log.error("RuleFunction load fail " + e);
+            log.error("RuleFunction 加载失败 " + e);
         }
     }
 
@@ -414,14 +500,20 @@ public class LoadConfigToRedis {
     private void loadRuleParam(){
         List<RuleParamViewModel> list = ruleParamService.listViewModel();
         Map<String, Object> map = new HashMap<>(list.size());
+        ObjectMapper om = new ObjectMapper();
         for (RuleParamViewModel ruleParam:list) {
-            map.put("ruleParamId="+ruleParam.getRuleParamId(), ruleParam);
+            try {
+                String value = om.writeValueAsString(ruleParam);
+                map.put("ruleParamId="+ruleParam.getRuleParamId(), value);
+            }catch (Exception e){
+                log.error("RuleParam 序列化失败");
+            }
         }
         try {
             redisUtil.hmset("RuleParam", map);
-            log.info("RuleParam load success ");
+            log.info("RuleParam 加载成功 ");
         }catch (Exception e){
-            log.error("RuleParam load fail " + e);
+            log.error("RuleParam 加载失败 " + e);
         }
     }
 
@@ -435,14 +527,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<ActionCodeViewModel> list = actionCodeService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (ActionCodeViewModel actionCode:list) {
-                map.put("actionCode="+actionCode.getActionId(), actionCode);
+                try {
+                    String value = om.writeValueAsString(actionCode);
+                    map.put("actionCode="+actionCode.getActionId(), value);
+                }catch (Exception e){
+                    log.error("ActionCode 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("ActionCode:hospitalId="+hospitalId, map);
-                log.info("ActionCode load success ");
+                log.info("ActionCode 加载成功 ");
             }catch (Exception e){
-                log.error("ActionCode load fail " + e);
+                log.error("ActionCode 加载失败 " + e);
             }
         }
     }
@@ -455,14 +553,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<AgeTypeViewModel> list = ageTypeService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (AgeTypeViewModel ageType:list) {
-                map.put("ageType="+ageType.getAgeTypeId(), ageType);
+                try {
+                    String value = om.writeValueAsString(ageType);
+                    map.put("ageType="+ageType.getAgeTypeId(), value);
+                }catch (Exception e){
+                    log.error("AgeType 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("AgeType:hospitalId="+hospitalId, map);
-                log.info("AgeType load success ");
+                log.info("AgeType 加载成功 ");
             }catch (Exception e){
-                log.error("AgeType load fail " + e);
+                log.error("AgeType 加载失败 " + e);
             }
         }
     }
@@ -475,14 +579,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<InstrumentGroupViewModel> list = instrumentGroupService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (InstrumentGroupViewModel instrumentGroup:list) {
-                map.put("instrumentGroupId="+instrumentGroup.getInstrumentGroupId(), instrumentGroup);
+                try {
+                    String value = om.writeValueAsString(instrumentGroup);
+                    map.put("instrumentGroupId="+instrumentGroup.getInstrumentGroupId(), value);
+                }catch (Exception e){
+                    log.error("InstrumentGroup 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("InstrumentGroup:hospitalId="+hospitalId, map);
-                log.info("InstrumentGroup load success ");
+                log.info("InstrumentGroup 加载成功 ");
             }catch (Exception e){
-                log.error("InstrumentGroup load fail " + e);
+                log.error("InstrumentGroup 加载失败 " + e);
             }
         }
     }
@@ -495,14 +605,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<InstrumentTypeViewModel> list = instrumentTypeService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (InstrumentTypeViewModel instrumentType:list) {
-                map.put("instrumentTypeId="+instrumentType.getInstrumentTypeId(), instrumentType);
+                try {
+                    String value = om.writeValueAsString(instrumentType);
+                    map.put("instrumentTypeId="+instrumentType.getInstrumentTypeId(), value);
+                }catch (Exception e){
+                    log.error("InstrumentType 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("InstrumentType:hospitalId="+hospitalId, map);
-                log.info("InstrumentType load success ");
+                log.info("InstrumentType 加载成功 ");
             }catch (Exception e){
-                log.error("InstrumentType load fail " + e);
+                log.error("InstrumentType 加载失败 " + e);
             }
         }
     }
@@ -516,16 +632,22 @@ public class LoadConfigToRedis {
             List<PatientTypeViewModel> list = patientTypeService.listViewModel(hospitalId);
             Map<String, Object> patientTypeIdMap = new HashMap<>(list.size());
             Map<String, Object> patientTypeNameMap = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (PatientTypeViewModel patientType:list) {
-                patientTypeIdMap.put("patientTypeId="+patientType.getPatientTypeId(), patientType);
-                patientTypeNameMap.put("patientTypeName="+patientType.getPatientTypeName(), patientType);
+                try {
+                    String value = om.writeValueAsString(patientType);
+                    patientTypeIdMap.put("patientTypeId="+patientType.getPatientTypeId(), value);
+                    patientTypeNameMap.put("patientTypeName="+patientType.getPatientTypeName(), value);
+                }catch (Exception e){
+                    log.error("PatientType 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("PatientType:patientTypeId:hospitalId="+hospitalId, patientTypeIdMap);
                 redisUtil.hmset("PatientType:patientTypeName:hospitalId="+hospitalId, patientTypeNameMap);
-                log.info("PatientType load success ");
+                log.info("PatientType 加载成功 ");
             }catch (Exception e){
-                log.error("PatientType load fail " + e);
+                log.error("PatientType 加载失败 " + e);
             }
         }
     }
@@ -538,14 +660,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<PrepLinkAbortCodeViewModel> list = prepLinkAbortCodeService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (PrepLinkAbortCodeViewModel prepLinkAbortCode:list) {
-                map.put("abortId="+prepLinkAbortCode.getAbortId(), prepLinkAbortCode);
+                try {
+                    String value = om.writeValueAsString(prepLinkAbortCode);
+                    map.put("abortId="+prepLinkAbortCode.getAbortId(), value);
+                }catch (Exception e){
+                    log.error("PrepLinkAbortCode 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("PrepLinkAbortCode:hospitalId="+hospitalId, map);
-                log.info("PrepLinkAbortCode load success ");
+                log.info("PrepLinkAbortCode 加载成功 ");
             }catch (Exception e){
-                log.error("PrepLinkAbortCode load fail " + e);
+                log.error("PrepLinkAbortCode 加载失败 " + e);
             }
         }
     }
@@ -558,14 +686,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<PrepLinkErrorCodeViewModel> list = prepLinkErrorCodeService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (PrepLinkErrorCodeViewModel prepLinkErrorCode:list) {
-                map.put("errorId="+prepLinkErrorCode.getErrorId(), prepLinkErrorCode);
+                try {
+                    String value = om.writeValueAsString(prepLinkErrorCode);
+                    map.put("errorId="+prepLinkErrorCode.getErrorId(), value);
+                }catch (Exception e){
+                    log.error("PrepLinkErrorCode 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("PrepLinkErrorCode:hospitalId="+hospitalId, map);
-                log.info("PrepLinkErrorCode load success ");
+                log.info("PrepLinkErrorCode 加载成功 ");
             }catch (Exception e){
-                log.error("PrepLinkErrorCode load fail " + e);
+                log.error("PrepLinkErrorCode 加载失败 " + e);
             }
         }
     }
@@ -578,14 +712,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<ResultRangeViewModel> list = resultRangeService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (ResultRangeViewModel resultRange:list) {
-                map.put("resultRange="+resultRange.getResultRangeId(), resultRange);
+                try {
+                    String value = om.writeValueAsString(resultRange);
+                    map.put("resultRange="+resultRange.getResultRangeId(), value);
+                }catch (Exception e){
+                    log.error("ResultRange 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("ResultRange:hospitalId="+hospitalId, map);
-                log.info("ResultRange load success ");
+                log.info("ResultRange 加载成功 ");
             }catch (Exception e){
-                log.error("ResultRange load fail " + e);
+                log.error("ResultRange 加载失败 " + e);
             }
         }
     }
@@ -598,14 +738,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<ResultUnitViewModel> list = resultUnitService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (ResultUnitViewModel resultUnit:list) {
-                map.put("resultUnitId="+resultUnit.getResultUnitId(), resultUnit);
+                try {
+                    String value = om.writeValueAsString(resultUnit);
+                    map.put("resultUnitId="+resultUnit.getResultUnitId(), value);
+                }catch (Exception e){
+                    log.error("ResultUnit 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("ResultUnit:hospitalId="+hospitalId, map);
-                log.info("ResultUnit load success ");
+                log.info("ResultUnit 加载成功 ");
             }catch (Exception e){
-                log.error("ResultUnit load fail " + e);
+                log.error("ResultUnit 加载失败 " + e);
             }
         }
     }
@@ -618,14 +764,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<RuleGroupViewModel> list = ruleGroupService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (RuleGroupViewModel ruleGroup:list) {
-                map.put("ruleGroupId="+ruleGroup.getRuleGroupId(), ruleGroup);
+                try {
+                    String value = om.writeValueAsString(ruleGroup);
+                    map.put("ruleGroupId="+ruleGroup.getRuleGroupId(), value);
+                }catch (Exception e){
+                    log.error("RuleGroup 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("RuleGroup:hospitalId="+hospitalId, map);
-                log.info("RuleGroup load success ");
+                log.info("RuleGroup 加载成功 ");
             }catch (Exception e){
-                log.error("RuleGroup load fail " + e);
+                log.error("RuleGroup 加载失败 " + e);
             }
         }
     }
@@ -639,16 +791,22 @@ public class LoadConfigToRedis {
             List<SampleTypeViewModel> list = sampleTypeService.listViewModel(hospitalId);
             Map<String, Object> sampleTypeIdMap = new HashMap<>(list.size());
             Map<String, Object> sampleTypeNameMap = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (SampleTypeViewModel sampleType:list) {
-                sampleTypeIdMap.put("sampleTypeId="+sampleType.getSampleTypeId(), sampleType);
-                sampleTypeNameMap.put("sampleTypeName="+sampleType.getSampleTypeName(), sampleType);
+                try {
+                    String value = om.writeValueAsString(sampleType);
+                    sampleTypeIdMap.put("sampleTypeId="+sampleType.getSampleTypeId(), value);
+                    sampleTypeNameMap.put("sampleTypeName="+sampleType.getSampleTypeName(), value);
+                }catch (Exception e){
+                    log.error("SampleType 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("SampleType:sampleTypeId:hospitalId="+hospitalId, sampleTypeIdMap);
                 redisUtil.hmset("SampleType:sampleTypeName:hospitalId="+hospitalId, sampleTypeNameMap);
-                log.info("SampleType load success ");
+                log.info("SampleType 加载成功 ");
             }catch (Exception e){
-                log.error("SampleType load fail " + e);
+                log.error("SampleType 加载失败 " + e);
             }
         }
     }
@@ -661,14 +819,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<TestItemTypeViewModel> list = testItemTypeService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (TestItemTypeViewModel testItemType:list) {
-                map.put("testItemTypeId="+testItemType.getTestItemTypeId(), testItemType);
+                try {
+                    String value = om.writeValueAsString(testItemType);
+                    map.put("testItemTypeId="+testItemType.getTestItemTypeId(), value);
+                }catch (Exception e){
+                    log.error("TestItemType 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("TestItemType:hospitalId="+hospitalId, map);
-                log.info("TestItemType load success ");
+                log.info("TestItemType 加载成功 ");
             }catch (Exception e){
-                log.error("TestItemType load fail " + e);
+                log.error("TestItemType 加载失败 " + e);
             }
         }
     }
@@ -681,14 +845,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<TestTypeViewModel> list = testTypeService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (TestTypeViewModel testType:list) {
-                map.put("testTypeId="+testType.getTestTypeId(), testType);
+                try {
+                    String value = om.writeValueAsString(testType);
+                    map.put("testTypeId="+testType.getTestTypeId(), value);
+                }catch (Exception e){
+                    log.error("TestType 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("TestType:hospitalId="+hospitalId, map);
-                log.info("TestType load success ");
+                log.info("TestType 加载成功 ");
             }catch (Exception e){
-                log.error("TestType load fail " + e);
+                log.error("TestType 加载失败 " + e);
             }
         }
     }
@@ -703,16 +873,22 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<ChemistryContrastViewModel> list = chemistryContrastService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (ChemistryContrastViewModel chemistryContrast:list) {
-                map.put("testItemId="+chemistryContrast.getTestItemId()+
-                        ":sampleTypeId="+chemistryContrast.getSampleTypeId()+
-                        ":instrumentId="+chemistryContrast.getInstrumentId(), chemistryContrast);
+                try {
+                    String value = om.writeValueAsString(chemistryContrast);
+                    map.put("testItemId="+chemistryContrast.getTestItemId()+
+                            ":sampleTypeId="+chemistryContrast.getSampleTypeId()+
+                            ":instrumentId="+chemistryContrast.getInstrumentId(), value);
+                }catch (Exception e){
+                    log.error("ChemistryContrast 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("ChemistryContrast:hospitalId="+hospitalId, map);
-                log.info("ChemistryContrast load success ");
+                log.info("ChemistryContrast 加载成功 ");
             }catch (Exception e){
-                log.error("ChemistryContrast load fail " + e);
+                log.error("ChemistryContrast 加载失败 " + e);
             }
         }
     }
@@ -725,16 +901,23 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<ComparisonInfoViewModel> list = comparisonInfoService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (ComparisonInfoViewModel comparisonInfo:list) {
-                map.put("instrumentTypeId="+comparisonInfo.getInstrumentTypeId()+
-                        ":comparisonTypeId="+comparisonInfo.getComparisonTypeId()+
-                        ":instrumentInfo="+comparisonInfo.getInstrumentInfo(), comparisonInfo);
+                try {
+                    String value = om.writeValueAsString(comparisonInfo);
+                    map.put("instrumentTypeId="+comparisonInfo.getInstrumentTypeId()+
+                            ":comparisonTypeId="+comparisonInfo.getComparisonTypeId()+
+                            ":instrumentInfo="+comparisonInfo.getInstrumentInfo(), value);
+                }catch (Exception e){
+                    log.error("ComparisonInfo 序列化失败");
+                }
+
             }
             try {
                 redisUtil.hmset("ComparisonInfo:hospitalId="+hospitalId, map);
-                log.info("ComparisonInfo load success ");
+                log.info("ComparisonInfo 加载成功 ");
             }catch (Exception e){
-                log.error("ComparisonInfo load fail " + e);
+                log.error("ComparisonInfo 加载失败 " + e);
             }
         }
     }
@@ -747,16 +930,22 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<InstrumentViewModel> list = instrumentService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (InstrumentViewModel instrument:list) {
-                map.put("instrumentId="+instrument.getInstrumentId()+
-                        ":instrumentGroupId="+instrument.getInstrumentGroupId()+
-                        ":instrumentTypeId="+instrument.getInstrumentTypeId(), instrument);
+                try {
+                    String value = om.writeValueAsString(instrument);
+                    map.put("instrumentId="+instrument.getInstrumentId()+
+                            ":instrumentGroupId="+instrument.getInstrumentGroupId()+
+                            ":instrumentTypeId="+instrument.getInstrumentTypeId(), value);
+                }catch (Exception e){
+                    log.error("Instrument 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("Instrument:hospitalId="+hospitalId, map);
-                log.info("Instrument load success ");
+                log.info("Instrument 加载成功 ");
             }catch (Exception e){
-                log.error("Instrument load fail " + e);
+                log.error("Instrument 加载失败 " + e);
             }
         }
     }
@@ -769,15 +958,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<LotSetViewModel> list = lotSetService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (LotSetViewModel lotSet:list) {
-                map.put("lotSetId="+lotSet.getLotSetId()+
-                        ":materialId="+lotSet.getMaterialId(), lotSet);
+                try {
+                    String value = om.writeValueAsString(lotSet);
+                    map.put("lotSetId="+lotSet.getLotSetId(), value);
+                }catch (Exception e){
+                    log.error("LotSet 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("LotSet:hospitalId="+hospitalId, map);
-                log.info("LotSet load success ");
+                log.info("LotSet 加载成功 ");
             }catch (Exception e){
-                log.error("LotSet load fail " + e);
+                log.error("LotSet 加载失败 " + e);
             }
         }
     }
@@ -790,14 +984,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<MaterialViewModel> list = materialService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (MaterialViewModel material:list) {
-                map.put("materialId="+material.getMaterialId(), material);
+                try {
+                    String value = om.writeValueAsString(material);
+                    map.put("materialId="+material.getMaterialId(), value);
+                }catch (Exception e){
+                    log.error("Material 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("Material:hospitalId="+hospitalId, map);
-                log.info("Material load success ");
+                log.info("Material 加载成功 ");
             }catch (Exception e){
-                log.error("Material load fail " + e);
+                log.error("Material 加载失败 " + e);
             }
         }
     }
@@ -810,16 +1010,22 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<RuleViewModel> list = ruleService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (RuleViewModel rule:list) {
-                map.put("ruleId="+rule.getRuleId()+
-                        ":ruleGroupId="+rule.getRuleGroupId()+
-                        ":ruleType="+rule.getRuleTypeId(), rule);
+                try {
+                    String value = om.writeValueAsString(rule);
+                    map.put("ruleId="+rule.getRuleId()+
+                            ":ruleGroupId="+rule.getRuleGroupId()+
+                            ":ruleType="+rule.getRuleTypeId(), value);
+                }catch (Exception e){
+                    log.error("Rule 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("Rule:hospitalId="+hospitalId, map);
-                log.info("Rule load success ");
+                log.info("Rule 加载成功 ");
             }catch (Exception e){
-                log.error("Rule load fail " + e);
+                log.error("Rule 加载失败 " + e);
             }
         }
     }
@@ -832,14 +1038,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<TestItemDeltaCheckViewModel> list = testItemDeltaCheckService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (TestItemDeltaCheckViewModel testItemDeltaCheck:list) {
-                map.put("TestItemId="+testItemDeltaCheck.getTestItemId(), testItemDeltaCheck);
+                try {
+                    String value = om.writeValueAsString(testItemDeltaCheck);
+                    map.put("TestItemId="+testItemDeltaCheck.getTestItemId(), value);
+                }catch (Exception e){
+                    log.error("TestItemDeltaCheck 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("TestItemDeltaCheck:hospitalId="+hospitalId, map);
-                log.info("TestItemDeltaCheck load success ");
+                log.info("TestItemDeltaCheck 加载成功 ");
             }catch (Exception e){
-                log.error("TestItemDeltaCheck load fail " + e);
+                log.error("TestItemDeltaCheck 加载失败 " + e);
             }
         }
     }
@@ -852,14 +1064,20 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<TestItemGroupViewModel> list = testItemGroupService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (TestItemGroupViewModel testItemGroup:list) {
-                map.put("TestItemGroupId="+testItemGroup.getTestItemGroupId(), testItemGroup);
+                try {
+                    String value = om.writeValueAsString(testItemGroup);
+                    map.put("TestItemGroupId="+testItemGroup.getTestItemGroupId(), value);
+                }catch (Exception e){
+                    log.error("TestItemGroup 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("TestItemGroup:hospitalId="+hospitalId, map);
-                log.info("TestItemGroup load success ");
+                log.info("TestItemGroup 加载成功 ");
             }catch (Exception e){
-                log.error("TestItemGroup load fail " + e);
+                log.error("TestItemGroup 加载失败 " + e);
             }
         }
     }
@@ -872,15 +1090,21 @@ public class LoadConfigToRedis {
         for (int hospitalId:hospitalIdList){
             List<TestItemGroupItemViewModel> list = testItemGroupItemService.listViewModel(hospitalId);
             Map<String, Object> map = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (TestItemGroupItemViewModel testItemGroupItem:list) {
-                map.put("TestItemId"+testItemGroupItem.getTestItemId()+
-                        "TestItemGroupId="+testItemGroupItem.getTestItemGroupId(), testItemGroupItem);
+                try {
+                    String value = om.writeValueAsString(testItemGroupItem);
+                    map.put("TestItemId"+testItemGroupItem.getTestItemId()+
+                            "TestItemGroupId="+testItemGroupItem.getTestItemGroupId(), value);
+                }catch (Exception e){
+                    log.error("TestItemGroupItem 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("TestItemGroupItem:hospitalId="+hospitalId, map);
-                log.info("TestItemGroupItem load success ");
+                log.info("TestItemGroupItem 加载成功 ");
             }catch (Exception e){
-                log.error("TestItemGroupItem load fail " + e);
+                log.error("TestItemGroupItem 加载失败 " + e);
             }
         }
     }
@@ -894,16 +1118,22 @@ public class LoadConfigToRedis {
             List<TestItemInfoViewModel> list = testItemInfoService.listViewModel(hospitalId);
             Map<String, Object> testItemIdMap = new HashMap<>(list.size());
             Map<String, Object> testItemNameMap = new HashMap<>(list.size());
+            ObjectMapper om = new ObjectMapper();
             for (TestItemInfoViewModel testItemInfo:list) {
-                testItemIdMap.put("TestItemId"+testItemInfo.getTestItemId(), testItemInfo);
-                testItemNameMap.put("TestItemName"+testItemInfo.getTestItemName(), testItemInfo);
+                try {
+                    String value = om.writeValueAsString(testItemIdMap);
+                    testItemIdMap.put("TestItemId"+testItemInfo.getTestItemId(), value);
+                    testItemNameMap.put("TestItemName"+testItemInfo.getTestItemName(), value);
+                }catch (Exception e){
+                    log.error("TestItemInfo 序列化失败");
+                }
             }
             try {
                 redisUtil.hmset("TestItemInfo:testItemId:hospitalId="+hospitalId, testItemIdMap);
                 redisUtil.hmset("TestItemInfo:testItemName:hospitalId="+hospitalId, testItemNameMap);
-                log.info("TestItemInfo load success ");
+                log.info("TestItemInfo 加载成功 ");
             }catch (Exception e){
-                log.error("TestItemInfo load fail " + e);
+                log.error("TestItemInfo 加载失败 " + e);
             }
         }
     }

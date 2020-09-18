@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
+ * 数据表UserRole对象模型
  * @author big_john
  */
 @Data

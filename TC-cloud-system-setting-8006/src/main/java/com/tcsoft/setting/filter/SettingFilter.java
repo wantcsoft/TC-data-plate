@@ -52,6 +52,7 @@ public class SettingFilter implements HandlerInterceptor {
         String token = request.getHeader("Authorization").substring(TOKEN_HEAD.length());
         JwtUser jwtUser = jwtTokenUtil.getJwtUser(token);
         String uri = request.getRequestURI();
+        log.info("{}访问了{}, method = {}", jwtUser.getUsername(), uri, request.getMethod());
         // 访问者
         String value = (String) redisUtil.hmget("UserGroup").get("groupId=" + jwtUser.getGroupId());
         ObjectMapper om = new ObjectMapper();
@@ -66,6 +67,7 @@ public class SettingFilter implements HandlerInterceptor {
                     Map<String, Double> params = new Gson().fromJson(reader, Map.class);
                     queryHospitalId = params.get("hospitalId").intValue();
                 }
+                log.info("GET请求获取信息，hospitalId = {}", queryHospitalId);
                 if (queryHospitalId == 0) {
                     return false;
                 }
@@ -85,12 +87,12 @@ public class SettingFilter implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("执行完方法之后进执行(Controller方法调用之后)，但是此时还没进行视图渲染");
+//        log.info("执行完方法之后进执行(Controller方法调用之后)，但是此时还没进行视图渲染");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        log.info("整个请求都处理完咯，DispatcherServlet也渲染了对应的视图咯，此时我可以做一些清理的工作了");
+//        log.info("整个请求都处理完咯，DispatcherServlet也渲染了对应的视图咯，此时我可以做一些清理的工作了");
     }
 
 }

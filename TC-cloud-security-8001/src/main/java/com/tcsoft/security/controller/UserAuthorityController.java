@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 权限模块的接口，增删改查
  * @author WMY
  */
 @RestController
@@ -19,11 +20,21 @@ public class UserAuthorityController {
     @Resource
     private UserAuthorityService authorityService;
 
+    /**
+     * GET请求查询所有的权限模块
+     * @return
+     */
     @GetMapping("/authority")
     public ResultData<List<UserAuthorityDao>> getUserAuthority(){
         return authorityService.queryAll();
     }
 
+    /**
+     * 权限的新建，删除，修改
+     * @param dao
+     * @param type
+     * @return
+     */
     @PostMapping("/authority")
     public ResultData<String> userAuthority(@RequestBody UserAuthorityDao dao,
                                             @RequestParam String type){

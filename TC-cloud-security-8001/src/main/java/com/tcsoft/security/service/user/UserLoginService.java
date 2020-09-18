@@ -4,7 +4,6 @@ package com.tcsoft.security.service.user;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.utils.JwtTokenUtil;
-import com.tcsoft.security.utils.UserConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
+ * 用户登录业务逻辑
  * @author big_john
  */
 @Service
@@ -30,6 +30,12 @@ public class UserLoginService {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
+    /**
+     * 根据用户名和密码进行用户登录，并进行验证
+     * @param username
+     * @param password
+     * @return
+     */
     public ResultData<String> login(String username, String password) {
         ResultData<String> resultData = new ResultData<>();
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -41,7 +47,6 @@ public class UserLoginService {
         resultData.setData(token);
         return resultData;
     }
-
 
     // token刷新服务
     public String refresh(String oldToken) {

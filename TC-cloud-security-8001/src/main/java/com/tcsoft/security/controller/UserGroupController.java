@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 用户组信息api
  * @author big_john
  */
 @RestController
@@ -22,7 +23,7 @@ public class UserGroupController {
     private UserGroupService groupService;
 
     /**
-     * 获取组信息
+     * 获取自己能看到的所有组信息
      * @param authentication
      * @return
      */
@@ -36,6 +37,12 @@ public class UserGroupController {
         return groupService.getUserGroup(role, user.getGroupId());
     }
 
+    /**
+     * 对组信息进行增加，删除，修改
+     * @param dao
+     * @param type
+     * @return
+     */
     @PostMapping("/group")
     public ResultData<String> group(@RequestBody UserGroupDao dao,
                                     @RequestParam String type){

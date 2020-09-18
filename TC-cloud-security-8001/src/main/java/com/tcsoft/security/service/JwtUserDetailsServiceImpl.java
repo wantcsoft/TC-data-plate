@@ -25,6 +25,12 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private UserRoleMapper userRoleMapper;
 
+    /**
+     * 根据用户名去加载用户信息
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDao userDao = userMapper.selectOne(new QueryWrapper<UserDao>()

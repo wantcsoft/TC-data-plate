@@ -7,6 +7,7 @@ import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.mapper.UserPermissionMapper;
 import com.tcsoft.security.utils.RedisUtil;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -31,7 +32,15 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     private RedisUtil redisUtil;
     @Resource
     private UserPermissionMapper userPermissionMapper;
+    @Value("${jwt.expiration}")
+    private Long expiration;
 
+    /**
+     * 用户登录时的验证
+     * @param authentication
+     * @return
+     * @throws AuthenticationException
+     */
     @SneakyThrows
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -74,7 +83,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     }
 
     /**
-     * 登录时将用户权限信息放入redis中
+     * 登录时将用户权限信息放入redis中,用户信息失效性为7天,和token保持一致
      * @param userId
      */
     private void loadRedis(int userId){
@@ -82,7 +91,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         List<String> list = userPermissionMapper.selectAuthorityByUserId(userId);
         Object[] array = list.toArray();
         // 设置过期时间为7天
-        long time = System.currentTimeMillis() + 604800 * 1000;
+        long time = System.currentTimeMillis() + expiration * 1000;
         redisUtil.sSetAndTime("Authority:userId="+userId, time, array);
     }
 }

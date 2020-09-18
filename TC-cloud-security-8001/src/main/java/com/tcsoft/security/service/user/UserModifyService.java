@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 用户信息修改业务逻辑
  * @author big_john
  */
 @Service
@@ -62,16 +63,31 @@ public class UserModifyService {
         return resultData;
     }
 
+    /**
+     * 被修改的是系统用户
+     * @param modifyUser
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     private ResultData<String> modifySystemUser(UserServiceBean modifyUser){
         return checkModify(modifyUser);
     }
 
+    /**
+     * 被修改的是医院用户
+     * @param modifyUser
+     * @return
+     */
     @PreAuthorize("hasAnyRole('system_admin', 'system_user', 'hospital')")
     private ResultData<String> modifyHospital(UserServiceBean modifyUser){
         return checkModify(modifyUser);
     }
 
+    /**
+     * 检查一下需要修改成什么用户
+     * @param modifyUser
+     * @return
+     */
     private ResultData<String> checkModify(UserServiceBean modifyUser){
         UserServiceBean userService = userMapper.selectUserById(modifyUser.getUserId()).get(0);
         if (UserConstant.SYSTEM_USER.equals(userService.getRole())){
@@ -86,11 +102,21 @@ public class UserModifyService {
         }
     }
 
+    /**
+     * 修改为系统用户
+     * @param modifyUser
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     private ResultData<String> modifyToSystemUser(UserServiceBean modifyUser){
         return modifyUser(modifyUser);
     }
 
+    /**
+     * 修改为医院用户
+     * @param modifyUser
+     * @return
+     */
     @PreAuthorize("hasAnyRole('system_admin', 'system_user', 'hospital')")
     private ResultData<String> modifyToHospital(UserServiceBean modifyUser){
         return modifyUser(modifyUser);
@@ -145,6 +171,11 @@ public class UserModifyService {
         return resultData;
     }
 
+    /**
+     * 自己修改自己的用户名或者密码
+     * @param modifyUser
+     * @return
+     */
     private ResultData<String> modifySelf(UserServiceBean modifyUser){
         ResultData<String> resultData = new ResultData<>();
         UserDao userDao = userMapper.selectById(modifyUser.getUserId());

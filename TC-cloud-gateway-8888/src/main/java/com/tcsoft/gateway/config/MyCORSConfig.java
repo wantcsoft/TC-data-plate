@@ -13,6 +13,10 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @Configuration
 public class MyCORSConfig {
 
+    /**
+     * 配置CorsWebFilterweb过滤器，允许任意请求头，任意方法，任意来源访问，并且注册到容器中
+     * @return
+     */
     @Bean
     public CorsWebFilter corsConfig(){
         UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();

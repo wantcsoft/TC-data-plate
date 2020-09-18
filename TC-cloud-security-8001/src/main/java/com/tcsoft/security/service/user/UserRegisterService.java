@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
+ * 用户注册业务逻辑
  * @author big_john
  */
 @Service
@@ -71,15 +72,30 @@ public class UserRegisterService {
         return resultData;
     }
 
+    /**
+     * 注册系统用户，只有系统管理员
+     * @param userServiceBean
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     private ResultData<String> registerSystemUser(UserServiceBean userServiceBean){
         return registerUser(userServiceBean);
     }
 
+    /**
+     * 注册医院用户
+     * @param userServiceBean
+     * @return
+     */
     private ResultData<String> registerHospital(UserServiceBean userServiceBean){
         return registerUser(userServiceBean);
     }
 
+    /**
+     * 注册用户具体实现
+     * @param userServiceBean
+     * @return
+     */
     private ResultData<String> registerUser(UserServiceBean userServiceBean){
         ResultData<String> resultData = new ResultData<>();
         //检查是否重名

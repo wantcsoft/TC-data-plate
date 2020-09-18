@@ -1,15 +1,9 @@
 package com.tcsoft.security.convert;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.sun.javafx.scene.control.skin.LabeledImpl;
 import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.dao.UserDao;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
 /**
@@ -21,6 +15,12 @@ public final class UserConvertJwtUser {
     private UserConvertJwtUser() {
     }
 
+    /**
+     * 生成jwtUser认证的对象
+     * @param userDao
+     * @param userRoleDao
+     * @return
+     */
     public static JwtUser create(UserDao userDao, UserRoleDao userRoleDao) {
         JwtUser jwtUser = new JwtUser();
 

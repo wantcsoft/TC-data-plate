@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
- * 全局拦截器，权限认证
+ * 网关的全局拦截器，权限认证，token合法性，时效性验证
  * @author WMY
  */
 @Component
@@ -48,22 +48,21 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
 
     @Resource
     private JwtTokenUtil jwtTokenUtil;
-
+    /**
+     * jwt加密字符串的开头
+     */
     private static final String TOKEN_HEAD = "Bearer ";
+    /**
+     * 用户安全模块的路径
+     */
     private static final String SECURITY = "/security/";
-    private static final String SYSTEM_GROUP = "system";
-    private static final HashSet<String> SETTING_URLS = new HashSet<>(
-            Arrays.asList(new String[]{"/setting/actionCode", "/setting/ageType",
-            "/setting/instrumentGroup", "/setting/instrumentType",
-            "/setting/patientType", "/setting/prepLinkAbortCode",
-            "/setting/prepLinkErrorCode", "/setting/resultRange",
-            "/setting/resultUnit", "/setting/ruleGroup", "/setting/sampleType",
-            "/setting/testItemType", "/setting/testType", "/setting/chemistryContrast",
-            "/setting/comparisonInfo", "/setting/instrument", "/setting/lotSet",
-            "/setting/material", "/setting/rule", "/setting/testItemDeltaCheck",
-            "/setting/testItemGroup", "/setting/testItemGroupItem",
-            "/setting/testItemInfo"}));
 
+    /**
+     * 过滤器
+     * @param exchange
+     * @param chain
+     * @return
+     */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
@@ -86,34 +85,19 @@ public class TcGateWayFilter implements GlobalFilter, Ordered {
         // 验证是否有权访问该url
         token = token.substring(TOKEN_HEAD.length());
         JwtUser jwtUser = jwtTokenUtil.getJwtUser(token);
+        // 验证是否是系统管理员
         if (!jwtUser.getUserId().equals(userId)){
             boolean flag = redisUtil.sHasKey("Authority:userId=" + jwtUser.getUserId(), url);
+            // 访问的url是否在自己被授权的集合中
             if (!flag){
                 return this.setErrorResponse(response, "你没有权限访问");
             }
         }
-        // 当访问系统基础配置信息
-//        if (SETTING_URLS.contains(url)){
-//            UserGroupDao groupDao = (UserGroupDao) redisUtil.hmget("UserGroup").get("groupId=" + jwtUser.getGroupId());
-//            System.out.println(groupDao);
-//            HttpMethod method = request.getMethod();
-//            if (HttpMethod.GET.equals(method)){
-//                String paramHospitalId = request.getQueryParams().getFirst("hospitalId");
-//                HospitalInfoViewModel hospitalInfo = (HospitalInfoViewModel) redisUtil.hmget("HospitalInfo:hospitalId").get("hospitalId=" + paramHospitalId);
-//                UserGroupDao groupDao = (UserGroupDao) redisUtil.hmget("UserGroup").get("groupId=" + jwtUser.getGroupId());
-//                System.out.println(groupDao);
-//                if (!SYSTEM_GROUP.equals(groupDao.getGroup())){
-//                    if (!hospitalInfo.getHospitalName().equals(groupDao.getGroup())){
-//                        return this.setErrorResponse(response,"你没有操作权限");
-//                    }
-//                }
-//            }
-//        }
         return  chain.filter(exchange);
     }
 
     /**
-     * 返回值
+     * 设置请求的返回值
      * @param response
      * @param message
      * @return

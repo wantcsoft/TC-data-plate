@@ -29,28 +29,46 @@ import java.util.Set;
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
-
+    /**
+     * jwt的token生成与解析工具
+     */
     @Resource
     private JwtTokenUtil jwtTokenUtil;
+    /**
+     * http请求头字段
+     */
     @Value("${jwt.header}")
     private String header;
+    /**
+     * token加密字符串的开头
+     */
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
+    /**
+     * 访问验证忽略下面URL
+     */
     private static final Set<String> IGNORE = new HashSet<>(Arrays
             .asList("/security/login", "/security/register", "/security/develop/register",
                     "/security/develop/login"));
 
+    /**
+     * 每次访问时的验证逻辑，验证token里的信息
+     * @param request
+     * @param response
+     * @param chain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        // 跳过忽略的URL
         if (!IGNORE.contains(request.getRequestURI())){
             String authHeader = request.getHeader(header);
             final String authToken = authHeader.substring(tokenHead.length());
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
             logger.info("checking authentication " + username);
+            // 解析token并验证里面的信息
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails jwtUser = jwtTokenUtil.getJwtUser(authToken);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

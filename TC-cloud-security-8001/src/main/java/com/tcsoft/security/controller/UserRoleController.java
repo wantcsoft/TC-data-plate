@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 用户角色的API
  * @author big_john
  */
 @RestController
@@ -23,6 +24,11 @@ public class UserRoleController {
     @Resource
     private UserRoleQueryService userRoleQueryService;
 
+    /**
+     * 对于角色只能进行获取操作，只能获取低于自己的所有权限
+     * @param authentication
+     * @return
+     */
     @GetMapping("/getRole")
     public ResultData<List<UserRoleDao>> getRole(Authentication authentication){
         JwtUser user = (JwtUser) authentication.getPrincipal();

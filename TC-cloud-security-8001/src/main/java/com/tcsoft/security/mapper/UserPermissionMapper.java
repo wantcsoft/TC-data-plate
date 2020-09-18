@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
+ * 数据库操作模型
  * @author WMY
  */
 public interface UserPermissionMapper extends BaseMapper<UserPermissionDao> {

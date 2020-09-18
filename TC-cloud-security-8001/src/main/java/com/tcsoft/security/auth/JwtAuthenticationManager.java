@@ -24,6 +24,12 @@ public class JwtAuthenticationManager
         this.authenticationProvider = authenticationProvider;
     }
 
+    /**
+     * 用户登录认证
+     * @param authentication
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {

@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 用户信息的api
  * @author WMY
  */
 @RestController
@@ -25,6 +26,13 @@ public class UserController {
     @Resource
     private UserQueryService userQueryService;
 
+    /**
+     * 用户信息的新建，删除，修改
+     * @param userServiceBean
+     * @param type
+     * @param authentication
+     * @return
+     */
     @PostMapping("/user")
     public ResultData<String> userService(@RequestBody UserServiceBean userServiceBean,
                                   @RequestParam String type,
@@ -68,6 +76,12 @@ public class UserController {
         }
     }
 
+    /**
+     * 用户信息的查询，可以根据指定的条件来查询
+     * @param condition
+     * @param authentication
+     * @return
+     */
     @GetMapping("/user")
     public ResultData<List<UserServiceBean>> getUser(QueryConditionBean condition,
                                                      Authentication authentication){
@@ -80,7 +94,7 @@ public class UserController {
     }
 
     /**
-     * 缺少必要的参数
+     * 掉用借口缺少必要的参数
      * @return
      */
     private ResultData<String> nullParameter(){

@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 权限接口业务逻辑处理部分
  * @author WMY
  */
 @Service
@@ -18,6 +19,10 @@ public class UserAuthorityService {
     @Resource
     private UserAuthorityMapper authorityMapper;
 
+    /**
+     * 查询所有的权限信息，只有系统管理员
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     public ResultData<List<UserAuthorityDao>> queryAll(){
         ResultData<List<UserAuthorityDao>> resultData = new ResultData<>();
@@ -26,6 +31,11 @@ public class UserAuthorityService {
         return resultData;
     }
 
+    /**
+     * 创建一个新的权限信息，有系统管理员
+     * @param dao
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     public ResultData<String> createAuthority(UserAuthorityDao dao){
         ResultData<String> resultData = new ResultData<>();
@@ -38,6 +48,11 @@ public class UserAuthorityService {
         return resultData;
     }
 
+    /**
+     * 删除一个权限信息，有系统管理员
+     * @param dao
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     public ResultData<String> deleteAuthority(UserAuthorityDao dao){
         ResultData<String> resultData = new ResultData<>();
@@ -50,6 +65,11 @@ public class UserAuthorityService {
         return resultData;
     }
 
+    /**
+     * 修改权限信息，有系统管理员
+     * @param dao
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     public ResultData<String> modifyAuthority(UserAuthorityDao dao){
         ResultData<String> resultData = new ResultData<>();

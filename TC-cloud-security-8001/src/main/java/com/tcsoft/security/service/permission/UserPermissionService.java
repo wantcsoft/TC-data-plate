@@ -12,13 +12,20 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 用户与权限的关联，业务逻辑处理
  * @author WMY
  */
 @Service
 public class UserPermissionService {
+
     @Resource
     private UserPermissionMapper permissionMapper;
 
+    /**
+     * 根据用户ID查询他的权限信息，只有系统管理员
+     * @param userId
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     public ResultData<List<UserPermissionDao>> queryByUserId(int userId){
         ResultData<List<UserPermissionDao>> resultData = new ResultData<>();
@@ -28,7 +35,7 @@ public class UserPermissionService {
     }
 
     /**
-     * 修改用户的权限信息，并开始事务
+     * 修改用户的权限信息，并开始事务，只有用户管理员
      * @param userId
      * @param list
      * @return

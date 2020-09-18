@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
+ * 用户查询业务逻辑
  * @author big_john
  */
 @Service
@@ -26,6 +27,11 @@ public class UserQueryService {
     @Resource
     private UserGroupMapper userGroupMapper;
 
+    /**
+     * 查询自己所管理的所有用户
+     * @param authentication
+     * @return
+     */
     public ResultData<List<UserServiceBean>> query(Authentication authentication){
         ResultData<List<UserServiceBean>> resultData = new ResultData<>();
         List<UserServiceBean> list;
@@ -46,6 +52,12 @@ public class UserQueryService {
         return resultData;
     }
 
+    /**
+     * 根据输入的条件查询用户信息
+     * @param condition
+     * @param authentication
+     * @return
+     */
     public ResultData<List<UserServiceBean>> queryByCondition(QueryConditionBean condition,
                                                               Authentication authentication){
         ResultData<List<UserServiceBean>> resultData = new ResultData<>();
@@ -64,9 +76,9 @@ public class UserQueryService {
                 return querySystemUserById(resultData, condition.getUserId());
             }else if (!UserConstant.SYSTEM_GROUP.equals(userGroupDao.getGroup()) &&
                     UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup())){
-                return queryAnyHospital(resultData, condition.getUserId());
+                return queryAnyHospitalById(resultData, condition.getUserId());
             }else if (userDao.getGroupId().equals(jwtUser.getGroupId())){
-                return querySameHospital(resultData, condition.getUserId());
+                return querySameHospitalById(resultData, condition.getUserId());
             }
         }else if (condition.getUsername() != null){
             //        根据username查询
@@ -82,9 +94,9 @@ public class UserQueryService {
                 return querySystemUserById(resultData, userDao.getUserId());
             }else if (!UserConstant.SYSTEM_GROUP.equals(userGroupDao.getGroup()) &&
                     UserConstant.SYSTEM_GROUP.equals(jwtGroup.getGroup())){
-                return queryAnyHospital(resultData, userDao.getUserId());
+                return queryAnyHospitalById(resultData, userDao.getUserId());
             }else if (userDao.getGroupId().equals(jwtUser.getGroupId())){
-                return querySameHospital(resultData, userDao.getUserId());
+                return querySameHospitalById(resultData, userDao.getUserId());
             }
         }else if (condition.getGroup() != null && !"".equals(condition.getGroup())){
             //        根据group查询
@@ -101,6 +113,12 @@ public class UserQueryService {
         return resultData;
     }
 
+    /**
+     * 根据用户ID查询系统用户，只有系统管理员可以
+     * @param resultData
+     * @param userId
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     private ResultData<List<UserServiceBean>> querySystemUserById(
             ResultData<List<UserServiceBean>> resultData, Integer userId){
@@ -108,20 +126,38 @@ public class UserQueryService {
         return resultData;
     }
 
+    /**
+     * 根据用户ID查询任意医院用户
+     * @param resultData
+     * @param userId
+     * @return
+     */
     @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
-    private ResultData<List<UserServiceBean>> queryAnyHospital(
+    private ResultData<List<UserServiceBean>> queryAnyHospitalById(
             ResultData<List<UserServiceBean>> resultData, Integer userId){
         resultData.setData(userMapper.selectUserById(userId));
         return resultData;
     }
 
+    /**
+     * 根据用户ID查询同一家医院的用户
+     * @param resultData
+     * @param userId
+     * @return
+     */
     @PreAuthorize("hasAnyRole('system_admin', 'system_user', 'hospital')")
-    private ResultData<List<UserServiceBean>> querySameHospital(
+    private ResultData<List<UserServiceBean>> querySameHospitalById(
             ResultData<List<UserServiceBean>> resultData, Integer userId){
         resultData.setData(userMapper.selectUserById(userId));
         return resultData;
     }
 
+    /**
+     * 根据组信息查询系统组所有的用户
+     * @param resultData
+     * @param group
+     * @return
+     */
     @PreAuthorize("hasRole('system_admin')")
     private ResultData<List<UserServiceBean>> querySystemGroup(
             ResultData<List<UserServiceBean>> resultData, String group){
@@ -129,6 +165,12 @@ public class UserQueryService {
         return resultData;
     }
 
+    /**
+     * 查询任意医院组的所有成员信息
+     * @param resultData
+     * @param group
+     * @return
+     */
     @PreAuthorize("hasAnyRole('system_admin', 'system_user')")
     private ResultData<List<UserServiceBean>> queryAnyHospitalGroup(
             ResultData<List<UserServiceBean>> resultData, String group){
@@ -136,6 +178,12 @@ public class UserQueryService {
         return resultData;
     }
 
+    /**
+     * 查询同一家医院组的所有成员信息
+     * @param resultData
+     * @param group
+     * @return
+     */
     @PreAuthorize("hasAnyRole('system_admin', 'system_user', 'hospital')")
     private ResultData<List<UserServiceBean>> querySameHospitalGroup(
             ResultData<List<UserServiceBean>> resultData, String group){

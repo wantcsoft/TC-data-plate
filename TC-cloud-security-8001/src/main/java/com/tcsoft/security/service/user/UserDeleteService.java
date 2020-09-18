@@ -26,10 +26,6 @@ public class UserDeleteService {
 
     @Resource
     private UserMapper userMapper;
-    @Resource
-    private UserRoleMapper userRoleMapper;
-    @Resource
-    private UserGroupMapper userGroupMapper;
 
     /**
      * 删除方法总入口

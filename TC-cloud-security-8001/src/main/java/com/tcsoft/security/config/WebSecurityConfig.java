@@ -63,6 +63,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         return new JwtAuthenticationTokenFilter();
     }
 
+    /**
+     * 忽略静态资源访问限制
+     * @param web
+     * @throws Exception
+     */
     @Override
     public void configure(WebSecurity web) throws Exception{
         web.ignoring().antMatchers(

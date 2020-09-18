@@ -8,6 +8,7 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
+ * 数据表UserGroup对象模型
  * @author big_john
  */
 @Data

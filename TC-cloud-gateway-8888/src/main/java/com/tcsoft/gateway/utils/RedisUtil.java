@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * redis的工具类
  * @author WMY
  */
 @Component

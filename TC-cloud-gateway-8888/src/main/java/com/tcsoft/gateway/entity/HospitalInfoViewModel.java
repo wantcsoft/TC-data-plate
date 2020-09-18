@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
+ * 用于从redis中反序列化医院对象
  * @author WMY
  */
 @Data

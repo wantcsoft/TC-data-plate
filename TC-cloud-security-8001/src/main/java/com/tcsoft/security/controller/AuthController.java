@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
+ * 数据平台登录接口
  * @author big_john
  */
 @RestController

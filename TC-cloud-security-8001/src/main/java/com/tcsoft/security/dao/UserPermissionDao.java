@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
+ * 数据表UserPermission对象模型
  * @author WMY
  */
 @Data

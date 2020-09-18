@@ -22,8 +22,10 @@ public class JwtTokenUtil implements Serializable {
     private static final String CLAIM_KEY_USER_ID = "userId";
     private static final String CLAIM_KEY_USERNAME = "username";
     private static final String CLAIM_KEY_GROUP_ID = "groupId";
-    private static final String CLAIM_KEY_CREATED = "created";
 
+    /**
+     * token的秘钥
+     */
     @Value("${jwt.secret}")
     private String secret;
 
@@ -43,6 +45,11 @@ public class JwtTokenUtil implements Serializable {
         return expiration;
     }
 
+    /**
+     * 从token中获取用户的部分信息
+     * @param token
+     * @return
+     */
     public JwtUser getJwtUser(String token){
         Claims claims = getClaimsFromToken(token);
         if (claims == null){
