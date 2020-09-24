@@ -7,6 +7,7 @@ import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.mapper.UserPermissionMapper;
 import com.tcsoft.security.utils.RedisUtil;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import java.util.*;
  * 验证用户的用户名和密码是否正确
  */
 @Component
+@Slf4j
 public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -87,7 +89,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
      * @param userId
      */
     private void loadRedis(int userId){
-        redisUtil.setRemove("Authority:userId="+userId);
+//        try {
+//            redisUtil.setRemove("Authority:userId="+userId);
+//        }catch (Exception e){
+//            log.error("没有该用户信息");
+//        }
         List<String> list = userPermissionMapper.selectAuthorityByUserId(userId);
         Object[] array = list.toArray();
         // 设置过期时间为7天

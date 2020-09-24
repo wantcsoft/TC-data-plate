@@ -76,7 +76,7 @@ public class SettingFilter implements HandlerInterceptor {
                 if (!hospitalInfo.getHospitalName().equals(groupDao.getGroupDescription())){
                     response.setCharacterEncoding("UTF-8");
                     response.setContentType("application/json");
-                    response.getWriter().println("{\"code\":401,\"message\":\"你没有权限访问\",\"data\":\"\"}");
+                    response.getWriter().println("{\"code\":403,\"message\":\"你没有权限访问\",\"data\":\"\"}");
                     response.getWriter().flush();
                     return false;
                 }

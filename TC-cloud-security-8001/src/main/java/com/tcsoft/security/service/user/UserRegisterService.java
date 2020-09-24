@@ -52,7 +52,7 @@ public class UserRegisterService {
     public ResultData<String> register(UserServiceBean userServiceBean,
                                         Authentication authentication){
         UserGroupDao groupDao = groupMapper.selectById(userServiceBean.getGroupId());
-        UserRoleDao roleDao = roleMapper.selectById(userServiceBean.getRole());
+        UserRoleDao roleDao = roleMapper.selectById(userServiceBean.getRoleId());
         userServiceBean.setGroup(groupDao.getGroup());
         userServiceBean.setRole(roleDao.getRole());
         if (UserConstant.SYSTEM_USER.equals(roleDao.getRole())){
