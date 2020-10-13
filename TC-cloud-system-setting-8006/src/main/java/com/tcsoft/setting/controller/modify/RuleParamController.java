@@ -27,7 +27,7 @@ public class RuleParamController extends
 
     @PostMapping("/ruleParam")
     public ResultData<List<RuleParamViewModel>> ruleParam(@RequestBody RuleParamDao dao,
-                                          @RequestParam String type){
+                                                          @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("RuleParamID", dao.getRuleParamId());
         return handleRequest(dao, type, deletedMap);

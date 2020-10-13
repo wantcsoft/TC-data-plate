@@ -29,7 +29,7 @@ public class RuleGroupController extends
 
     @PostMapping("/ruleGroup")
     public ResultData<List<RuleGroupViewModel>> ruleGroup(@RequestBody RuleGroupDao dao,
-                                          @RequestParam String type){
+                                                          @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("RuleGroupID", dao.getRuleGroupId());
         hospitalId = dao.getHospitalId();

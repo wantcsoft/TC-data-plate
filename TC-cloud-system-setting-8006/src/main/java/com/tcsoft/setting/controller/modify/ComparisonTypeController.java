@@ -27,7 +27,7 @@ public class ComparisonTypeController extends
 
     @PostMapping("/comparisonType")
     public ResultData<List<ComparisonTypeViewModel>> comparisonType(@RequestBody ComparisonTypeDao dao,
-                                                       @RequestParam String type){
+                                                                    @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ComparisonTypeID", dao.getComparisonTypeId());
         return handleRequest(dao, type, deletedMap);

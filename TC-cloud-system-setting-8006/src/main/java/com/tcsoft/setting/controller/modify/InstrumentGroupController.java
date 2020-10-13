@@ -29,7 +29,7 @@ public class InstrumentGroupController extends
 
     @PostMapping("/instrumentGroup")
     public ResultData<List<InstrumentGroupViewModel>> instrumentGroup(@RequestBody InstrumentGroupDao dao,
-                                                             @RequestParam String type){
+                                                                      @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("InstrumentGroupID", dao.getInstrumentGroupId());
         hospitalId = dao.getHospitalId();

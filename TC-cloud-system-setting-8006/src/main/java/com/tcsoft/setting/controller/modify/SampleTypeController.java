@@ -28,7 +28,7 @@ public class SampleTypeController extends
 
     @PostMapping("/sampleType")
     public ResultData<List<SampleTypeViewModel>> sampleType(@RequestBody SampleTypeDao dao,
-                                                          @RequestParam String type){
+                                                            @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("SampleTypeID", dao.getSampleTypeId());
         hospitalId = dao.getHospitalId();

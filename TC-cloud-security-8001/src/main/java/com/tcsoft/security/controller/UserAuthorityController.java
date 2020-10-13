@@ -3,6 +3,7 @@ package com.tcsoft.security.controller;
 
 import com.tcsoft.security.dao.UserAuthorityDao;
 import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.myExceptions.UserException;
 import com.tcsoft.security.service.authority.UserAuthorityService;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.web.bind.annotation.*;
@@ -46,10 +47,7 @@ public class UserAuthorityController {
             case UserConstant.MODIFY:
                 return authorityService.modifyAuthority(dao);
             default:
-                ResultData<String> resultData = new ResultData<>();
-                resultData.setCode(403);
-                resultData.setMessage("操作失败");
-                return resultData;
+                throw new UserException("操作失败");
         }
     }
 }

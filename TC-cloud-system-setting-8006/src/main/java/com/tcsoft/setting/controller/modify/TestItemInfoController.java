@@ -29,11 +29,9 @@ public class TestItemInfoController extends
 
     @PostMapping("/testItemInfo")
     public ResultData<List<TestItemInfoViewModel>> testItemInfo(@RequestBody TestItemInfoDao dao,
-                                                @RequestParam String type){
+                                                                @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
-        System.out.println(dao);
         deletedMap.put("TestItemID", dao.getTestItemId());
-        System.out.println(dao);
         hospitalId = dao.getHospitalId();
         return handleRequest(dao, type, deletedMap);
     }

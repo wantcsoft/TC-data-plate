@@ -29,7 +29,7 @@ public class ResultUnitController extends
 
     @PostMapping("/resultUnit")
     public ResultData<List<ResultUnitViewModel>> resultUnit(@RequestBody ResultUnitDao dao,
-                                                      @RequestParam String type){
+                                                            @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ResultUnitID", dao.getResultUnitId());
         hospitalId = dao.getHospitalId();

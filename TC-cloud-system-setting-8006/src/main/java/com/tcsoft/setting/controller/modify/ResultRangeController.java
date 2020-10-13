@@ -29,7 +29,7 @@ public class ResultRangeController extends
 
     @PostMapping("/resultRange")
     public ResultData<List<ResultRangeViewModel>> resultRange(@RequestBody ResultRangeDao dao,
-                                                        @RequestParam String type){
+                                                              @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ResultRangeID", dao.getResultRangeId());
         hospitalId = dao.getHospitalId();

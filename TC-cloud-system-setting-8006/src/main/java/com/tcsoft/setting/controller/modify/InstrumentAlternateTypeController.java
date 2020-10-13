@@ -26,7 +26,7 @@ public class InstrumentAlternateTypeController extends
 
     @PostMapping("/instrumentAlternateType")
     public ResultData<List<InstrumentAlternateTypeViewModel>> instrumentAlternateType(@RequestBody InstrumentAlternateTypeDao dao,
-                                                                     @RequestParam String type){
+                                                                                      @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("InstrumentAlternateTypeID", dao.getInstrumentAlternateTypeId());
         return handleRequest(dao, type, deletedMap);

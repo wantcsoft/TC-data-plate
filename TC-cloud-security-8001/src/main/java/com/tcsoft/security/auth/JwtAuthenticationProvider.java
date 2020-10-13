@@ -46,6 +46,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     @SneakyThrows
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        log.info("登录的用户名 = {}， 密码 = {}", authentication.getName(), authentication.getCredentials().toString());
         // 获取用户登录时输入的用户名
         String username = authentication.getName();
         // 根据用户名查询系统中的用户信息
@@ -53,22 +54,22 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 .eq("UserName", username));
         // 如果用户列表为空，说明没有匹配的用户，抛出 UsernameNotFoundException
         if (Objects.isNull(userDao)) {
-            throw new UsernameNotFoundException(String.format("No qualified userDao[%s]!", username));
+            throw new UsernameNotFoundException(String.format("没有找到该用户[%s]!", username));
         }
         // 如果用户没有设置启用或禁用状态，或者用户被设为禁用，则抛出 DisabledException
         Optional<Boolean> enabled = Optional.of(userDao.isEnabled());
         if (!enabled.orElse(false)) {
-            throw new DisabledException(String.format("UserDao[%s] is disabled!", username));
+            throw new DisabledException(String.format("用户[%s] 账户未启用!", username));
         }
         // 如果用户没有过期状态或过期状态为 true 则抛出 AccountExpiredException
         Optional<Boolean> expired = Optional.of(userDao.isAccountNonExpired());
         if (expired.orElse(true)) {
-            throw new AccountExpiredException(String.format("UserDao[%s] is expired!", username));
+            throw new AccountExpiredException(String.format("用户[%s] 账号信息过期!", username));
         }
         // 如果用户没有锁定状态或锁定状态为 true 则抛出 LockedException
         Optional<Boolean> locked = Optional.of(userDao.isAccountNonLocked());
         if (locked.orElse(true)) {
-            throw new LockedException(String.format("UserDao[%s] is locked!", username));
+            throw new LockedException(String.format("用户[%s] 账号被锁定!", username));
         }
         // 如果用户登录时输入的密码和系统中密码匹配，则返回一个完全填充的 Authentication 对象
         if (passwordEncoder.matches(authentication.getCredentials().toString(), userDao.getPassword())){
@@ -89,15 +90,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
      * @param userId
      */
     private void loadRedis(int userId){
-//        try {
-//            redisUtil.setRemove("Authority:userId="+userId);
-//        }catch (Exception e){
-//            log.error("没有该用户信息");
-//        }
         List<String> list = userPermissionMapper.selectAuthorityByUserId(userId);
-        Object[] array = list.toArray();
-        // 设置过期时间为7天
-        long time = System.currentTimeMillis() + expiration * 1000;
-        redisUtil.sSetAndTime("Authority:userId="+userId, time, array);
+        if (list.size() != 0){
+            Object[] array = list.toArray();
+            // 设置过期时间为7天
+            long time = System.currentTimeMillis() + expiration * 1000;
+            redisUtil.sSetAndTime("Authority:userId="+userId, time, array);
+        }
     }
 }

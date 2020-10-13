@@ -7,9 +7,11 @@ import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
+import com.tcsoft.security.enums.ResultCode;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.mapper.UserRoleMapper;
+import com.tcsoft.security.myExceptions.UserException;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -66,10 +68,7 @@ public class UserRegisterService {
                 return registerHospital(userServiceBean);
             }
         }
-        ResultData<String> resultData = new ResultData<>();
-        resultData.setCode(401);
-        resultData.setMessage("创建失败");
-        return resultData;
+        throw new UserException("创建失败");
     }
 
     /**
@@ -101,16 +100,13 @@ public class UserRegisterService {
         //检查是否重名
         String username = userServiceBean.getUsername();
         if ("".equals(username)){
-            resultData.setCode(401);
-            resultData.setMessage("注册失败，用户名为空");
+            throw new UserException("注册失败，用户名为空");
         }else if (checkUserName(username)){
             String password = userServiceBean.getPassword();
             //密码长度检查
             if (password.length() < UserConstant.PASSWORD_LENGTH_MIN ||
                     password.length() > UserConstant.PASSWORD_LENGTH_MAX){
-                resultData.setCode(401);
-                resultData.setMessage("注册失败，密码长度异常");
-                return resultData;
+                throw new UserException("注册失败，密码长度异常");
             } else {
                 UserDao userDao = new UserDao();
                 userDao.setGroupId(userServiceBean.getGroupId());
@@ -124,17 +120,13 @@ public class UserRegisterService {
                 userDao.setAccountNonLocked(userServiceBean.isAccountNonLocked());
                 userDao.setEnabled(userServiceBean.isEnabled());
                 if (userMapper.insert(userDao) == 1){
-                    resultData.setCode(200);
-                    resultData.setMessage("注册成功");
+                    resultData.setResultCode(ResultCode.SUCCESS);
                 }else {
-                    resultData.setCode(401);
-                    resultData.setMessage("注册失败");
+                    throw new UserException("注册失败");
                 }
             }
         }else {
-            //重名
-            resultData.setCode(401);
-            resultData.setMessage("注册失败，用户名已被注册");
+            throw new UserException("注册失败，用户名已被注册");
         }
         return resultData;
     }

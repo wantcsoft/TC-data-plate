@@ -7,9 +7,11 @@ import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
+import com.tcsoft.security.enums.ResultCode;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.mapper.UserRoleMapper;
+import com.tcsoft.security.myExceptions.UserException;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -36,8 +38,7 @@ public class UserDeleteService {
         ResultData<String> resultData = new ResultData<>();
         List<UserServiceBean> list = userMapper.selectUserById(deleteUserId);
         if (list.size() == 0){
-            resultData.setCode(401);
-            resultData.setMessage("用户不存在");
+            throw new UserException("用户不存在");
         }else {
             UserServiceBean userService = list.get(0);
             // 删除系统用户
@@ -49,9 +50,7 @@ public class UserDeleteService {
                 UserServiceBean jwtUserService = userMapper.selectUserById(jwtUser.getUserId()).get(0);
                 if (!UserConstant.SYSTEM_GROUP.equals(jwtUserService.getGroup()) &&
                         !jwtUserService.getGroup().equals(userService.getGroup())){
-                    resultData.setCode(401);
-                    resultData.setMessage("权限不足");
-                    return resultData;
+                    throw new UserException("没有权限");
                 }
                 return deleteHospital(deleteUserId);
             }
@@ -76,11 +75,9 @@ public class UserDeleteService {
     private ResultData<String> deleteById(int id){
         ResultData<String> resultData = new ResultData<>();
         if (userMapper.deleteById(id) == 1){
-            resultData.setCode(200);
-            resultData.setMessage("删除成功");
+            resultData.setResultCode(ResultCode.SUCCESS);
         } else {
-            resultData.setCode(401);
-            resultData.setMessage("删除失败");
+            throw new UserException("用户删除失败");
         }
         return resultData;
     }

@@ -29,7 +29,7 @@ public class TestItemGroupController extends
 
     @PostMapping("/testItemGroup")
     public ResultData<List<TestItemGroupViewModel>> testItemGroup(@RequestBody TestItemGroupDao dao,
-                                                @RequestParam String type){
+                                                                  @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("TestItemGroupID", dao.getTestItemGroupId());
         hospitalId = dao.getHospitalId();

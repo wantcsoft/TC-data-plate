@@ -28,7 +28,7 @@ public class PrepLinkAbortCodeController extends
 
     @PostMapping("/prepLinkAbortCode")
     public ResultData<List<PrepLinkAbortCodeViewModel>> prepLinkAbortCode(@RequestBody PrepLinkAbortCodeDao dao,
-                                                                    @RequestParam String type){
+                                                                          @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("AbortID", dao.getAbortId());
         hospitalId = dao.getHospitalId();

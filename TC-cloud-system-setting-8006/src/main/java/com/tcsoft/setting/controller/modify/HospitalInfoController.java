@@ -27,7 +27,7 @@ public class HospitalInfoController extends
 
     @PostMapping("/hospitalInfo")
     public ResultData<List<HospitalInfoViewModel>> hospitalInfo(@RequestBody HospitalInfoDao dao,
-                                                      @RequestParam String type){
+                                                                @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("HospitalID", dao.getHospitalId());
         return handleRequest(dao, type, deletedMap);

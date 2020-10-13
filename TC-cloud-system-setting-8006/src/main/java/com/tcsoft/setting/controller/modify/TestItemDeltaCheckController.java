@@ -29,7 +29,7 @@ public class TestItemDeltaCheckController extends
 
     @PostMapping("/testItemDeltaCheck")
     public ResultData<List<TestItemDeltaCheckViewModel>> testItemDeltaCheck(@RequestBody TestItemDeltaCheckDao dao,
-                                                   @RequestParam String type){
+                                                                            @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(2);
         deletedMap.put("TestItemID", dao.getTestItemId());
         deletedMap.put("HospitalID", dao.getHospitalId());

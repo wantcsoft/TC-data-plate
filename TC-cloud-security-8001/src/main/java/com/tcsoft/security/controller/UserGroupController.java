@@ -3,6 +3,7 @@ package com.tcsoft.security.controller;
 import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.myExceptions.UserException;
 import com.tcsoft.security.service.group.UserGroupService;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.core.Authentication;
@@ -54,10 +55,7 @@ public class UserGroupController {
             case UserConstant.MODIFY:
                 return groupService.modifyGroup(dao);
             default:
-                ResultData<String> resultData = new ResultData<>();
-                resultData.setCode(403);
-                resultData.setMessage("操作失败");
-                return resultData;
+                throw new UserException("操作失败");
         }
     }
 }

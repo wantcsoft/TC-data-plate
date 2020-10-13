@@ -27,7 +27,7 @@ public class SampleEventController extends
 
     @PostMapping("/sampleEvent")
     public ResultData<List<SampleEventViewModel>> sampleEvent(@RequestBody SampleEventDao dao,
-                                                  @RequestParam String type){
+                                                              @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("SampleEventID", dao.getSampleEventId());
         return handleRequest(dao, type, deletedMap);

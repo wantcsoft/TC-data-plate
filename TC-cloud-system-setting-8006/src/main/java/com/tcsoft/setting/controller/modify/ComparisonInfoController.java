@@ -29,7 +29,7 @@ public class ComparisonInfoController extends
 
     @PostMapping("/comparisonInfo")
     public ResultData<List<ComparisonInfoViewModel>> comparisonInfo(@RequestBody ComparisonInfoDao dao,
-                                                       @RequestParam String type){
+                                                                    @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(4);
         deletedMap.put("HospitalId", dao.getHospitalId());
         deletedMap.put("InstrumentTypeID", dao.getInstrumentTypeId());

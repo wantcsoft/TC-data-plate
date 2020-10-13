@@ -1,5 +1,6 @@
 package com.tcsoft.security.auth;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderNotFoundException;
@@ -13,6 +14,7 @@ import java.util.Objects;
  * @author WMY
  * 将请求转到用户验证AuthenticationProvider类
  */
+@Slf4j
 @Component
 public class JwtAuthenticationManager
         implements AuthenticationManager {
@@ -35,8 +37,10 @@ public class JwtAuthenticationManager
             throws AuthenticationException {
         Authentication result = authenticationProvider.authenticate(authentication);
         if (Objects.nonNull(result)) {
+            log.info("认证成功");
             return result;
         }
-        throw new ProviderNotFoundException("Authentication failed!");
+        log.info("认证失败");
+        throw new ProviderNotFoundException("认证失败");
     }
 }

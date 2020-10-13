@@ -28,7 +28,7 @@ public class InstrumentTypeController extends
 
     @PostMapping("/instrumentType")
     public ResultData<List<InstrumentTypeViewModel>> instrumentType(@RequestBody InstrumentTypeDao dao,
-                                                              @RequestParam String type){
+                                                                    @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("InstrumentTypeID", dao.getInstrumentTypeId());
         hospitalId = dao.getHospitalId();

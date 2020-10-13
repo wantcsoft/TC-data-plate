@@ -27,7 +27,7 @@ public class ResultTypeController extends
 
     @PostMapping("/resultType")
     public ResultData<List<ResultTypeViewModel>> resultType(@RequestBody ResultTypeDao dao,
-                                                      @RequestParam String type){
+                                                            @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ResultTypeID", dao.getResultTypeId());
         return handleRequest(dao, type, deletedMap);

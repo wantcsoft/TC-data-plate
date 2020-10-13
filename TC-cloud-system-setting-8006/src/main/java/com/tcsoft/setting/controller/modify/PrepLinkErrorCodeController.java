@@ -29,7 +29,7 @@ public class PrepLinkErrorCodeController extends
 
     @PostMapping("/prepLinkErrorCode")
     public ResultData<List<PrepLinkErrorCodeViewModel>> prepLinkErrorCode(@RequestBody PrepLinkErrorCodeDao dao,
-                                                                    @RequestParam String type){
+                                                                          @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ErrorID", dao.getErrorId());
         hospitalId = dao.getHospitalId();

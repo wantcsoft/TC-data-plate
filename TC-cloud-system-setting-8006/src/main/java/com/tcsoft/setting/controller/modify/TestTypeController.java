@@ -29,7 +29,7 @@ public class TestTypeController extends
 
     @PostMapping("/testType")
     public ResultData<List<TestTypeViewModel>> testType(@RequestBody TestTypeDao dao,
-                                                @RequestParam String type){
+                                                        @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("TestTypeID", dao.getTestTypeId());
         hospitalId = dao.getHospitalId();

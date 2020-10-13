@@ -10,7 +10,7 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
   configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: false   # 关闭驼峰命名
 
 
@@ -19,13 +19,13 @@ spring:
     name: tcsoft-data-platform-security
 
   datasource:
-    username: john
+    username: root
     password: TCsoft123..
-    url: jdbc:mysql://106.14.77.81:3306/tc_data_plat?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
+    url: jdbc:mysql://192.168.3.3:3306/tc_data_plat?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   redis:
-    host: 106.14.77.81
+    host: 192.168.3.3
     port: 6379
     password: TCsoft123..
     database: 0
@@ -39,11 +39,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 106.14.77.81:8848
-#        server-addr: 192.168.3.3:8848
-#    sentinel:
-#      transport:
-#        dashboard: 192.168.3.3:8080
+#        server-addr: 106.14.77.81:8848
+        server-addr: 192.168.3.3:8848
+    sentinel:
+      transport:
+        dashboard: 192.168.3.3:8080
 #      eager: false
 
 # JWT 参数配置

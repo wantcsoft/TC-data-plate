@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.entity.*;
+import com.tcsoft.security.enums.ResultCode;
 import com.tcsoft.security.mapper.UserGroupMapper;
 import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.utils.UserConstant;
@@ -37,17 +38,20 @@ public class UserQueryService {
         List<UserServiceBean> list;
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         List<UserServiceBean> userList = userMapper.selectUserById(jwtUser.getUserId());
+        if (userList.size() == 0) {
+            return null;
+        }
         UserServiceBean serviceBean = userList.get(0);
         if (UserConstant.SYSTEM_GROUP.equals(serviceBean.getGroup())){
             if (UserConstant.SYSTEM_ADMIN.equals(serviceBean.getRole())){
-                list = userMapper.selectAllUser();
+                list = userMapper.selectAllUsers();
             }else {
                 list = userMapper.selectUserAllGroupId();
             }
         }else {
             list = userMapper.selectSameGroup(serviceBean.getGroup(), jwtUser.getUserId());
         }
-        resultData.setMessage("查询成功");
+        resultData.setResultCode(ResultCode.SUCCESS);
         resultData.setData(list);
         return resultData;
     }
@@ -67,7 +71,7 @@ public class UserQueryService {
             //        根据userId查询
             if (condition.getUserId().equals(jwtUser.getUserId())){
                 resultData.setData(userMapper.selectUserById(condition.getUserId()));
-                resultData.setMessage("查询成功");
+                resultData.setResultCode(ResultCode.SUCCESS);
                 return resultData;
             }
             UserDao userDao = userMapper.selectById(condition.getUserId());
@@ -86,7 +90,7 @@ public class UserQueryService {
                     .eq("UserName", condition.getUsername()));
             if (userDao.getUserId().equals(jwtUser.getUserId())){
                 resultData.setData(userMapper.selectUserById(userDao.getUserId()));
-                resultData.setMessage("查询成功");
+                resultData.setResultCode(ResultCode.SUCCESS);
                 return resultData;
             }
             UserGroupDao userGroupDao = userGroupMapper.selectById(userDao.getGroupId());

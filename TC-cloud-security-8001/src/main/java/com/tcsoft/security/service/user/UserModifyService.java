@@ -6,7 +6,9 @@ import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
+import com.tcsoft.security.enums.ResultCode;
 import com.tcsoft.security.mapper.UserMapper;
+import com.tcsoft.security.myExceptions.UserException;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -37,10 +39,7 @@ public class UserModifyService {
                                       Authentication authentication){
         List<UserServiceBean> list = userMapper.selectUserById(modifyUser.getUserId());
         if (list.size() == 0){
-            ResultData<String> resultData = new ResultData<>();
-            resultData.setCode(401);
-            resultData.setMessage("用户不存在");
-            return resultData;
+            throw new UserException("用户不存在");
         }else {
             UserServiceBean userServiceBean = list.get(0);
             JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
@@ -57,10 +56,7 @@ public class UserModifyService {
                 return modifyHospital(modifyUser);
             }
         }
-        ResultData<String> resultData = new ResultData<>();
-        resultData.setCode(401);
-        resultData.setMessage("修改失败");
-        return resultData;
+        throw new UserException("修改失败");
     }
 
     /**
@@ -95,10 +91,7 @@ public class UserModifyService {
         }else if (UserConstant.HOSPITAL.equals(userService.getRole())){
             return modifyToHospital(modifyUser);
         }else {
-            ResultData<String> resultData = new ResultData<>();
-            resultData.setCode(401);
-            resultData.setMessage("修改失败");
-            return resultData;
+            throw new UserException("修改失败");
         }
     }
 
@@ -140,9 +133,7 @@ public class UserModifyService {
                     .eq("UserName", modifyUser.getUsername())
                     .ne("UserID", modifyUser.getUserId()));
             if (list.size() != 0){
-                resultData.setCode(401);
-                resultData.setMessage("用户名已被使用");
-                return resultData;
+                throw new UserException("用户名已被使用");
             }else {
                 newUserDao.setUsername(modifyUser.getUsername());
             }
@@ -150,9 +141,7 @@ public class UserModifyService {
         if (modifyUser.getPassword() != null && !"".equals(modifyUser.getPassword())){
             if (modifyUser.getPassword().length() < UserConstant.PASSWORD_LENGTH_MIN ||
                     modifyUser.getPassword().length() > UserConstant.PASSWORD_LENGTH_MAX) {
-                resultData.setCode(401);
-                resultData.setMessage("密码长度异常，更新失败");
-                return resultData;
+                throw new UserException("密码长度异常，更新失败");
             }else {
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
                 newUserDao.setPassword(encoder.encode(modifyUser.getPassword()));
@@ -162,11 +151,9 @@ public class UserModifyService {
         newUserDao.setAccountNonLocked(modifyUser.isAccountNonLocked());
         newUserDao.setEnabled(modifyUser.isEnabled());
         if (userMapper.updateById(newUserDao) == 1){
-            resultData.setCode(200);
-            resultData.setMessage("用户信息更新成功");
+            resultData.setResultCode(ResultCode.SUCCESS);
         }else{
-            resultData.setCode(401);
-            resultData.setMessage("用户信息更新失败");
+            throw new UserException("用户信息更新失败");
         }
         return resultData;
     }
@@ -184,9 +171,7 @@ public class UserModifyService {
                     .eq("UserName", modifyUser.getUsername())
                     .ne("UserID", modifyUser.getUserId()));
             if (list.size() != 0){
-                resultData.setCode(401);
-                resultData.setMessage("用户名已被使用");
-                return resultData;
+                throw new UserException("用户名已被使用");
             }else {
                 userDao.setUsername(modifyUser.getUsername());
             }
@@ -194,9 +179,7 @@ public class UserModifyService {
         if (modifyUser.getPassword() != null && !"".equals(modifyUser.getPassword())){
             if (modifyUser.getPassword().length() < UserConstant.PASSWORD_LENGTH_MIN ||
                     modifyUser.getPassword().length() > UserConstant.PASSWORD_LENGTH_MAX) {
-                resultData.setCode(401);
-                resultData.setMessage("密码长度异常，更新失败");
-                return resultData;
+                throw new UserException("密码长度异常，更新失败");
             }else {
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
                 userDao.setPassword(encoder.encode(modifyUser.getPassword()));
@@ -204,11 +187,9 @@ public class UserModifyService {
             }
         }
         if (userMapper.updateById(userDao) == 1){
-            resultData.setCode(200);
-            resultData.setMessage("用户信息更新成功");
+            resultData.setResultCode(ResultCode.SUCCESS);
         }else{
-            resultData.setCode(401);
-            resultData.setMessage("用户信息更新失败");
+            throw new UserException("用户信息更新失败");
         }
         return resultData;
     }

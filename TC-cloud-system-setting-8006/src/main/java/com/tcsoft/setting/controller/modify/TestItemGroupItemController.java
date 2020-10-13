@@ -29,7 +29,7 @@ public class TestItemGroupItemController extends
 
     @PostMapping("/testItemGroupItem")
     public ResultData<List<TestItemGroupItemViewModel>> testItemGroupItem(@RequestBody TestItemGroupItemDao dao,
-                                                @RequestParam String type){
+                                                                          @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(2);
         deletedMap.put("TestItemGroupID", dao.getTestItemGroupId());
         deletedMap.put("TestItemID", dao.getTestItemId());

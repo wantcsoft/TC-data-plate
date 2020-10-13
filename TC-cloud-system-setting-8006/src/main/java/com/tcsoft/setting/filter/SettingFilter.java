@@ -2,7 +2,6 @@ package com.tcsoft.setting.filter;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.tcsoft.setting.entity.JwtUser;
 import com.tcsoft.setting.entity.UserGroupDao;
 import com.tcsoft.setting.utils.JwtTokenUtil;
@@ -36,14 +35,17 @@ public class SettingFilter implements HandlerInterceptor {
     private static final String TOKEN_HEAD = "Bearer ";
     private static final String SYSTEM_GROUP = "system";
     private static final HashSet<String> SETTING_URLS = new HashSet<>(
-            Arrays.asList(new String[]{"/setting/actionCode", "/setting/ageType",
+            Arrays.asList(new String[]{
+                    "/setting/actionCode", "/setting/ageType",
                     "/setting/instrumentGroup", "/setting/instrumentType",
                     "/setting/patientType", "/setting/prepLinkAbortCode",
                     "/setting/prepLinkErrorCode", "/setting/resultRange",
-                    "/setting/resultUnit", "/setting/ruleGroup", "/setting/sampleType",
-                    "/setting/testItemType", "/setting/testType", "/setting/chemistryContrast",
-                    "/setting/comparisonInfo", "/setting/instrument", "/setting/lotSet",
-                    "/setting/material", "/setting/rule", "/setting/testItemDeltaCheck",
+                    "/setting/resultUnit", "/setting/ruleGroup",
+                    "/setting/sampleType", "/setting/testItemType",
+                    "/setting/testType", "/setting/chemistryContrast",
+                    "/setting/comparisonInfo", "/setting/instrument",
+                    "/setting/lotSet", "/setting/material",
+                    "/setting/rule", "/setting/testItemDeltaCheck",
                     "/setting/testItemGroup", "/setting/testItemGroupItem",
                     "/setting/testItemInfo"}));
 
@@ -53,7 +55,6 @@ public class SettingFilter implements HandlerInterceptor {
         JwtUser jwtUser = jwtTokenUtil.getJwtUser(token);
         String uri = request.getRequestURI();
         log.info("{}访问了{}, method = {}", jwtUser.getUsername(), uri, request.getMethod());
-        // 访问者
         String value = (String) redisUtil.hmget("UserGroup").get("groupId=" + jwtUser.getGroupId());
         ObjectMapper om = new ObjectMapper();
         UserGroupDao groupDao = om.readValue(value, UserGroupDao.class);
@@ -64,7 +65,7 @@ public class SettingFilter implements HandlerInterceptor {
                     queryHospitalId = Integer.parseInt(request.getParameter("hospitalId"));
                 }else if ("POST".equals(request.getMethod())){
                     BufferedReader reader = request.getReader();
-                    Map<String, Double> params = new Gson().fromJson(reader, Map.class);
+                    Map<String, Double> params = om.readValue(reader, Map.class);
                     queryHospitalId = params.get("hospitalId").intValue();
                 }
                 log.info("GET请求获取信息，hospitalId = {}", queryHospitalId);
@@ -74,6 +75,7 @@ public class SettingFilter implements HandlerInterceptor {
                 HospitalInfoViewModel hospitalInfo = (HospitalInfoViewModel) redisUtil
                         .hmget("HospitalInfo:hospitalId").get("hospitalId=" + queryHospitalId);
                 if (!hospitalInfo.getHospitalName().equals(groupDao.getGroupDescription())){
+                    log.info("所在医院和访问医院不统一");
                     response.setCharacterEncoding("UTF-8");
                     response.setContentType("application/json");
                     response.getWriter().println("{\"code\":403,\"message\":\"你没有权限访问\",\"data\":\"\"}");

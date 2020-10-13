@@ -30,10 +30,8 @@ public class MyCORSConfig {
         corsConfiguration.addAllowedOrigin("*");
         //允许携带cookie
         corsConfiguration.setAllowCredentials(true);
-
         //表示所有请求都需要跨域
         corsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
-
         return new CorsWebFilter(corsConfigurationSource);
     }
 

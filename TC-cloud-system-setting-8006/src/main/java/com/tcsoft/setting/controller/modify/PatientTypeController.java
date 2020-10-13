@@ -29,7 +29,7 @@ public class PatientTypeController extends
 
     @PostMapping("/patientType")
     public ResultData<List<PatientTypeViewModel>> patientType(@RequestBody PatientTypeDao dao,
-                                                        @RequestParam String type){
+                                                              @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("PatientTypeID", dao.getPatientTypeId());
         hospitalId = dao.getHospitalId();

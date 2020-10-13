@@ -28,7 +28,7 @@ public class ActionCodeController extends
 
     @PostMapping("/actionCode")
     public ResultData<List<ActionCodeViewModel>> actionCode(@RequestBody ActionCodeDao dao,
-                                                      @RequestParam String type){
+                                                            @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ActionID", dao.getActionId());
         hospitalId = dao.getHospitalId();

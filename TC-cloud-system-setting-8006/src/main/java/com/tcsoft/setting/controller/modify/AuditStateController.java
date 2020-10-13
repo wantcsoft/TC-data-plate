@@ -27,7 +27,7 @@ public class AuditStateController extends
 
     @PostMapping("/auditState")
     public ResultData<List<AuditStateViewModel>> auditState(@RequestBody AuditStateDao dao,
-                                                      @RequestParam String type){
+                                                            @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("AuditStateID", dao.getAuditStateId());
         return handleRequest(dao, type, deletedMap);

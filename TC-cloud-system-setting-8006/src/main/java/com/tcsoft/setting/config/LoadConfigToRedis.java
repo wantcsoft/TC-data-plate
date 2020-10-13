@@ -1,5 +1,6 @@
 package com.tcsoft.setting.config;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcsoft.setting.service.impl.*;
 import com.tcsoft.setting.utils.RedisUtil;
@@ -25,7 +26,9 @@ public class LoadConfigToRedis {
     private RedisUtil redisUtil;
     private List<Integer> hospitalIdList = new ArrayList<>();
 
-    //与其他配置无关，与医院也无关
+    /**
+     * 与其他配置无关，与医院也无关
+     */
     @Resource
     private AuditStateServiceImpl auditStateService;
     @Resource
@@ -52,12 +55,18 @@ public class LoadConfigToRedis {
     private SexTypeServiceImpl sexTypeService;
     @Resource
     private SampleStatusServiceImpl sampleStatusService;
-    //与其他配置有关但与医院无关
+
+    /**
+     * 与其他配置有关但与医院无关
+     */
     @Resource
     private RuleFunctionServiceImpl ruleFunctionService;
     @Resource
     private RuleParamServiceImpl ruleParamService;
-    //与其他配置无关，仅与医院有关
+
+    /**
+     * 与其他配置无关，仅与医院有关
+     */
     @Resource
     private ActionCodeServiceImpl actionCodeService;
     @Resource

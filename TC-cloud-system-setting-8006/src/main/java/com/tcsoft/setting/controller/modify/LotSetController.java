@@ -29,7 +29,7 @@ public class LotSetController extends
 
     @PostMapping("/lotSet")
     public ResultData<List<LotSetViewModel>> lotSet(@RequestBody LotSetDao dao,
-                                              @RequestParam String type){
+                                                    @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("LotSetID", dao.getLotSetId());
         hospitalId = dao.getHospitalId();

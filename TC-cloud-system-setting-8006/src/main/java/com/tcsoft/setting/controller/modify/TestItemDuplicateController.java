@@ -27,7 +27,7 @@ public class TestItemDuplicateController extends
 
     @PostMapping("/testItemDuplicate")
     public ResultData<List<TestItemDuplicateViewModel>> testItemDuplicate(@RequestBody TestItemDuplicateDao dao,
-                                                   @RequestParam String type){
+                                                                          @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("DuplicateTestItemID", dao.getDuplicateTestItemId());
         return handleRequest(dao, type, deletedMap);

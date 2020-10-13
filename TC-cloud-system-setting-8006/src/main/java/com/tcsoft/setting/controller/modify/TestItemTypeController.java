@@ -29,7 +29,7 @@ public class TestItemTypeController extends
 
     @PostMapping("/testItemType")
     public ResultData<List<TestItemTypeViewModel>> testItemType(@RequestBody TestItemTypeDao dao,
-                                                @RequestParam String type){
+                                                                @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("TestItemTypeID", dao.getTestItemTypeId());
         hospitalId = dao.getHospitalId();

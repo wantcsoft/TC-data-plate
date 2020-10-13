@@ -27,7 +27,7 @@ public class LineTypeController extends
 
     @PostMapping("/lineType")
     public ResultData<List<LineTypeViewModel>> lineType(@RequestBody LineTypeDao dao,
-                                                  @RequestParam String type){
+                                                        @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("LineTypeId", dao.getLineTypeId());
         return handleRequest(dao, type, deletedMap);

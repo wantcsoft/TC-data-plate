@@ -28,7 +28,7 @@ spring:
     name: tcsoft-data-platform-system-setting
 
   redis:
-    host: 106.14.77.81
+    host: 192.168.3.3
     port: 6379
     password: TCsoft123..
     database: 0
@@ -42,7 +42,7 @@ spring:
   datasource:
     username: root
     password: TCsoft123..
-    url: jdbc:mysql://106.14.77.81:3306/systemConfiguration?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=utf-8
+    url: jdbc:mysql://192.168.3.3:3306/systemConfiguration?serverTimezone=Asia/Shanghai&userUnicode=true&CharacterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     # 配置数据库监控druid
@@ -81,10 +81,14 @@ spring:
 #        deny:
 
 
-
   cloud:
     nacos:
       discovery:
-#        server-addr: 192.168.3.3:8848
-        server-addr: 106.14.77.81:8848
+        server-addr: 192.168.3.3:8848
+#        server-addr: 106.14.77.81:8848
+
+    sentinel:
+      transport:
+        dashboard: 192.168.3.3:8080
+#      eager: false
 

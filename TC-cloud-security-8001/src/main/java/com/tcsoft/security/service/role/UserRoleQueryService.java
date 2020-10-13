@@ -2,12 +2,11 @@ package com.tcsoft.security.service.role;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tcsoft.security.dao.UserDao;
 import com.tcsoft.security.dao.UserGroupDao;
 import com.tcsoft.security.dao.UserRoleDao;
 import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.enums.ResultCode;
 import com.tcsoft.security.mapper.UserGroupMapper;
-import com.tcsoft.security.mapper.UserMapper;
 import com.tcsoft.security.mapper.UserRoleMapper;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.stereotype.Service;
@@ -37,16 +36,15 @@ public class UserRoleQueryService {
         ResultData<List<UserRoleDao>> resultData = new ResultData<>();
         UserGroupDao groupDao = userGroupMapper.selectById(groupId);
         if ("".equals(role)) {
-            resultData.setCode(401);
-            resultData.setMessage("获取失败");
+            resultData.setResultCode(ResultCode.FAILED);
         }else if (UserConstant.SYSTEM_ADMIN.equals(role)){
             List<UserRoleDao> list = userRoleMapper.selectList(null);
-            resultData.setMessage("用户角色获取成功");
+            resultData.setResultCode(ResultCode.SUCCESS);
             resultData.setData(list);
         }else {
             List<UserRoleDao> list = userRoleMapper.selectList(new QueryWrapper<UserRoleDao>()
                     .eq("Role", UserConstant.HOSPITAL));
-            resultData.setMessage("用户角色获取成功");
+            resultData.setResultCode(ResultCode.SUCCESS);
             resultData.setData(list);
         }
         return resultData;

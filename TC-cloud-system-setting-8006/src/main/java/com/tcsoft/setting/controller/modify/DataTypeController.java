@@ -27,7 +27,7 @@ public class DataTypeController extends
 
     @PostMapping("/dataType")
     public ResultData<List<DataTypeViewModel>> dataType(@RequestBody DataTypeDao dao,
-                                                  @RequestParam String type){
+                                                        @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("DataTypeID", dao.getDataTypeId());
         return handleRequest(dao, type, deletedMap);

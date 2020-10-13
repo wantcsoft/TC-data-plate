@@ -29,7 +29,7 @@ public class MaterialController extends
 
     @PostMapping("/material")
     public ResultData<List<MaterialViewModel>> material(@RequestBody MaterialDao dao,
-                                                  @RequestParam String type){
+                                                        @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("MaterialID", dao.getMaterialId());
         hospitalId = dao.getHospitalId();

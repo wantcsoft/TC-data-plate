@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tcsoft.setting.entity.ResultData;
+import com.tcsoft.setting.enums.ResultCode;
 import com.tcsoft.setting.utils.SettingUtilsConstant;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public abstract class BaseController<T extends ServiceImpl<? extends BaseMapper<
         this.service = t;
     }
 
-    public ResultData<List<V>> handleRequest(K k ,String type, Map<String, Object> deletedMap){
+    public ResultData<List<V>> handleRequest(K k , String type, Map<String, Object> deletedMap){
         ResultData<List<V>> resultData = new ResultData<>();
         boolean flag = false;
         if (type != null){
@@ -49,11 +50,9 @@ public abstract class BaseController<T extends ServiceImpl<? extends BaseMapper<
             }
         }
         if (flag){
-            resultData.setCode(200);
-            resultData.setMessage("操作成功");
+            resultData.setResultCode(ResultCode.SUCCESS);
         }else {
-            resultData.setCode(401);
-            resultData.setMessage("操作失败");
+            resultData.setResultCode(ResultCode.FAILED);
         }
         return resultData;
     }

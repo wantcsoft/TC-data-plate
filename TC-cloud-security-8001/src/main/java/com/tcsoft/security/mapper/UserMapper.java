@@ -28,7 +28,7 @@ public interface UserMapper extends BaseMapper<UserDao> {
             "from User, UserRole, UserGroup\n" +
             "where User.GroupID = UserGroup.GroupID\n" +
             "and  User.RoleID = UserRole.RoleID\n" +
-            "and UserGroup.GroupDescription != '系统';")
+            "and UserGroup.`Group` != 'system';")
     List<UserServiceBean> selectUserAllGroupId();
 
     /**
@@ -80,8 +80,8 @@ public interface UserMapper extends BaseMapper<UserDao> {
             "from User, UserRole, UserGroup\n" +
             "where User.GroupID = UserGroup.GroupID\n" +
             "and  User.RoleID = UserRole.RoleID\n" +
-            "and UserRole.RoleDescription != '系统管理员';")
-    List<UserServiceBean> selectAllUser();
+            "and UserRole.Role != 'ROLE_system_admin';")
+    List<UserServiceBean> selectAllUsers();
 
     /**
      * 根据userId查询系统用户

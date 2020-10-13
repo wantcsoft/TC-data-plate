@@ -6,6 +6,14 @@
         <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/TC-cloud-kafka-consumer01-8004/pom.xml" />
+        <option value="$PROJECT_DIR$/TC-cloud-kafka-consumer02-8005/pom.xml" />
+        <option value="$PROJECT_DIR$/TC-cloud-kafka-provider-8003/pom.xml" />
+        <option value="$PROJECT_DIR$/TC-cloud-service01-8010/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />

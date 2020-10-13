@@ -3,6 +3,7 @@ package com.tcsoft.security.controller;
 import com.tcsoft.security.entity.QueryConditionBean;
 import com.tcsoft.security.entity.ResultData;
 import com.tcsoft.security.entity.UserServiceBean;
+import com.tcsoft.security.myExceptions.UserException;
 import com.tcsoft.security.service.user.*;
 import com.tcsoft.security.utils.UserConstant;
 import org.springframework.security.core.Authentication;
@@ -42,7 +43,7 @@ public class UserController {
                 case UserConstant.DELETE:
                     //删除操作,根据userId删除用户
                     if (userServiceBean.getUserId()==null){
-                        return nullParameter();
+                        throw new UserException("缺少必要参数");
                     }else {
                         int deleteUserId = userServiceBean.getUserId();
                         return userDeleteService.delete(deleteUserId, authentication);
@@ -51,28 +52,22 @@ public class UserController {
                     //创建操作
                     if (userServiceBean.getGroupId()==null || userServiceBean.getRoleId()==null ||
                     userServiceBean.getUsername()== null || userServiceBean.getPassword()==null){
-                        return nullParameter();
+                        throw new UserException("缺少必要参数");
                     }else {
                         return userRegisterService.register(userServiceBean, authentication);
                     }
                 case UserConstant.MODIFY:
                     //修改操作
                     if (userServiceBean.getUserId()==null || userServiceBean.getRoleId()==null){
-                        return nullParameter();
+                        throw new UserException("缺少必要参数");
                     }else {
                         return userModifyService.modify(userServiceBean, authentication);
                     }
                 default:
-                    ResultData<String> resultData = new ResultData<>();
-                    resultData.setCode(401);
-                    resultData.setMessage("type类型不正确");
-                    return resultData;
+                    throw new UserException("type类型不正确");
             }
         }else {
-            ResultData<String> resultData = new ResultData<>();
-            resultData.setCode(401);
-            resultData.setMessage("type没有值");
-            return resultData;
+            throw new UserException("type没有值");
         }
     }
 
@@ -93,14 +88,4 @@ public class UserController {
         }
     }
 
-    /**
-     * 掉用借口缺少必要的参数
-     * @return
-     */
-    private ResultData<String> nullParameter(){
-        ResultData<String> resultData = new ResultData<>();
-        resultData.setCode(401);
-        resultData.setMessage("缺少必要参数");
-        return resultData;
-    }
 }

@@ -27,7 +27,7 @@ public class ConfirmStateController extends
 
     @PostMapping("/confirmState")
     public ResultData<List<ConfirmStateViewModel>> confirmState(@RequestBody ConfirmStateDao dao,
-                                                          @RequestParam String type){
+                                                                @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("ConfirmStateID", dao.getConfirmStateId());
         return handleRequest(dao, type, deletedMap);

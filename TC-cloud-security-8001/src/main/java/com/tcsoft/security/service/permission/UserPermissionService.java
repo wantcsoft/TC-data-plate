@@ -3,6 +3,7 @@ package com.tcsoft.security.service.permission;
 
 import com.tcsoft.security.dao.UserPermissionDao;
 import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.enums.ResultCode;
 import com.tcsoft.security.mapper.UserPermissionMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class UserPermissionService {
     @PreAuthorize("hasRole('system_admin')")
     public ResultData<List<UserPermissionDao>> queryByUserId(int userId){
         ResultData<List<UserPermissionDao>> resultData = new ResultData<>();
-        resultData.setMessage("获取成功");
+        resultData.setResultCode(ResultCode.SUCCESS);
         resultData.setData(permissionMapper.selectPermissionByUserId(userId));
         return resultData;
     }
@@ -49,10 +50,9 @@ public class UserPermissionService {
             for (Integer authorityId:list){
                 permissionMapper.insertPermission(userId, authorityId);
             }
-            resultData.setMessage("操作成功");
+            resultData.setResultCode(ResultCode.SUCCESS);
         }catch (Exception e){
-            resultData.setCode(401);
-            resultData.setMessage("操作失败");
+            resultData.setResultCode(ResultCode.FAILED);
         }
         return resultData;
     }

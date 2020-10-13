@@ -3,6 +3,7 @@ package com.tcsoft.security.service.user;
 
 import com.tcsoft.security.entity.JwtUser;
 import com.tcsoft.security.entity.ResultData;
+import com.tcsoft.security.enums.ResultCode;
 import com.tcsoft.security.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,7 +44,7 @@ public class UserLoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final JwtUser jwtUser = (JwtUser) userDetailsService.loadUserByUsername(username);
         final String token = tokenHead + jwtTokenUtil.generateToken(jwtUser);
-        resultData.setMessage("登陆成功");
+        resultData.setResultCode(ResultCode.SUCCESS);
         resultData.setData(token);
         return resultData;
     }

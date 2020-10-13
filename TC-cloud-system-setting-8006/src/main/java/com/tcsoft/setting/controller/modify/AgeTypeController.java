@@ -25,7 +25,7 @@ public class AgeTypeController extends
 
     @PostMapping("/ageType")
     public ResultData<List<AgeTypeViewModel>> ageType(@RequestBody AgeTypeDao dao,
-                                                @RequestParam String type){
+                                                      @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("AgeTypeID", dao.getAgeTypeId());
         hospitalId = dao.getHospitalId();

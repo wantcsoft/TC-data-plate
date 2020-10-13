@@ -1,6 +1,7 @@
 server:
   port: 8888
 
+
 jwt:
   # 秘钥
   secret: "qazwsxedcrfvtgbyhnujmdssaftghyujkloipmnvgyuhikolp"
@@ -11,7 +12,7 @@ spring:
     name: tcsoft-data-platform-gateway
 
   redis:
-    host: 106.14.77.81
+    host: 192.168.3.3
     port: 6379
     password: TCsoft123..
     database: 0
@@ -25,10 +26,15 @@ spring:
   cloud:
     nacos:
       discovery:
-#        server-addr: 192.168.3.3:8848
-        server-addr: 106.14.77.81:8848
+        server-addr: 192.168.3.3:8848
+#        server-addr: 106.14.77.81:8848
     gateway:
       discovery:
         locator:
           enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由
           lower-case-service-id: true
+
+logging:
+#  配置日志输出级别
+  level:
+    root: info

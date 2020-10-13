@@ -27,7 +27,7 @@ public class RuleTypeController extends
 
     @PostMapping("/ruleType")
     public ResultData<List<RuleTypeViewModel>> ruleType(@RequestBody RuleTypeDao dao,
-                                          @RequestParam String type){
+                                                        @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("RuleTypeID", dao.getRuleTypeId());
         return handleRequest(dao, type, deletedMap);

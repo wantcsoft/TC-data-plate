@@ -30,7 +30,7 @@ public class ChemistryContrastController extends
 
     @PostMapping("/chemistryContrast")
     public ResultData<List<ChemistryContrastViewModel>> chemistryContrast(@RequestBody ChemistryContrastDao dao,
-                                                                    @RequestParam String type){
+                                                                          @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(4);
         deletedMap.put("HospitalID", dao.getHospitalId());
         deletedMap.put("TestItemID", dao.getTestItemId());

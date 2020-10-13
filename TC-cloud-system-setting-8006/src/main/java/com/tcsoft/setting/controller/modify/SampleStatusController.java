@@ -27,7 +27,7 @@ public class SampleStatusController extends
 
     @PostMapping("/sampleStatus")
     public ResultData<List<SampleStatusViewModel>> sampleStatus(@RequestBody SampleStatusDao dao,
-                                                     @RequestParam String type){
+                                                                @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("SampleStatusID", dao.getSampleStatusId());
         return handleRequest(dao, type, deletedMap);

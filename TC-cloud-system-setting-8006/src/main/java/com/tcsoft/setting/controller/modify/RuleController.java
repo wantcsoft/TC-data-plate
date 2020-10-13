@@ -29,7 +29,7 @@ public class RuleController extends
 
     @PostMapping("/rule")
     public ResultData<List<RuleViewModel>> rule(@RequestBody RuleDao dao,
-                                          @RequestParam String type){
+                                                @RequestParam String type){
         Map<String, Object> deletedMap = new HashMap<>(1);
         deletedMap.put("RuleID", dao.getRuleId());
         hospitalId = dao.getHospitalId();
