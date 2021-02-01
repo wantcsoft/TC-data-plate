@@ -4,7 +4,6 @@ package com.tcsoft.sample.controller;
 import com.tcsoft.sample.entity.InfoFromThird;
 import com.tcsoft.sample.entity.ResultData;
 import com.tcsoft.sample.service.InfoFromThirdService;
-import com.tcsoft.sample.service.kafka.SendResultKafka;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,8 +16,8 @@ import java.util.List;
 @RequestMapping("/result")
 public class ResultController {
 
-    @Resource
-    private SendResultKafka sendService;
+//    @Resource
+//    private SendResultKafka sendService;
     @Resource
     private InfoFromThirdService infoFromThirdService;
 
@@ -30,7 +29,7 @@ public class ResultController {
     @PostMapping("/push")
     public void pushResult(@RequestBody List<InfoFromThird> resultList){
         for (InfoFromThird result:resultList){
-            sendService.send(result);
+//            sendService.send(result);
         }
     }
 

@@ -4,7 +4,7 @@ package com.tcsoft.sample.controller;
 import com.tcsoft.sample.entity.InfoFromLis;
 import com.tcsoft.sample.entity.ResultData;
 import com.tcsoft.sample.service.InfoFromLisService;
-import com.tcsoft.sample.service.kafka.SendOrderKafka;
+import com.tcsoft.sample.utils.RedisUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,10 +18,12 @@ import java.util.List;
 @RequestMapping("/order")
 public class OrderController {
 
-    @Resource
-    private SendOrderKafka sendService;
+//    @Resource
+//    private SendOrderKafka sendService;
     @Resource
     private InfoFromLisService service;
+    @Resource
+    private RedisUtil redisUtil;
 
     /**
      * 从lis获取医嘱信息
@@ -31,7 +33,7 @@ public class OrderController {
     @PostMapping("/push")
     public void pushOrder(@RequestBody List<InfoFromLis> orderList) {
         for (InfoFromLis order:orderList){
-            sendService.send(order);
+//            sendService.send(order);
         }
     }
 
@@ -47,5 +49,8 @@ public class OrderController {
         resultData.setData(list);
         return resultData;
     }
+
+
+
 
 }

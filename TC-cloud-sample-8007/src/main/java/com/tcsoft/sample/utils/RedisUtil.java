@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @author WMY
  */
 @Component
-public final class RedisUtil {
+public class RedisUtil {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -43,7 +43,9 @@ public final class RedisUtil {
      * @return 时间(秒) 返回0代表为永久有效
      */
     public long getExpire(String key) {
-        if (key == null)    return -1L;
+        if (key == null) {
+            return -1L;
+        }
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
@@ -54,7 +56,9 @@ public final class RedisUtil {
      * @return true 存在 false不存在
      */
     public boolean hasKey(String key) {
-        if (key == null)    return false;
+        if (key == null) {
+            return false;
+        }
         try {
             return redisTemplate.hasKey(key);
         } catch (Exception e) {
@@ -567,6 +571,38 @@ public final class RedisUtil {
             return 0;
         }
 
+    }
+
+//    =============================================队列==========================================================
+
+    /**
+     * 往队列中放入消息
+     * @param key
+     * @param value
+     * @return
+     */
+    public boolean pushQueue(String key, Object value){
+        try {
+            redisTemplate.opsForList().leftPush(key, value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 从队列中获取消息
+     * @param key
+     * @return
+     */
+    public int pullQueue(String key){
+        try {
+            return (int) redisTemplate.opsForList().rightPop(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
 }
